@@ -7,8 +7,8 @@ public class UnitData
 {
     public enum UnitTeam { teamA, teamB }
     public enum UnitType { warrior, archer, cavalry, monster }
-    public enum AI_State_Tactic { attack, hold_n_attack, shoot, shoot_n_advance, shoot_n_flee }
-    public enum AI_State_FindTarget { findClosest,findWarrior, findArcher, findCavalry, findMonster, findRearmost }
+    public enum AI_State_Tactic { attack, hold_n_attack, guard, shoot, hold_n_shoot, shoot_n_flee }
+    public enum AI_State_FindTarget { findClosest, findWarrior, findArcher, findCavalry, findMonster, findRearmost }
 
     public UnitType unitType;
     public UnitTeam unitTeam;
@@ -19,7 +19,11 @@ public class UnitData
     public float attackDis;
     public float moveSpeed;
 
-    
+
+    [Header("Arrow")]
+    public float arrowOffset;
+    public float arrowSpeed;
+
 
 
     [Header("UnitAI")]

@@ -24,14 +24,14 @@ public class TeamController : MonoBehaviour
         monsterList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.monster);
     }
 
-    public void TeamCheck_Action()
+    public void TeamCheck_Action(bool holdStageEnd)
     {
         if (warriorList != null)
             if (warriorList.Count != 0)
             {
                 foreach (Unit unit in warriorList)
                 {
-                    unit.AI_DecideAction();
+                    unit.AI_DecideAction(holdStageEnd);
                 }
             }
 
@@ -40,7 +40,7 @@ public class TeamController : MonoBehaviour
             {
                 foreach (Unit unit in archerList)
                 {
-                    unit.AI_DecideAction();
+                    unit.AI_DecideAction(holdStageEnd);
                 }
             }
 
@@ -49,7 +49,7 @@ public class TeamController : MonoBehaviour
             {
                 foreach (Unit unit in cavalryList)
                 {
-                    unit.AI_DecideAction();
+                    unit.AI_DecideAction(holdStageEnd);
                 }
             }
 
@@ -58,7 +58,7 @@ public class TeamController : MonoBehaviour
             {
                 foreach (Unit unit in monsterList)
                 {
-                    unit.AI_DecideAction();
+                    unit.AI_DecideAction(holdStageEnd);
                 }
             }
     }

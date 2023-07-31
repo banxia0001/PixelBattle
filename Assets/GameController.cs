@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour
     public TeamController teamB;
 
     private float actionTimer;
+    private int turn;
 
     private void Start()
     {
@@ -22,17 +23,22 @@ public class GameController : MonoBehaviour
 
         else
         {
-            actionTimer = .2f; 
-            TeamCheck();
+            
+            actionTimer = .2f;
+            if (turn > 30)
+            {
+                TeamCheck(true);
+            }
+            else TeamCheck(false);
         }
     }
 
-    private void TeamCheck()
+    private void TeamCheck(bool holdStageEnd)
     {
         teamA.TeamCheck_AddUnitToList();
         teamB.TeamCheck_AddUnitToList();
-        teamA.TeamCheck_Action();
-        teamB.TeamCheck_Action();
+        teamA.TeamCheck_Action(holdStageEnd);
+        teamB.TeamCheck_Action(holdStageEnd);
     }
 
 }
