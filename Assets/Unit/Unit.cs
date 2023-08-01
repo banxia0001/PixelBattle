@@ -14,6 +14,8 @@ public class Unit : MonoBehaviour
     public UnitData data;
     public int health;
     public int attackCD;
+    private bool haveJavelin;
+
 
     [Header("Movement")]
     public Unit attackTarget;
@@ -25,6 +27,8 @@ public class Unit : MonoBehaviour
     private float knockBackTimer;
     public bool canMeleeAttack;
     public bool triggerUpdatePerTurn;
+
+
 
 
 
@@ -45,7 +49,7 @@ public class Unit : MonoBehaviour
         if (data.unitType == UnitData.UnitType.cavalry) { render.color = Color.blue; agent.avoidancePriority = 100; }
         if (data.unitType == UnitData.UnitType.archer) { render.color = Color.green; agent.avoidancePriority = 10; }
         if (data.unitType == UnitData.UnitType.monster) { render.color = Color.red; agent.avoidancePriority = 200; }
-        if (data.unitType == UnitData.UnitType.warrior) { render.color = Color.white; agent.avoidancePriority = 30; }
+        if (data.unitType == UnitData.UnitType.infantry) { render.color = Color.white; agent.avoidancePriority = 30; }
 
         InputData(data);
     }
@@ -57,6 +61,8 @@ public class Unit : MonoBehaviour
         attackCD = 0;
         BC.SetValue_Initial(health, data.health);
         canMeleeAttack = false;
+
+        if (data.isJavelin) haveJavelin = true;
     }
 
   
@@ -114,7 +120,7 @@ public class Unit : MonoBehaviour
         else
         {
             float dis = Vector3.Distance(this.transform.position, attackTarget.transform.position);
-            if (data.unitType == UnitData.UnitType.warrior)
+            if (data.unitType == UnitData.UnitType.infantry)
             {
                 if (dis > data.attackDis * 2f) AI_FindTarget();
             }
@@ -151,7 +157,7 @@ public class Unit : MonoBehaviour
 
         if (agent.enabled)
         {
-            if (data.unitType == UnitData.UnitType.warrior)
+            if (data.unitType == UnitData.UnitType.infantry)
             {
                 AI_Warrior_Action();
             }
@@ -184,7 +190,7 @@ public class Unit : MonoBehaviour
         }
         if (data.current_AI_Target == UnitData.AI_State_FindTarget.findWarrior)
         {
-            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.warrior, this);
+            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.infantry, this);
         }
         if (data.current_AI_Target == UnitData.AI_State_FindTarget.findArcher)
         {
@@ -289,10 +295,25 @@ public class Unit : MonoBehaviour
 
 
 
+    private bool CheckHoldStage()
+    {
+        int stateNum = (int)GameController.waitState;
+      
+        if (this.data.current_AI_Wait == UnitData.AI_State_Wait.advance) return true;
+
+        if (this.data.current_AI_Wait == UnitData.AI_State_Wait.hold5s && stateNum >= 1) return true;
+
+        if (this.data.current_AI_Wait == UnitData.AI_State_Wait.hold10S && stateNum >= 2) return true;
+
+        if (this.data.current_AI_Wait == UnitData.AI_State_Wait.hold15S && stateNum >= 3) return true;
+
+        Debug.Log(stateNum);
+
+        return false;
+    }
 
 
-
-
+   
 
 
     /// <summary>
@@ -309,6 +330,18 @@ public class Unit : MonoBehaviour
             return;
         }
 
+        if (haveJavelin)
+        {
+            UnitData.UnitTeam targetTeam = UnitData.UnitTeam.teamB;
+            if (data.unitTeam == UnitData.UnitTeam.teamB) targetTeam = UnitData.UnitTeam.teamA;
+            Unit target = AIFunctions.AI_Find_ShootJavelin(data.shootDis, this.transform, targetTeam);
+            if (target != null)
+            {
+                haveJavelin = false;
+                AI_Shoot(target.transform);
+            }
+        }
+
         //[Attack]
         if (attackCD <= 0 && canMeleeAttack)
         {
@@ -316,15 +349,17 @@ public class Unit : MonoBehaviour
             canMeleeAttack = false;
         }
 
-        //[Find Enemy]
-       if(attackCD != 0)
-        {
-            if (data.current_AI_Tactic == UnitData.AI_State_Tactic.hold_n_attack)
-            {
-                if (GameController.holdStage) AI_Stay();
+        if (!CheckHoldStage()) { AI_Stay(); return; }
 
-                else AI_MoveToward(attackTarget.gameObject.transform);
-            }
+        //[Find Enemy]
+        if (attackCD != 0)
+        {
+            //if (data.current_AI_Tactic == UnitData.AI_State_Tactic.hold_n_attack)
+            //{
+            //    if (GameController.holdStage) AI_Stay();
+
+            //    else AI_MoveToward(attackTarget.gameObject.transform);
+            //}
             if (data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
             {
                 AI_MoveToward(attackTarget.gameObject.transform);
@@ -344,6 +379,7 @@ public class Unit : MonoBehaviour
             //[Attack]
             attackCD = data.attackCD;
             BattleFunction.Attack(this.gameObject.transform, data.damage, attackUnit);
+            StartCoroutine(attackUnit.AddKnockBack(this.transform, 1f));
             chargeSpeed = 0f;
             //[Set Pos]
             AI_Stay();
@@ -379,7 +415,9 @@ public class Unit : MonoBehaviour
         //[Attack]
         float dis = Vector3.Distance(this.transform.position, attackTarget.transform.position);
 
-        if (dis < data.shootDis && attackCD <= 0) AI_Shoot();
+        if (dis < data.shootDis && attackCD <= 0) AI_Shoot(attackTarget.transform);
+
+        if (!CheckHoldStage()) { AI_Stay();  return; }
 
         //[Find Enemy]
         else
@@ -387,27 +425,28 @@ public class Unit : MonoBehaviour
             if (data.current_AI_Tactic == UnitData.AI_State_Tactic.shoot_n_keepDis)
             {
                 bool shouldFlee = AI_CheckIfShouldFlee();
-                if (dis < data.shootDis * 0.5f || shouldFlee)
-                    AI_Flee();
+
+                if (dis < data.shootDis * 0.7f) AI_Stay();
+
+                else if (dis < data.shootDis * 0.35f || shouldFlee) AI_Flee();
 
                 else AI_MoveToward(attackTarget.transform);
             }
 
-            else if (data.current_AI_Tactic == UnitData.AI_State_Tactic.hold_n_shoot)
-            {
-                if (GameController.holdStage) AI_Stay();
-
-                else AI_MoveToward(attackTarget.gameObject.transform);
-            }
+        
 
             else if (data.current_AI_Tactic == UnitData.AI_State_Tactic.shoot)
             {
-                AI_MoveToward(attackTarget.gameObject.transform);
+                if (dis < data.shootDis * 0.7f) AI_Stay();
+
+                else if (dis < data.shootDis * 0.35f) AI_Flee();
+
+                else AI_MoveToward(attackTarget.gameObject.transform);
             }
         }
 
     }
-    public void AI_Shoot()
+    public void AI_Shoot(Transform _targetPos)
     {
         //[Shoot Arrow]
         attackCD = data.attackCD;
@@ -415,15 +454,14 @@ public class Unit : MonoBehaviour
         UnitData.UnitTeam targetTeam = UnitData.UnitTeam.teamB;
         if (data.unitTeam == UnitData.UnitTeam.teamB) targetTeam = UnitData.UnitTeam.teamA;
 
-        GameObject Arrow = Instantiate(Resources.Load<GameObject>("VFX/ArrowPrefab"), this.transform.position, Quaternion.identity);
+        //GameObject Arrow = Instantiate(Resources.Load<GameObject>("VFX/ArrowPrefab"), this.transform.position, Quaternion.identity);
+        GameObject Arrow = Instantiate(data.ProjectilePrefab, this.transform.position, Quaternion.identity);
         Projectile ArrowScript = Arrow.GetComponent<Projectile>();
-        Vector3 targetPos = attackTarget.transform.position + new Vector3(Random.Range(-data.arrowOffset, data.arrowOffset), 0, Random.Range(-data.arrowOffset, data.arrowOffset));
-        ArrowScript.SetUpArror(targetPos, data.damage, data.arrowSpeed, targetTeam);
+        Vector3 targetPos = _targetPos.transform.position + new Vector3(Random.Range(-data.arrowOffset, data.arrowOffset), 0, Random.Range(-data.arrowOffset, data.arrowOffset));
+        ArrowScript.SetUpArror(targetPos, data.rangeDamage, data.arrowSpeed, targetTeam);
         chargeSpeed = 0f;
-
-        //[Set Pos]
-        AI_MoveToward(attackTarget.transform);
     }
+
     private void AI_Flee()
     {
         if (agent.enabled)
@@ -487,40 +525,36 @@ public class Unit : MonoBehaviour
             return;
         }
 
+        bool canAttack = false;
+        if (attackCD <= data.attackCD * 0.75f && agent.velocity.magnitude > 2f) canAttack = true;
         //[Attack]
-        if (attackCD <= 0 && canMeleeAttack)
+        if (attackCD <= 0 && canMeleeAttack) canAttack = true;
+
+        if(canAttack)
         {
             canMeleeAttack = false;
-            AI_Charge_Mutiple();
-            //if (agent.velocity.magnitude > 1.12f)
-            //{
-            //    AI_Charge_Mutiple();
-            //}
 
-            //else
-            //{
-            //    AI_Charge_Mutiple();
-            //}
+            if (data.charge_CauseAOEDamage)
+                AI_Charge_Mutiple();
+
+            else
+                AI_Charge_Single();
         }
 
-        //[Freeze after attack]
-        if (attackCD >= data.attackCD * 0.2f)
-        {
-            AI_MoveForward();
-        }
+        if (!CheckHoldStage()) { AI_Stay(); return; }
 
         //[Find Enemy]
         else
         {
-            if (data.current_AI_Tactic == UnitData.AI_State_Tactic.hold_n_attack)
-            {
-                if (GameController.holdStage) AI_Stay();
-
-                else AI_MoveTowardWithoutStopping(attackTarget.gameObject.transform);
-            }
             if (data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
             {
-                AI_MoveTowardWithoutStopping(attackTarget.gameObject.transform);
+                //[Freeze after attack]
+                if (attackCD >= data.attackCD * 0.3f)
+                {
+                    AI_MoveForward();
+                }
+                else
+                    AI_MoveTowardWithoutStopping(attackTarget.gameObject.transform);
             }
         }
     }
@@ -555,9 +589,9 @@ public class Unit : MonoBehaviour
         //Vector3 dir = BattleFunction.DistantPoint(this.transform.position, trans.position);
         //agent.SetDestination(dir + new Vector3(Random.Range(-0.1f, 0.1f), 0, Random.Range(-0.1f, 0.1f)));
     }
-    public void AI_Charge_Simgle()
+    public void AI_Charge_Single()
     {
-        List<Unit> units = AI_Melee_FindAllUnit_InHitBox(1f,1f);
+        List<Unit> units = AI_Melee_FindAllUnit_InHitBox(1f,1.33f);
         Unit targetUnit = null;
         if (units != null && units.Count != 0)
         {
@@ -571,14 +605,15 @@ public class Unit : MonoBehaviour
             attackCD = data.attackCD + knockBackForce / 2;
             StartCoroutine(targetUnit.AddKnockBack(this.transform, speed));
           
-            BattleFunction.Attack(this.gameObject.transform, data.damage + knockBackForce, targetUnit);
+            BattleFunction.Attack(this.gameObject.transform, data.damage + (int)speed * 3, targetUnit);
+            StartCoroutine(targetUnit.AddKnockBack(this.transform, speed* 1.75f));
             chargeSpeed = 0f;
         }
     }
 
     public void AI_Charge_Mutiple()
     {
-        List<Unit> units = AI_Melee_FindAllUnit_InHitBox(2f,1.2f);
+        List<Unit> units = AI_Melee_FindAllUnit_InHitBox(1.33f,1.33f);
 
         if (units != null)
             if (units.Count != 0)
@@ -622,5 +657,4 @@ public class Unit : MonoBehaviour
             }
         }
     }
-
 }

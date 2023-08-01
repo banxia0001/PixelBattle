@@ -10,11 +10,12 @@ public class GameController : MonoBehaviour
     private float actionTimer;
     private int turn;
 
-    public static bool holdStage;
+    public static UnitData.AI_State_Wait waitState;
 
     private void Start()
     {
         actionTimer = 0;
+        waitState = UnitData.AI_State_Wait.advance;
     }
     void FixedUpdate()
     {
@@ -27,16 +28,11 @@ public class GameController : MonoBehaviour
         {
             turn++;
             actionTimer = 0.33f;
-            if (turn > 30)
-            {
-                holdStage = false;
-                TeamCheck();
-            }
-            else
-            {
-                holdStage = true;
-                TeamCheck();
-            }
+            if (turn > 16) waitState = UnitData.AI_State_Wait.hold5s;
+            if (turn > 32) waitState = UnitData.AI_State_Wait.hold10S;
+            if (turn > 48) waitState = UnitData.AI_State_Wait.hold15S;
+
+            TeamCheck();
         }
     }
 

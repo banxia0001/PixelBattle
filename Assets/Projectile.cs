@@ -50,6 +50,7 @@ public class Projectile : MonoBehaviour
         {
             //Debug.Log("!!");
             BattleFunction.Attack(this.transform, dam, targetUnit);
+            StartCoroutine(targetUnit.AddKnockBack(this.transform, 2f));
         }
 
         yield return new WaitForSeconds(0.3f);

@@ -6,17 +6,19 @@ using UnityEngine;
 public class UnitData
 {
     public enum UnitTeam { teamA, teamB }
-    public enum UnitType { warrior, archer, cavalry, monster }
-    public enum AI_State_Tactic { attack, hold_n_attack, guard, shoot, hold_n_shoot, shoot_n_keepDis }
+    public enum UnitType { infantry, archer, cavalry, monster }
+
+    public enum AI_State_Wait { advance, hold5s, hold10S, hold15S }
+    public enum AI_State_Tactic { attack, guard, shoot, shoot_n_keepDis }
     public enum AI_State_FindTarget { findClosest, findWarrior, findArcher, findCavalry, findMonster, findRearmost }
 
     public UnitType unitType;
     public UnitTeam unitTeam;
     [Range(10, 75)]
     public int health;
-    [Range(1,10)]
+    [Range(1, 10)]
     public int armor;
-    [Range(2,20 )]
+    [Range(2, 20)]
     public int damage;
     [Range(1, 30)]
     public int attackCD;
@@ -26,8 +28,11 @@ public class UnitData
     public float moveSpeed;
 
 
-    [Header("Arrow")]
+    [Header("Archer")]
+    public GameObject ProjectilePrefab;
     public bool isJavelin;
+    [Range(2, 20)]
+    public int rangeDamage;
     [Range(5f, 35f)]
     public float shootDis;
     [Range(0.2f, 2f)]
@@ -35,14 +40,16 @@ public class UnitData
     [Range(0.2f, 0.75f)]
     public float arrowSpeed;
 
-    [Header("Charge")]
+    [Header("Cavalry")]
+    public bool charge_CauseAOEDamage;
     [Range(0f, 6f)]
     public float chargeSpeed_Accererate;
-    [Range(0,4)]
+    [Range(0, 4)]
     public float chargeSpeed_Max;
 
 
     [Header("UnitAI")]
     public AI_State_Tactic current_AI_Tactic;
     public AI_State_FindTarget current_AI_Target;
+    public AI_State_Wait current_AI_Wait;
 }

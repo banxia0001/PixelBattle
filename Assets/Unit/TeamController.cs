@@ -18,7 +18,7 @@ public class TeamController : MonoBehaviour
 
     public void TeamCheck_AddUnitToList()
     {
-        warriorList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.warrior);
+        warriorList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.infantry);
         archerList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.archer);
         cavalryList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.cavalry);
         monsterList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.monster);
