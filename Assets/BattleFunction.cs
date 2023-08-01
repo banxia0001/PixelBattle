@@ -83,14 +83,17 @@ public class BattleFunction : MonoBehaviour
         //Debug.Log("Defender:" + defender.name +" Dam:" +  attackerDam + "," + finalDam);
         if (finalDam > 0)
         {
-            defender.GetDamage(finalDam);
+            defender.AddDamage(finalDam);
         }
     }
 
-    public static void Add_KnockBack_ToDefender(Transform attacker, Transform defender, Rigidbody rb_Defender, float knockBackForce)
+
+    public static Vector3 DistantPoint(Vector3 pointS, Vector3 pointM)
     {
-        Vector3 newVector = defender.transform.position - attacker.gameObject.transform.position;
-        rb_Defender.velocity = Vector3.zero;
-        rb_Defender.AddForce(newVector * knockBackForce, ForceMode.Impulse);
+        GameObject MyTransform = Instantiate(Resources.Load<GameObject>("Null"), pointS, Quaternion.identity);
+        MyTransform.transform.LookAt(pointM);
+        Vector3 distantPosition = pointM + Quaternion.Euler(0, 0, MyTransform.transform.eulerAngles.y) * Vector3.right * -3f;
+        Destroy(MyTransform);
+        return distantPosition;
     }
 }

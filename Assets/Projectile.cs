@@ -48,7 +48,7 @@ public class Projectile : MonoBehaviour
         Unit targetUnit = BattleFunction.Find_ClosestUnitInList(BattleFunction.Find_UnitsInRange(targetAttackTeam, 0.9f, this.transform), this.transform);
         if (targetUnit != null)
         {
-            Debug.Log("!!");
+            //Debug.Log("!!");
             BattleFunction.Attack(this.transform, dam, targetUnit);
         }
 

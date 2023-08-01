@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour
     private float actionTimer;
     private int turn;
 
+    public static bool holdStage;
+
     private void Start()
     {
         actionTimer = 0;
@@ -23,22 +25,27 @@ public class GameController : MonoBehaviour
 
         else
         {
-            
-            actionTimer = .2f;
+            turn++;
+            actionTimer = 0.33f;
             if (turn > 30)
             {
-                TeamCheck(true);
+                holdStage = false;
+                TeamCheck();
             }
-            else TeamCheck(false);
+            else
+            {
+                holdStage = true;
+                TeamCheck();
+            }
         }
     }
 
-    private void TeamCheck(bool holdStageEnd)
+    private void TeamCheck()
     {
         teamA.TeamCheck_AddUnitToList();
         teamB.TeamCheck_AddUnitToList();
-        teamA.TeamCheck_Action(holdStageEnd);
-        teamB.TeamCheck_Action(holdStageEnd);
+        teamA.TeamCheck_Action();
+        teamB.TeamCheck_Action();
     }
 
 }
