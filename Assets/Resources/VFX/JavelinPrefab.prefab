@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flySpeed: 0
-  arrowDropLocation: {x: 0, y: 0, z: 0}
+  cuaseAOE: 0
+  attackDistance: 0.9
 --- !u!1 &1957203459581591319
 GameObject:
   m_ObjectHideFlags: 0

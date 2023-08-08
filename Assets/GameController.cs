@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public bool gameStart;
     public TeamController teamA;
     public TeamController teamB;
 
@@ -19,21 +20,27 @@ public class GameController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (actionTimer > 0)
+
+        if (gameStart)
         {
-            actionTimer -= Time.fixedDeltaTime;
+            if (actionTimer > 0)
+            {
+                actionTimer -= Time.fixedDeltaTime;
+            }
+
+            else
+            {
+                turn++;
+                actionTimer = 0.33f;
+                if (turn > 16) waitState = UnitData.AI_State_Wait.hold5s;
+                if (turn > 32) waitState = UnitData.AI_State_Wait.hold10S;
+                if (turn > 48) waitState = UnitData.AI_State_Wait.hold15S;
+
+                TeamCheck();
+            }
         }
 
-        else
-        {
-            turn++;
-            actionTimer = 0.33f;
-            if (turn > 16) waitState = UnitData.AI_State_Wait.hold5s;
-            if (turn > 32) waitState = UnitData.AI_State_Wait.hold10S;
-            if (turn > 48) waitState = UnitData.AI_State_Wait.hold15S;
-
-            TeamCheck();
-        }
+       
     }
 
     private void TeamCheck()

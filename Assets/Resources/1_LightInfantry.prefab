@@ -52,8 +52,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.ID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.armor
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.damage
@@ -61,11 +65,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.health
-      value: 25
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.attackCD
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.shootDis
@@ -77,15 +81,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.attackDis
-      value: 0.8
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.damageMax
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.damageMin
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.isJavelin
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.moveSpeed
-      value: 1
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.arrowSpeed
@@ -117,7 +129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929164, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_Name
-      value: _Infantry
+      value: 1_LightInfantry
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929167, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_AngularSpeed

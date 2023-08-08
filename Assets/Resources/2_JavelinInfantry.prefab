@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5065277303118766525
+--- !u!1001 &1610856735722748629
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -13,15 +13,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929160, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.78
+      value: 11.6324835
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929160, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.0000019073486
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929160, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.15
+      value: 7.967564
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929160, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -52,8 +52,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.ID
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.armor
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.damage
@@ -61,23 +65,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.health
-      value: 45
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.attackCD
-      value: 12
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.shootDis
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.unitType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.attackDis
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.damageMax
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.damageMin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.isJavelin
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.moveSpeed
-      value: 0.5
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.arrowSpeed
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.shootRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.arrowOffset
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.rangeDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.JavelinDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.ProjectilePrefab
+      value: 
+      objectReference: {fileID: 1957203459384285164, guid: ece504d80020de349b638e54d30d953c, type: 3}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.current_AI_Tactic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: data.chargeSpeed_Accererate
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929164, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_Name
-      value: _HeavyInfantry Variant
-      objectReference: {fileID: 0}
-    - target: {fileID: 437509751958929166, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
-      propertyPath: m_Mass
-      value: 8
+      value: 2_JavelinInfantry
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929167, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_AngularSpeed

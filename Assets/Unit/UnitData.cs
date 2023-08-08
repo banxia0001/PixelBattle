@@ -5,12 +5,22 @@ using UnityEngine;
 [System.Serializable]
 public class UnitData
 {
-    public enum UnitTeam { teamA, teamB }
-    public enum UnitType { infantry, archer, cavalry, monster }
+    public enum UnitListID
+    {
+        Militia,
+        LightInfantry,
+        JavelinInfantry,
+        HeavyInfantry,
+        FootKnight,
+        Barbarian,
+    }
 
+    public UnitListID ID;
+    public enum UnitTeam { teamA, teamB}
+    public enum UnitType { infantry, archer, cavalry, monster, artillery }
     public enum AI_State_Wait { advance, hold5s, hold10S, hold15S }
     public enum AI_State_Tactic { attack, guard, shoot, shoot_n_keepDis }
-    public enum AI_State_FindTarget { findClosest, findWarrior, findArcher, findCavalry, findMonster, findRearmost }
+    public enum AI_State_FindTarget { findClosest, findWarrior, findArcher, findCavalry, findMonster, findArtillery }
 
     public UnitType unitType;
     public UnitTeam unitTeam;
@@ -18,8 +28,10 @@ public class UnitData
     public int health;
     [Range(1, 10)]
     public int armor;
-    [Range(2, 20)]
-    public int damage;
+
+    public int damageMin;
+    public int damageMax;
+
     [Range(1, 30)]
     public int attackCD;
     [Range(.4f, 3f)]
@@ -32,7 +44,8 @@ public class UnitData
     public GameObject ProjectilePrefab;
     public bool isJavelin;
     [Range(2, 20)]
-    public int rangeDamage;
+    public int JavelinDamage;
+
     [Range(5f, 35f)]
     public float shootDis;
     [Range(0.2f, 2f)]
@@ -46,6 +59,9 @@ public class UnitData
     public float chargeSpeed_Accererate;
     [Range(0, 4)]
     public float chargeSpeed_Max;
+
+    [Header("Traits")]
+    public bool antiCharge;
 
 
     [Header("UnitAI")]

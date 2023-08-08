@@ -9,6 +9,7 @@ public class TeamController : MonoBehaviour
     public List<Unit> archerList;
     public List<Unit> cavalryList;
     public List<Unit> monsterList;
+    public List<Unit> artilleryList;
 
 
     public void Awake()
@@ -22,6 +23,7 @@ public class TeamController : MonoBehaviour
         archerList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.archer);
         cavalryList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.cavalry);
         monsterList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.monster);
+        artilleryList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.artillery);
     }
 
     public void TeamCheck_Action()
@@ -57,6 +59,15 @@ public class TeamController : MonoBehaviour
             if (monsterList.Count != 0)
             {
                 foreach (Unit unit in monsterList)
+                {
+                    unit.AI_DecideAction();
+                }
+            }
+
+        if (artilleryList != null)
+            if (artilleryList.Count != 0)
+            {
+                foreach (Unit unit in artilleryList)
                 {
                     unit.AI_DecideAction();
                 }

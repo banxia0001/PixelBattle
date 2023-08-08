@@ -4,6 +4,22 @@ using UnityEngine;
 
 public class BattleFunction : MonoBehaviour
 {
+    public static List<Unit> Find_UnitsInRange(float range, Transform startPos)
+    {
+        GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
+        List<Unit> unitList = new List<Unit>();
+
+        if (allUnits != null)
+            foreach (GameObject unitOb in allUnits)
+            {
+                Unit unit = unitOb.GetComponent<Unit>();
+
+                float thisDis = Vector3.Distance(startPos.transform.position, unit.transform.position);
+                if (thisDis < range)
+                    unitList.Add(unit);
+            }
+        return unitList;
+    }
     public static List<Unit> Find_UnitsInRange(UnitData.UnitTeam targetTeam,float range, Transform startPos)
     {
         GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
@@ -13,6 +29,7 @@ public class BattleFunction : MonoBehaviour
             foreach (GameObject unitOb in allUnits)
             {
                 Unit unit = unitOb.GetComponent<Unit>();
+
                 if (unit.data.unitTeam == targetTeam)
                 {
                     float thisDis = Vector3.Distance(startPos.transform.position, unit.transform.position);
@@ -77,9 +94,18 @@ public class BattleFunction : MonoBehaviour
         return unitList;
     }
 
-    public static void Attack(Transform AttackerPos, int attackerDam, Unit defender)
+    public static void Attack(Transform AttackerPos, int damMin,int damMax, Unit defender, bool isCharge)
     {
-        int finalDam = attackerDam - defender.data.armor + Random.Range(-2,2);
+        int dam = Random.Range(damMin, damMax);
+        int finalDam = dam - defender.data.armor + Random.Range(-4,4);
+
+        if (isCharge)
+        {
+            if (defender.data.antiCharge)
+            {
+                finalDam = finalDam / 2;
+            }
+        }
         //Debug.Log("Defender:" + defender.name +" Dam:" +  attackerDam + "," + finalDam);
         if (finalDam > 0)
         {

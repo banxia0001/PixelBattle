@@ -51,6 +51,7 @@ public class AIFunctions : MonoBehaviour
         if (targetType == UnitData.UnitType.archer) unitGroup = targetUnitTeam.archerList;
         if (targetType == UnitData.UnitType.cavalry) unitGroup = targetUnitTeam.cavalryList;
         if (targetType == UnitData.UnitType.monster) unitGroup = targetUnitTeam.monsterList;
+        if (targetType == UnitData.UnitType.artillery) unitGroup = targetUnitTeam.artilleryList;
 
         if (unitGroup == null) return null;
         if (unitGroup.Count == 0) return null;

@@ -29,9 +29,6 @@ public class Unit : MonoBehaviour
     public bool triggerUpdatePerTurn;
 
 
-
-
-
     [Header("UI")]
     public BarController BC;
     public TMP_Text text;
@@ -124,7 +121,7 @@ public class Unit : MonoBehaviour
             {
                 if (dis > data.attackDis * 2f) AI_FindTarget();
             }
-            else if (data.unitType == UnitData.UnitType.archer)
+            else if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery)
             {
                 if (dis > data.shootDis * 1.2f) AI_FindTarget();
             } 
@@ -162,15 +159,16 @@ public class Unit : MonoBehaviour
                 AI_Warrior_Action();
             }
 
-            if (data.unitType == UnitData.UnitType.archer)
+            if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery)
             {
-                AI_Archer_Action();
+                AI_RangeUnit_Action();
             }
 
             if (data.unitType == UnitData.UnitType.cavalry)
             {
                 AI_CavalryAttack();
             }
+
         }
     }
 
@@ -204,6 +202,10 @@ public class Unit : MonoBehaviour
         {
             attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.monster, this);
         }
+        if (data.current_AI_Target == UnitData.AI_State_FindTarget.findArtillery)
+        {
+            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.artillery, this);
+        }
         if (attackTarget == null)
         {
             attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
@@ -231,11 +233,14 @@ public class Unit : MonoBehaviour
     public IEnumerator AddKnockBack(Transform attacker, float knockBackForce)
     {
         yield return new WaitForSeconds(0.01f);
-        agent.enabled = false;
-        Vector3 newVector = this.transform.position - attacker.gameObject.transform.position;
-        rb.velocity = Vector3.zero;
-        rb.AddForce(4f * newVector * knockBackForce, ForceMode.Impulse);
-        knockBackTimer = knockBackForce / 3;
+        if (attacker != null)
+        {
+            agent.enabled = false;
+            Vector3 newVector = this.transform.position - attacker.gameObject.transform.position;
+            rb.velocity = Vector3.zero;
+            rb.AddForce(4f * newVector * knockBackForce, ForceMode.Impulse);
+            knockBackTimer = knockBackForce / 3;
+        }
     }
 
     private void AI_Stay()
@@ -307,7 +312,7 @@ public class Unit : MonoBehaviour
 
         if (this.data.current_AI_Wait == UnitData.AI_State_Wait.hold15S && stateNum >= 3) return true;
 
-        Debug.Log(stateNum);
+        //Debug.Log(stateNum);
 
         return false;
     }
@@ -338,7 +343,7 @@ public class Unit : MonoBehaviour
             if (target != null)
             {
                 haveJavelin = false;
-                AI_Shoot(target.transform);
+                AI_Shoot(target.transform,true);
             }
         }
 
@@ -378,7 +383,7 @@ public class Unit : MonoBehaviour
             //Debug.Log(units.Count);
             //[Attack]
             attackCD = data.attackCD;
-            BattleFunction.Attack(this.gameObject.transform, data.damage, attackUnit);
+            BattleFunction.Attack(this.gameObject.transform, data.damageMin,data.damageMax, attackUnit,false);
             StartCoroutine(attackUnit.AddKnockBack(this.transform, 1f));
             chargeSpeed = 0f;
             //[Set Pos]
@@ -403,7 +408,7 @@ public class Unit : MonoBehaviour
     //ArcherAI//ArcherAI//ArcherAI//
     //ArcherAI//ArcherAI//ArcherAI//
     /// </summary>
-    private void AI_Archer_Action()
+    private void AI_RangeUnit_Action()
     {
         //[Stay]
         if (attackTarget == null)
@@ -415,7 +420,14 @@ public class Unit : MonoBehaviour
         //[Attack]
         float dis = Vector3.Distance(this.transform.position, attackTarget.transform.position);
 
-        if (dis < data.shootDis && attackCD <= 0) AI_Shoot(attackTarget.transform);
+        if (dis < data.shootDis && attackCD <= 0)
+        {
+            if (data.unitType == UnitData.UnitType.archer)
+                AI_Shoot(attackTarget.transform,false);
+
+            if (data.unitType == UnitData.UnitType.artillery)
+                AI_ArtilleryShoot(attackTarget.transform);
+        }
 
         if (!CheckHoldStage()) { AI_Stay();  return; }
 
@@ -433,7 +445,6 @@ public class Unit : MonoBehaviour
                 else AI_MoveToward(attackTarget.transform);
             }
 
-        
 
             else if (data.current_AI_Tactic == UnitData.AI_State_Tactic.shoot)
             {
@@ -444,9 +455,8 @@ public class Unit : MonoBehaviour
                 else AI_MoveToward(attackTarget.gameObject.transform);
             }
         }
-
     }
-    public void AI_Shoot(Transform _targetPos)
+    public void AI_Shoot(Transform _targetPos, bool isJave)
     {
         //[Shoot Arrow]
         attackCD = data.attackCD;
@@ -455,10 +465,19 @@ public class Unit : MonoBehaviour
         if (data.unitTeam == UnitData.UnitTeam.teamB) targetTeam = UnitData.UnitTeam.teamA;
 
         //GameObject Arrow = Instantiate(Resources.Load<GameObject>("VFX/ArrowPrefab"), this.transform.position, Quaternion.identity);
+
+        int damMin = data.damageMin;
+        int damMax = data.damageMax;
+
+        if (isJave)
+        {
+            damMin = data.JavelinDamage;
+            damMax = data.JavelinDamage;
+        }
         GameObject Arrow = Instantiate(data.ProjectilePrefab, this.transform.position, Quaternion.identity);
         Projectile ArrowScript = Arrow.GetComponent<Projectile>();
         Vector3 targetPos = _targetPos.transform.position + new Vector3(Random.Range(-data.arrowOffset, data.arrowOffset), 0, Random.Range(-data.arrowOffset, data.arrowOffset));
-        ArrowScript.SetUpArror(targetPos, data.rangeDamage, data.arrowSpeed, targetTeam);
+        ArrowScript.SetUpArror(targetPos, damMin, damMax, data.arrowSpeed, targetTeam);
         chargeSpeed = 0f;
     }
 
@@ -605,7 +624,7 @@ public class Unit : MonoBehaviour
             attackCD = data.attackCD + knockBackForce / 2;
             StartCoroutine(targetUnit.AddKnockBack(this.transform, speed));
           
-            BattleFunction.Attack(this.gameObject.transform, data.damage + (int)speed * 3, targetUnit);
+            BattleFunction.Attack(this.gameObject.transform, data.damageMin + (int)speed * 3, data.damageMax + (int)speed * 3, targetUnit,true);
             StartCoroutine(targetUnit.AddKnockBack(this.transform, speed* 1.75f));
             chargeSpeed = 0f;
         }
@@ -628,11 +647,38 @@ public class Unit : MonoBehaviour
                 foreach (Unit targetUnit in units)
                 {
                     StartCoroutine(targetUnit.AddKnockBack(this.transform, speed));
-                    BattleFunction.Attack(this.gameObject.transform, data.damage + (int)speed * 2, targetUnit);
+                    BattleFunction.Attack(this.gameObject.transform, data.damageMin + (int)speed * 2,data.damageMax+ (int)speed * 2, targetUnit,true);
                 }
                 chargeSpeed = 0f;
             }    
     }
+
+
+
+
+
+    //ArtilleryAI//ArtilleryAI//ArtilleryAI//
+    //ArtilleryAI//ArtilleryAI//ArtilleryAI//
+    //ArtilleryAI//ArtilleryAI//ArtilleryAI//
+    public void AI_ArtilleryShoot(Transform _targetPos)
+    {
+        attackCD = data.attackCD;
+
+        UnitData.UnitTeam targetTeam = UnitData.UnitTeam.teamB;
+        if (data.unitTeam == UnitData.UnitTeam.teamB) targetTeam = UnitData.UnitTeam.teamA;
+
+        //GameObject Arrow = Instantiate(Resources.Load<GameObject>("VFX/ArrowPrefab"), this.transform.position, Quaternion.identity);
+        GameObject Arrow = Instantiate(data.ProjectilePrefab, this.transform.position, Quaternion.identity);
+        Projectile ArrowScript = Arrow.GetComponent<Projectile>();
+        Vector3 targetPos = _targetPos.transform.position + new Vector3(Random.Range(-data.arrowOffset, data.arrowOffset), 0, Random.Range(-data.arrowOffset, data.arrowOffset));
+        ArrowScript.SetUpArror(targetPos, data.damageMin,data.damageMax, data.arrowSpeed, targetTeam);
+
+        chargeSpeed = 0f;
+
+        StartCoroutine( AddKnockBack(Arrow.transform, 2f));
+    }
+
+
 
     public void AI_Monster_Hit()
     {
