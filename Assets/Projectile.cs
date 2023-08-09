@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
  
     public float flySpeed;
     public bool cuaseAOE;
+    public bool isJave;
     public float attackDistance;
     private Vector3 arrowDropLocation;
     private int damMin;
@@ -19,15 +20,17 @@ public class Projectile : MonoBehaviour
         
     }
 
-    public void SetUpArror(Vector3 arrowDropLocation, int damMin, int damMax, float flySpeed, UnitData.UnitTeam targetAttackTeam)
+    public void SetUpArror(Vector3 arrowDropLocation, int damMin, int damMax, float flySpeed, UnitData.UnitTeam targetAttackTeam, bool isJave)
     {
         this.arrowDropLocation = arrowDropLocation;
         this.flySpeed = flySpeed;
         this.damMin = damMin;
         this.damMax = damMax;
+        this.isJave = isJave;
         transform.LookAt(arrowDropLocation);
         this.targetAttackTeam = targetAttackTeam;
         isDead = false;
+      
     }
 
     // Update is called once per frame
@@ -50,15 +53,15 @@ public class Projectile : MonoBehaviour
     {
         isDead = true;
 
-
         //[an arrow]
         if (!cuaseAOE)
         {
             Unit targetUnit = BattleFunction.Find_ClosestUnitInList(BattleFunction.Find_UnitsInRange(targetAttackTeam, attackDistance, this.transform), this.transform);
             if (targetUnit != null)
             {
+                int dam = BattleFunction.DamageCalculate(damMin, damMax, targetUnit, false,isJave);
                 //Debug.Log("!!");
-                BattleFunction.Attack(this.transform,damMin,damMax , targetUnit,false);
+                BattleFunction.Attack(this.transform, dam, targetUnit);
                 StartCoroutine(targetUnit.AddKnockBack(this.transform, 2f));
             }
         }
@@ -72,7 +75,9 @@ public class Projectile : MonoBehaviour
                 {
                     foreach (Unit unit in targetUnits)
                     {
-                        BattleFunction.Attack(this.transform, damMin,damMax, unit,false);
+                        int dam = BattleFunction.DamageCalculate(damMin, damMax, unit, false,isJave);
+                        //Debug.Log("!!");
+                        BattleFunction.Attack(this.transform, dam, unit);
                         StartCoroutine(unit.AddKnockBack(this.transform, 3f));
                     }
                 }

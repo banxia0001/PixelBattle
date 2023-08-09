@@ -9,9 +9,10 @@ public class UnitData
     {
         Militia,
         LightInfantry,
+        LightArcher,
         JavelinInfantry,
         HeavyInfantry,
-        FootKnight,
+        Knight,
         Barbarian,
     }
 
@@ -31,20 +32,19 @@ public class UnitData
 
     public int damageMin;
     public int damageMax;
+    public bool weaponCauseAOE;
 
     [Range(1, 30)]
     public int attackCD;
-    [Range(.4f, 3f)]
-    public float attackDis;
-    [Range(0.5f, 2f)]
+
+    [Range(0.5f, 4f)]
     public float moveSpeed;
 
 
     [Header("Archer")]
     public GameObject ProjectilePrefab;
     public bool isJavelin;
-    [Range(2, 20)]
-    public int JavelinDamage;
+
 
     [Range(5f, 35f)]
     public float shootDis;
@@ -54,10 +54,10 @@ public class UnitData
     public float arrowSpeed;
 
     [Header("Cavalry")]
-    public bool charge_CauseAOEDamage;
-    [Range(0f, 6f)]
+
+    [Range(0f, 10f)]
     public float chargeSpeed_Accererate;
-    [Range(0, 4)]
+    [Range(0, 10)]
     public float chargeSpeed_Max;
 
     [Header("Traits")]

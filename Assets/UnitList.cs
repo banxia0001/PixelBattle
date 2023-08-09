@@ -14,7 +14,8 @@ public class UnitInList
 {
    
     public UnitData.UnitListID ID;
-    public GameObject UnitPrefab;
+    public GameObject UnitPrefabA;
+    public GameObject UnitPrefabB;
     public int Cost;
 
     public Trait trait1, trait2;

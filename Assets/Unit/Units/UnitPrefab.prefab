@@ -57,8 +57,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 59170129
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!114 &8978227228673675580
 MonoBehaviour:
@@ -116,7 +116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &437509751827549360
 Transform:
   m_ObjectHideFlags: 0
@@ -194,7 +194,6 @@ GameObject:
   - component: {fileID: 437509751958929161}
   - component: {fileID: 437509751958929166}
   - component: {fileID: 437509751958929167}
-  - component: {fileID: 4688771078429950264}
   - component: {fileID: 6756247963785763713}
   m_Layer: 6
   m_Name: UnitPrefab
@@ -233,28 +232,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug_Unit: 0
   data:
+    ID: 0
     unitType: 0
     unitTeam: 0
     health: 40
     armor: 2
-    damage: 2
+    damageMin: 0
+    damageMax: 0
+    weaponCauseAOE: 0
     attackCD: 10
-    attackDis: 1.45
     moveSpeed: 1
+    ProjectilePrefab: {fileID: 0}
     isJavelin: 0
     shootDis: 0
     arrowOffset: 0
     arrowSpeed: 0
     chargeSpeed_Accererate: 0
     chargeSpeed_Max: 0
+    antiCharge: 0
     current_AI_Tactic: 0
     current_AI_Target: 0
+    current_AI_Wait: 0
   health: 0
   attackCD: 0
   attackTarget: {fileID: 0}
   unitSprite: {fileID: 437509751992264078}
-  canMeleeAttack: 0
-  triggerUpdatePerTurn: 0
+  currentAgentSpeed: 0
   BC: {fileID: 9133468955189136455}
   text: {fileID: 1481242013728093155}
   render: {fileID: 437509751827549361}
@@ -285,9 +288,9 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.44
   m_Speed: 3.5
-  m_Acceleration: 4
+  m_Acceleration: 5
   avoidancePriority: 50
-  m_AngularSpeed: 300
+  m_AngularSpeed: 600
   m_StoppingDistance: 0.12
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -296,20 +299,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!136 &4688771078429950264
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437509751958929164}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.55
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &6756247963785763713
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -320,7 +309,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.38
+  m_Radius: 0.45
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -333,7 +322,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 437509751992264079}
-  - component: {fileID: 2863089894568387934}
   m_Layer: 0
   m_Name: BodyFolder
   m_TagString: Untagged
@@ -358,20 +346,6 @@ Transform:
   m_Father: {fileID: 437509751958929160}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &2863089894568387934
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437509751992264078}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.4
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2982441046941724335
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,7 +363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8152667164497720612
 RectTransform:
   m_ObjectHideFlags: 0
@@ -558,7 +532,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5376823041633527195
 Transform:
   m_ObjectHideFlags: 0
@@ -631,6 +605,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 645981376066967838}
     m_Modifications:
+    - target: {fileID: 3045000782027773424, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045000782027773424, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045000782027773424, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045000782027773424, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045000782125048870, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045000782125048870, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045000782125048870, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
+      propertyPath: m_Color.r
+      value: 0.3208711
+      objectReference: {fileID: 0}
     - target: {fileID: 3045000782125048871, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -677,15 +679,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3045000783427998915, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2577991
+      value: 0.16110511
       objectReference: {fileID: 0}
     - target: {fileID: 3045000783427998915, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.30089635
+      value: 0.18803766
       objectReference: {fileID: 0}
     - target: {fileID: 3045000783427998915, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.9397524
+      value: 0.58727485
       objectReference: {fileID: 0}
     - target: {fileID: 3045000783427998915, guid: efdb066ac43ffbb43ab1a0a2c4917662, type: 3}
       propertyPath: m_LocalPosition.x

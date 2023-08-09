@@ -94,10 +94,17 @@ public class BattleFunction : MonoBehaviour
         return unitList;
     }
 
-    public static void Attack(Transform AttackerPos, int damMin,int damMax, Unit defender, bool isCharge)
+    public static int DamageCalculate(int damMin, int damMax, Unit defender, bool isCharge, bool isJave)
     {
         int dam = Random.Range(damMin, damMax);
-        int finalDam = dam - defender.data.armor + Random.Range(-4,4);
+        int amr = defender.data.armor;
+
+        if (isJave)
+        {
+            amr = amr / 2;
+        }
+
+        int finalDam = dam - amr + Random.Range(-4, 4);
 
         if (isCharge)
         {
@@ -105,12 +112,19 @@ public class BattleFunction : MonoBehaviour
             {
                 finalDam = finalDam / 2;
             }
+
         }
-        //Debug.Log("Defender:" + defender.name +" Dam:" +  attackerDam + "," + finalDam);
-        if (finalDam > 0)
+
+        if (finalDam < 0)
         {
-            defender.AddDamage(finalDam);
+            finalDam = 0;
         }
+        return dam;
+
+    }
+    public static void Attack(Transform AttackerPos, int dam, Unit defender)
+    {
+        defender.AddDamage(dam);
     }
 
 
