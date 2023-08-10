@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb10edd3e552e448a34c088b002c8b8, type: 3}
+  m_Name: 5_HeavyCav
+  m_EditorClassIdentifier: 
+  ID: 5
+  UnitPrefabA: {fileID: 5228721496451551652, guid: 919c9f549e4fcbf4ab5503bc48620a13, type: 3}
+  UnitPrefabB: {fileID: 5678418641081850666, guid: e43960441169e5c46a1b2c6c33082e29, type: 3}
+  Cost: 50
+  trait1: {fileID: 11400000, guid: eacaf167c9a37df44a8574b8d05c44db, type: 2}
+  trait2: {fileID: 11400000, guid: 6d9f0e4c4079a7e4989c774e672d0e9a, type: 2}
+  description: 
+  data:
+    unitType: 2
+    health: 50
+    armor: 6
+    toughness: 2
+    damageMin: 3
+    damageMax: 6
+    weaponCauseAOE: 1
+    attackCD: 15
+    moveSpeed: 3
+    ProjectilePrefab: {fileID: 0}
+    isJavelin: 0
+    shootDis: 0
+    arrowOffset: 0
+    arrowSpeed: 0
+    chargeSpeed_Accererate: 3
+    chargeSpeed_Max: 4
+    antiCharge: 0

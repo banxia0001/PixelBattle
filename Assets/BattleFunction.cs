@@ -20,7 +20,7 @@ public class BattleFunction : MonoBehaviour
             }
         return unitList;
     }
-    public static List<Unit> Find_UnitsInRange(UnitData.UnitTeam targetTeam,float range, Transform startPos)
+    public static List<Unit> Find_UnitsInRange(Unit.UnitTeam targetTeam,float range, Transform startPos)
     {
         GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
         List<Unit> unitList = new List<Unit>();
@@ -30,7 +30,7 @@ public class BattleFunction : MonoBehaviour
             {
                 Unit unit = unitOb.GetComponent<Unit>();
 
-                if (unit.data.unitTeam == targetTeam)
+                if (unit.unitTeam == targetTeam)
                 {
                     float thisDis = Vector3.Distance(startPos.transform.position, unit.transform.position);
                     if (thisDis < range)
@@ -61,7 +61,7 @@ public class BattleFunction : MonoBehaviour
         }
         return closedUnit;
     }
-    public static List<Unit> Find_TargetUnitGroup(UnitData.UnitTeam targetTeam, UnitData.UnitType targetType)
+    public static List<Unit> Find_TargetUnitGroup(Unit.UnitTeam targetTeam, UnitData.UnitType targetType)
     {
         GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
         List<Unit> unitList = new List<Unit>();
@@ -70,14 +70,14 @@ public class BattleFunction : MonoBehaviour
             foreach (GameObject unitOb in allUnits)
             {
                 Unit unit = unitOb.GetComponent<Unit>();
-                if (unit.data.unitTeam == targetTeam && unit.data.unitType == targetType)
+                if (unit.unitTeam == targetTeam && unit.data.unitType == targetType)
                 {
                     unitList.Add(unit);
                 }
             }
         return unitList;
     }
-    public static List<Unit> Find_TargetUnitGroup(UnitData.UnitTeam targetTeam)
+    public static List<Unit> Find_TargetUnitGroup(Unit.UnitTeam targetTeam)
     {
         GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
         List<Unit> unitList = new List<Unit>();
@@ -86,7 +86,7 @@ public class BattleFunction : MonoBehaviour
             foreach (GameObject unitOb in allUnits)
             {
                 Unit unit = unitOb.GetComponent<Unit>();
-                if (unit.data.unitTeam == targetTeam)
+                if (unit.unitTeam == targetTeam)
                 {
                     unitList.Add(unit);
                 }
@@ -108,7 +108,7 @@ public class BattleFunction : MonoBehaviour
 
         if (isCharge)
         {
-            if (defender.data.antiCharge)
+            if (defender.data.isSpear)
             {
                 finalDam = finalDam / 2;
             }

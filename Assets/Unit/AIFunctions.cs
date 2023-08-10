@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AIFunctions : MonoBehaviour
 {
-    public static Unit AI_Find_ShootJavelin(float dis, Transform trans, UnitData.UnitTeam unitTeam)
+    public static Unit AI_Find_ShootJavelin(float dis, Transform trans, Unit.UnitTeam unitTeam)
     {
         List<Unit> closeUnit = BattleFunction.Find_UnitsInRange(unitTeam, dis, trans);
         if (closeUnit == null) return null;
@@ -14,7 +14,7 @@ public class AIFunctions : MonoBehaviour
         return target;
     }
 
-    public static Unit AI_Find_ClosestUnit(UnitData.UnitTeam targetTeam, Unit startUnit)
+    public static Unit AI_Find_ClosestUnit(Unit.UnitTeam targetTeam, Unit startUnit)
     {
         List<Unit> unitGroup = BattleFunction.Find_TargetUnitGroup(targetTeam);
 
@@ -39,12 +39,12 @@ public class AIFunctions : MonoBehaviour
         }
         return closedUnit;
     }
-    public static Unit AI_Find_ClosestUnit(UnitData.UnitTeam targetTeam, UnitData.UnitType targetType, Unit startUnit)
+    public static Unit AI_Find_ClosestUnit(Unit.UnitTeam targetTeam, UnitData.UnitType targetType, Unit startUnit)
     {
         GameController GC = FindObjectOfType<GameController>(false);
         TeamController targetUnitTeam = null;
-        if (targetTeam == UnitData.UnitTeam.teamA) targetUnitTeam = GC.teamA;
-        if (targetTeam == UnitData.UnitTeam.teamB) targetUnitTeam = GC.teamB;
+        if (targetTeam == Unit.UnitTeam.teamA) targetUnitTeam = GC.teamA;
+        if (targetTeam == Unit.UnitTeam.teamB) targetUnitTeam = GC.teamB;
 
         List<Unit> unitGroup = new List<Unit>();
         if (targetType == UnitData.UnitType.infantry) unitGroup = targetUnitTeam.warriorList;
@@ -74,6 +74,32 @@ public class AIFunctions : MonoBehaviour
             }
         }
         return closedUnit;
+    }
+
+    public static List<Unit> AI_Melee_FindAllUnit_InHitBox(Unit attacker,float hitboxLength, float hitboxWidth, Vector3 postion)
+    {
+        Collider[] overlappingItems;
+        overlappingItems = Physics.OverlapBox(postion, new Vector3(hitboxWidth, 1f, hitboxLength), Quaternion.identity, LayerMask.GetMask("Unit"));
+        if (overlappingItems == null) return null;
+        else return AIFunctions.AI_FindEnemyInList(attacker, overlappingItems);
+    }
+
+    public static List<Unit> AI_FindEnemyInList(Unit attacker, Collider[] overlappingItems)
+    {
+        Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
+        if (attacker.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
+        List<Unit> finalList = new List<Unit>();
+
+        foreach (Collider coll in overlappingItems)
+        {
+            Unit unit = coll.gameObject.GetComponent<Unit>();
+
+            if (unit.unitTeam == targetTeam)
+            {
+                finalList.Add(unit);
+            }
+        }
+        return finalList;
     }
 
 }

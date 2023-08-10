@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TeamController : MonoBehaviour
 {
-    public UnitData.UnitTeam unitTeam;
+    public Unit.UnitTeam unitTeam;
     public List<Unit> warriorList;
     public List<Unit> archerList;
     public List<Unit> cavalryList;

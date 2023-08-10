@@ -29,7 +29,7 @@ public class UnitPanel : MonoBehaviour
             "Range:" + range + "\n" +
             "Speed:" + unit.data.moveSpeed;
 
-        unitName.text = unit.data.ID.ToString();
+        unitName.text = unit.data_local.ID.ToString();
 
 
         UnitList list = Resources.Load<UnitList>("List");
@@ -38,9 +38,9 @@ public class UnitPanel : MonoBehaviour
         Trait _trait1 = null;
         Trait _trait2 = null;
         int gold = 0;
-        foreach (UnitInList _unit in list.UnitPrefabs)
+        foreach (UnitData_Local _unit in list.UnitPrefabs)
         {
-            if (_unit.ID == unit.data.ID)
+            if (_unit.ID == unit.data_local.ID)
             {
                 des = _unit.description;
                 _trait1 = _unit.trait1;

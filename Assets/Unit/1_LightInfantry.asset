@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb10edd3e552e448a34c088b002c8b8, type: 3}
+  m_Name: 1_LightInfantry
+  m_EditorClassIdentifier: 
+  ID: 1
+  UnitPrefabA: {fileID: 4538235908834789508, guid: 58730de9fdffb8f4eb551023c2f89ca9, type: 3}
+  UnitPrefabB: {fileID: 4724036186802065626, guid: 7507cf23ebc68cd40904392448e83a06, type: 3}
+  Cost: 14
+  trait1: {fileID: 11400000, guid: 957e3d1267c75e84bb479485028121b1, type: 2}
+  trait2: {fileID: 11400000, guid: 957e3d1267c75e84bb479485028121b1, type: 2}
+  description: 
+  data:
+    unitType: 0
+    health: 35
+    armor: 4
+    toughness: 1
+    damageMin: 4
+    damageMax: 6
+    weaponCauseAOE: 0
+    attackCD: 8
+    moveSpeed: 0.5
+    ProjectilePrefab: {fileID: 0}
+    isJavelin: 0
+    shootDis: 0
+    arrowOffset: 0
+    arrowSpeed: 0
+    chargeSpeed_Accererate: 0
+    chargeSpeed_Max: 0
+    antiCharge: 0
+    current_AI_Tactic: 0
+    current_AI_Target: 0
+    current_AI_Wait: 0
