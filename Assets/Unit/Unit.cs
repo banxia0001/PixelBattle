@@ -42,10 +42,6 @@ public class Unit : MonoBehaviour
     [Header("UI")]
     public BarController BC;
 
-    public void PasteDataFromScriptObject()
-    {
-        this.data = data_local.data;
-    }
 
     void Start()
     {

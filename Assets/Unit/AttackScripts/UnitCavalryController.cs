@@ -64,7 +64,14 @@ public class UnitCavalryController : UnitAIController
             if (unit.attackCD > unit.data.attackCD * 0.3f)
             {
                 unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.NoObstacleAvoidance;
-                AI_MoveForward();
+
+                Vector3 toPos = unit.transform.position + unit.transform.forward * 5f;
+                unit.agent.SetDestination(toPos);
+
+ 
+                bool canunitgo = unit.agent.CalculatePath(toPos, unit.agent.path);
+                if(!canunitgo) unit.agent.SetDestination(unit.transform.position + unit.transform.forward * -10f);
+
             }
 
             else
@@ -88,6 +95,7 @@ public class UnitCavalryController : UnitAIController
                     {
                         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.NoObstacleAvoidance;
                         unit.agent.SetDestination(unit.transform.position + unit.transform.forward * 6f);
+        
                     }
                 }
             }

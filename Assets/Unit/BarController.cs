@@ -10,7 +10,7 @@ public class BarController : MonoBehaviour
     private float valueShould;
     private float valueMax;
     public Image healthBarImage;
-    public void SetValue_Initial(int valueCurrent, int value)
+    public void SetValue_Initial(float valueCurrent, float value)
     {
         valueNow = (float)valueCurrent;
         valueMax = (float)value;
@@ -19,7 +19,7 @@ public class BarController : MonoBehaviour
         valueShould = valueNow;
     }
 
-    public void SetValue(int valueCurrent, int valueMax)
+    public void SetValue(float valueCurrent, float valueMax)
     {
         valueShould = (float)valueCurrent;
     }

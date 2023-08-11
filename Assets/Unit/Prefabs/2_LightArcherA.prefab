@@ -228,7 +228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: current_AI_Tactic
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.ProjectilePrefab

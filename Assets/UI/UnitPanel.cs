@@ -6,17 +6,11 @@ using TMPro;
 
 public class UnitPanel : MonoBehaviour
 {
-    //public Unit test;
-
-    //public void Start()
-    //{
-    //    InputUnit(test);
-    //}
-    public TMP_Text stats,unitName,unitDes,Gcost;
+    public TMP_Text stats,unitName,unitDes,Gcost,Tcost;
     public Image image;
 
     public TraitButtonPanel trait1, trait2;
-    public void InputUnit(Unit unit)
+    public void InputUnit(UnitData_Local unit)
     {
         string range = "Melee";
         if (unit.data.unitType == UnitData.UnitType.archer || unit.data.unitType == UnitData.UnitType.artillery)
@@ -29,29 +23,21 @@ public class UnitPanel : MonoBehaviour
             "Range:" + range + "\n" +
             "Speed:" + unit.data.moveSpeed;
 
-        unitName.text = unit.data_local.ID.ToString();
+        unitName.text = unit.ID.ToString();
 
-
-        UnitList list = Resources.Load<UnitList>("List");
         string des = "";
 
         Trait _trait1 = null;
         Trait _trait2 = null;
-        int gold = 0;
-        foreach (UnitData_Local _unit in list.UnitPrefabs)
-        {
-            if (_unit.ID == unit.data_local.ID)
-            {
-                des = _unit.description;
-                _trait1 = _unit.trait1;
-                _trait2 = _unit.trait2;
-                gold = _unit.Cost;
-            }
-        }
+
+        des = unit.description;
+        _trait1 = unit.trait1;
+        _trait2 = unit.trait2;
 
         unitDes.text = des;
         trait1.InputTrait(_trait1);
         trait2.InputTrait(_trait2);
-        Gcost.text = gold.ToString();
+        Gcost.text = unit.Gcost.ToString() + "G";
+        Tcost.text = unit.Tcost.ToString() + "S";
     }
 }

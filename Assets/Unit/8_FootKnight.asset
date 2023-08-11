@@ -13,22 +13,26 @@ MonoBehaviour:
   m_Name: 8_FootKnight
   m_EditorClassIdentifier: 
   ID: 8
-  UnitPrefabA: {fileID: 0}
-  UnitPrefabB: {fileID: 0}
-  Cost: 30
-  trait1: {fileID: 0}
-  trait2: {fileID: 0}
+  UnitPrefabA: {fileID: 9001497167157717691, guid: ab3efd7ab0312464d9a0a189fa52764e, type: 3}
+  UnitPrefabB: {fileID: 4620132254154690545, guid: f5e517f9cb540a3429ea09839b755469, type: 3}
+  unitSpriteA: {fileID: 21300000, guid: dfe3f47cdb141664791702929d1d2868, type: 3}
+  unitSpriteB: {fileID: 21300000, guid: 41b46cab66c53da49a628458281cc65e, type: 3}
+  Gcost: 65
+  Tcost: 10
+  Num: 2
+  trait1: {fileID: 11400000, guid: eacaf167c9a37df44a8574b8d05c44db, type: 2}
+  trait2: {fileID: 11400000, guid: 300bec1d68df9104185a4672ba839477, type: 2}
   description: 
   data:
     unitType: 0
-    health: 62
+    health: 65
     armor: 8
     toughness: 2
     damageMin: 6
     damageMax: 12
     weaponCauseAOE: 1
     attackCD: 6
-    moveSpeed: 1.22
+    moveSpeed: 1
     ProjectilePrefab: {fileID: 0}
     isJavelin: 0
     shootDis: 0

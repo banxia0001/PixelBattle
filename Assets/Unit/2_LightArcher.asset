@@ -15,7 +15,11 @@ MonoBehaviour:
   ID: 2
   UnitPrefabA: {fileID: 4089302256987607740, guid: 63efd139b5f8fab44b46f676a3555c88, type: 3}
   UnitPrefabB: {fileID: 3903716346512750715, guid: a744124f163c06747a6298a2b6b5d7d5, type: 3}
-  Cost: 16
+  unitSpriteA: {fileID: 21300000, guid: 649be5dd067e52540af7ad52e6e4488c, type: 3}
+  unitSpriteB: {fileID: 21300000, guid: 8af7802df08617f4b860580e769f9fbe, type: 3}
+  Gcost: 50
+  Tcost: 6
+  Num: 3
   trait1: {fileID: 11400000, guid: 41dfcb00599763a48896bf65eaec5318, type: 2}
   trait2: {fileID: 11400000, guid: f78dae40049b4fe48911c263aa154ccb, type: 2}
   description: 
@@ -36,4 +40,4 @@ MonoBehaviour:
     arrowSpeed: 0.2
     chargeSpeed_Accererate: 0
     chargeSpeed_Max: 0
-    antiCharge: 0
+    isSpear: 0

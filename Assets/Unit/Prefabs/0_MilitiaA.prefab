@@ -35,6 +35,7 @@ MonoBehaviour:
   VP: {fileID: 0}
   anim: {fileID: 0}
   unit: {fileID: 0}
+  use3DirVP: 0
 --- !u!135 &615421844
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -222,6 +223,10 @@ PrefabInstance:
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.moveSpeed
       value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: current_AI_Tactic
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929164, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_Name

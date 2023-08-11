@@ -69,7 +69,7 @@ public class UnitAIController : MonoBehaviour
     public virtual void AI_LookAt(Transform pos)
     {
         unit.agent.enabled = false;
-        transform.LookAt(pos, Vector3.up);
+        unit.transform.LookAt(pos, Vector3.up);
         unit.agent.enabled = true;
     }
     public virtual void AI_Flee()
