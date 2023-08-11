@@ -27,7 +27,7 @@ public class UnitInfantryController : UnitAIController
         if (unit.attackCD <= 0 && canAttack)
         {
             unit.attackCD = unit.data.attackCD + Random.Range(-1, 1);
-            SetUpAttack(unit.data.damageMin, unit.data.damageMax, false);
+            SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponCauseAOE);
             unit.SetChargeSpeed(0);
             AI_Stay(true);
         }
@@ -49,7 +49,17 @@ public class UnitInfantryController : UnitAIController
     {
         int ran = Random.Range(0, 2);
         if (ran == 0) anim.SetTrigger("attack");
-        if (ran == 1) anim.SetTrigger("attack2");
+
+
+        if (ran == 1)
+        {
+            anim.SetTrigger("attack2");
+            if (unit.data_local.ID == UnitData.UnitListID.FootKnight)
+            {
+                AI_LookAt(unit.attackTarget.transform);
+            }
+        }
+           
         attackTrigger.InputData(this, damMin, damMax, causeAOE);
     }
 }

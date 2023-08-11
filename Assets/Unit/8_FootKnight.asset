@@ -21,14 +21,14 @@ MonoBehaviour:
   description: 
   data:
     unitType: 0
-    health: 40
-    armor: 6
+    health: 62
+    armor: 8
     toughness: 2
-    damageMin: 2
-    damageMax: 10
+    damageMin: 6
+    damageMax: 12
     weaponCauseAOE: 1
-    attackCD: 10
-    moveSpeed: 0.75
+    attackCD: 6
+    moveSpeed: 1.22
     ProjectilePrefab: {fileID: 0}
     isJavelin: 0
     shootDis: 0

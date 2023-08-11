@@ -230,7 +230,7 @@ public class Unit : MonoBehaviour
      
         //Debug.Log(knockBackForce);
 
-        if (knockBackForce > (float)data.toughness)
+        if (knockBackForce > (float)data.toughness/2)
         {
             agent.enabled = false;
             yield return new WaitForSeconds(waitTime);
@@ -242,7 +242,7 @@ public class Unit : MonoBehaviour
                    
                     Vector3 newVector = this.transform.position - attacker.gameObject.transform.position;
                     rb.velocity = Vector3.zero;
-                    rb.AddForce(2f * newVector * knockBackForce, ForceMode.Impulse);
+                    rb.AddForce(4f * newVector * knockBackForce, ForceMode.Impulse);
                     knockBackTimer = 0.1f + knockBackForce / 15;
                 }
             }
