@@ -274,6 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inAttacking: 0
   isCharging: 0
+  damBonus: 0
 --- !u!114 &7763152626759104746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,7 +469,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929166, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_Mass
-      value: 10
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929167, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3026952450678620712, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_AnchorMax.x

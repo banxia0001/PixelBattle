@@ -11,7 +11,8 @@ public class UnitRangerController : UnitAIController
     {
         unit = this.transform.parent.GetComponent<Unit>();
         canAttack = false;
-        SetUp();
+        anim = this.GetComponent<Animator>();
+        unit = this.transform.parent.GetComponent<Unit>();
     }
 
     public void AI_RangeUnit_Action()
@@ -58,9 +59,9 @@ public class UnitRangerController : UnitAIController
 
             else if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.shoot)
             {
-                if (dis < unit.data.shootDis * 0.7f) AI_Stay(false);
+                if (dis < unit.data.shootDis * 0.6f) AI_Stay(false);
 
-                else if (dis < unit.data.shootDis * 0.35f) AI_Flee();
+                else if (dis < unit.data.shootDis * 0.2f) AI_Flee();
 
                 else AI_MoveToward(unit.attackTarget.gameObject.transform);
             }
@@ -76,8 +77,8 @@ public class UnitRangerController : UnitAIController
 
     public void Update()
     {
-        if (unit.attackCD <= unit.data.attackCD * 0.4f) unit.SetSpeed(0.1f);
-        else unit.SetSpeed(unit.data.moveSpeed);
+        //if (unit.attackCD <= unit.data.attackCD * 0.4f) unit.SetSpeed(0.1f);
+        //else unit.SetSpeed(unit.data.moveSpeed);
 
         if (canAttack)
         {

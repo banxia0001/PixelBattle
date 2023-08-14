@@ -25,14 +25,15 @@ public class UnitData
 
     public UnitType unitType;
   
-    [Range(10, 75)]
+    [Range(10, 200)]
     public int health;
-    [Range(0, 10)]
+    [Range(0, 20)]
     public int armor;
     [Range(0, 10)]
     public int toughness;
-
+    [Range(1, 20)]
     public int damageMin;
+    [Range(2, 20)]
     public int damageMax;
     public bool weaponCauseAOE;
 
@@ -41,6 +42,7 @@ public class UnitData
 
     [Range(0.5f, 5f)]
     public float moveSpeed;
+    public float moveStopDis;
 
 
     [Header("Archer")]
@@ -64,4 +66,5 @@ public class UnitData
 
     [Header("Traits")]
     public bool isSpear;
+    public bool isAP;
 }

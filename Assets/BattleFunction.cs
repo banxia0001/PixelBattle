@@ -94,12 +94,12 @@ public class BattleFunction : MonoBehaviour
         return unitList;
     }
 
-    public static int DamageCalculate(int damMin, int damMax, Unit defender, bool isCharge, bool isJave)
+    public static int DamageCalculate(int damMin, int damMax, Unit defender, bool isCharge, bool isJave, bool isAP)
     {
         int dam = Random.Range(damMin, damMax);
         int amr = defender.data.armor;
 
-        if (isJave)
+        if (isJave || isAP)
         {
             amr = amr / 2;
         }

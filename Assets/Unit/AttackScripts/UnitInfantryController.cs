@@ -16,8 +16,21 @@ public class UnitInfantryController : UnitAIController
             return;
         }
 
+
+        Unit closestCav = unit.AI_FindClosestTargetInList(UnitData.AI_State_FindTarget.findCavalry);
+        if (closestCav != null)
+        {
+            float dis_CavAlerm = Vector3.Distance(unit.transform.position, closestCav.transform.position);
+            if (dis_CavAlerm < 4f)
+            {
+                unit.attackTarget = closestCav;
+            }
+
+        }
+
         float dis = Vector3.Distance(unit.transform.position, unit.attackTarget.transform.position);
         bool canAttack = false;
+
         if (dis < VP.radius_EyeRough * 4f)
         {
             canAttack = VP.CheckHitShpere();
@@ -27,7 +40,7 @@ public class UnitInfantryController : UnitAIController
         if (unit.attackCD <= 0 && canAttack)
         {
             unit.attackCD = unit.data.attackCD + Random.Range(-1, 1);
-            SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponCauseAOE);
+            SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponCauseAOE, unit.data.isAP);
             unit.SetChargeSpeed(0);
             AI_Stay(true);
         }
@@ -40,26 +53,59 @@ public class UnitInfantryController : UnitAIController
         {
             if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
             {
-                AI_MoveToward(unit.attackTarget.gameObject.transform);
+                if (dis < unit.data.moveStopDis) AI_Stay(false);
+
+                else AI_MoveToward(unit.attackTarget.gameObject.transform);
             }
         }
     }
 
-    public override void SetUpAttack(int damMin, int damMax, bool causeAOE)
+    public override void SetUpAttack(int damMin, int damMax, bool causeAOE, bool causeAP)
     {
-        int ran = Random.Range(0, 2);
-        if (ran == 0) anim.SetTrigger("attack");
+        attackTrigger.InputData(this, damMin, damMax, causeAOE, causeAP);
 
-
-        if (ran == 1)
+        if (use3DirVP)
         {
-            anim.SetTrigger("attack2");
-            if (unit.data_local.ID == UnitData.UnitListID.FootKnight)
+            if (unit.data_local.ID == UnitData.UnitListID.SpearKnight)
             {
-                AI_LookAt(unit.attackTarget.transform);
+                if (VP.CheckSphere("Right"))
+                {
+                    Debug.Log("!!R");
+                    this.unit.agent.enabled = false;
+                    this.unit.transform.eulerAngles += new Vector3(0, -30, 0);
+                    this.unit.agent.enabled = true;
+                    anim.SetTrigger("attack");
+                    return;
+                }
+
+                if (VP.CheckSphere("Left"))
+                {
+                    Debug.Log("!!L");
+                    this.unit.agent.enabled = false;
+                    this.unit.transform.eulerAngles += new Vector3(0, 30, 0);
+                    this.unit.agent.enabled = true;
+                    anim.SetTrigger("attack");
+                    return;
+                }
+
+                else anim.SetTrigger("attack");
+
             }
         }
-           
-        attackTrigger.InputData(this, damMin, damMax, causeAOE);
+
+        else
+        {
+            int ran = Random.Range(0, 2);
+            if (ran == 0) anim.SetTrigger("attack");
+
+            if (ran == 1)
+            {
+                anim.SetTrigger("attack2");
+                if (unit.data_local.ID == UnitData.UnitListID.FootKnight)
+                {
+                    AI_LookAt(unit.attackTarget.transform);
+                }
+            }
+        }
     }
 }

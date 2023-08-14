@@ -33,6 +33,7 @@ public class Unit : MonoBehaviour
     private UnitRangerController URC;
     private UnitCavalryController UCC;
     private UnitInfantryController UIC;
+    private UnitSpearmanController USC;
 
     private Rigidbody rb;
     private float chargeSpeed;
@@ -49,6 +50,7 @@ public class Unit : MonoBehaviour
         URC = this.transform.GetChild(2).GetComponent<UnitRangerController>();
         UCC = this.transform.GetChild(2).GetComponent<UnitCavalryController>();
         UIC = this.transform.GetChild(2).GetComponent<UnitInfantryController>();
+        USC = this.transform.GetChild(2).GetComponent<UnitSpearmanController>();
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
@@ -102,10 +104,18 @@ public class Unit : MonoBehaviour
         if (health <= 0) return;
         attackCD--;
 
+        UnitTeam targetTeam = UnitTeam.teamB;
+        if (unitTeam == UnitTeam.teamB) targetTeam = UnitTeam.teamA;
+
         //[If target empty]
         if (attackTarget == null)
         {
-            AI_FindTarget();
+            attackTarget = AI_FindClosestTargetInList(current_AI_Target);
+
+            if (attackTarget == null)
+            {
+                attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
+            }
         }
         //[See if there are new unit that are closer]
         else
@@ -113,19 +123,24 @@ public class Unit : MonoBehaviour
             float dis = Vector3.Distance(this.transform.position, attackTarget.transform.position);
             if (data.unitType == UnitData.UnitType.infantry)
             {
-                if (dis > 3f) AI_FindTarget();
+                attackTarget = AI_FindClosestTargetInList(current_AI_Target);
             }
             else if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery)
             {
-                if (dis > data.shootDis * 1.2f) AI_FindTarget();
+                if (dis > data.shootDis * 1.2f) attackTarget = AI_FindClosestTargetInList(current_AI_Target);
             } 
             else if (data.unitType == UnitData.UnitType.cavalry)
             {
-                if (dis > 4f) AI_FindTarget();
+                if (dis > 4f) attackTarget = AI_FindClosestTargetInList(current_AI_Target);
             }
             else if (data.unitType == UnitData.UnitType.monster)
             {
-                if (dis > 3f) AI_FindTarget();
+                if (dis > 3f) attackTarget = AI_FindClosestTargetInList(current_AI_Target);
+            }
+
+            if (attackTarget == null)
+            {
+                attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
             }
         }
 
@@ -133,7 +148,11 @@ public class Unit : MonoBehaviour
         {
             if (data.unitType == UnitData.UnitType.infantry)
             {
-                UIC.AI_Warrior_Action();
+                if (UIC != null)
+                    UIC.AI_Warrior_Action();
+
+                if (USC != null)
+                    USC.AI_Warrior_Action();
             }
 
             if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery)
@@ -149,42 +168,38 @@ public class Unit : MonoBehaviour
     }
 
 
-    private void AI_FindTarget()
+    public Unit AI_FindClosestTargetInList(UnitData.AI_State_FindTarget current_AI_Target)
     {
         UnitTeam targetTeam = UnitTeam.teamB;
         if (unitTeam == UnitTeam.teamB) targetTeam = UnitTeam.teamA;
 
         if (current_AI_Target == UnitData.AI_State_FindTarget.findClosest)
         {
-            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
+          return AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
         }
-
 
         if (current_AI_Target == UnitData.AI_State_FindTarget.findWarrior)
         {
-            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.infantry, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.infantry, this);
         }
         if (current_AI_Target == UnitData.AI_State_FindTarget.findArcher)
         {
-            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.archer, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.archer, this);
         }
         if (current_AI_Target == UnitData.AI_State_FindTarget.findCavalry)
         {
-            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.cavalry, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.cavalry, this);
         }
         if (current_AI_Target == UnitData.AI_State_FindTarget.findMonster)
         {
-            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.monster, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.monster, this);
         }
         if (current_AI_Target == UnitData.AI_State_FindTarget.findArtillery)
         {
-            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.artillery, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.artillery, this);
         }
 
-        if (attackTarget == null)
-        {
-            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
-        }
+        return null;
     }
 
     public void AddDamage(int dam)
@@ -222,8 +237,6 @@ public class Unit : MonoBehaviour
     }
     private IEnumerator _AddKnockBack(Transform attacker, float knockBackForce, float waitTime)
     {
-       
-     
         //Debug.Log(knockBackForce);
 
         if (knockBackForce > (float)data.toughness/2)
@@ -235,10 +248,11 @@ public class Unit : MonoBehaviour
             {
                 if (agent != null)
                 {
-                   
+                    knockBackForce = knockBackForce -= data.toughness / 2;
+                    Debug.Log(knockBackForce);
                     Vector3 newVector = this.transform.position - attacker.gameObject.transform.position;
                     rb.velocity = Vector3.zero;
-                    rb.AddForce(4f * newVector * knockBackForce, ForceMode.Impulse);
+                    rb.AddForce(2f * newVector * knockBackForce, ForceMode.Impulse);
                     knockBackTimer = 0.1f + knockBackForce / 15;
                 }
             }

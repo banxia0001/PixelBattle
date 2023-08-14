@@ -27,8 +27,8 @@ public class GameController : MonoBehaviour
 
     public void UpdateG()
     {
-        GTextA.text = teamA.G.ToString();
-        GTextB.text = teamB.G.ToString();
+        GTextA.text = teamA.G.ToString() + "G";
+        GTextB.text = teamB.G.ToString() + "G";
     }
 
     private void Update()

@@ -17,7 +17,8 @@ public class UnitAIController : MonoBehaviour
     {
         unit = this.transform.parent.GetComponent<Unit>();
         VP = this.transform.parent.GetComponent<ViewPoint>();
-        SetUp();
+        anim = this.GetComponent<Animator>();
+        unit = this.transform.parent.GetComponent<Unit>();
     }
     public virtual void SetUp()
     {
@@ -28,7 +29,7 @@ public class UnitAIController : MonoBehaviour
         unit = this.transform.parent.GetComponent<Unit>();
     }
 
-    public virtual void SetUpAttack(int damMin, int damMax, bool causeAOE)
+    public virtual void SetUpAttack(int damMin, int damMax, bool causeAOE, bool causeAP)
     {
         return;
     }

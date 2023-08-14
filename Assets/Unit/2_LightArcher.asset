@@ -25,19 +25,20 @@ MonoBehaviour:
   description: 
   data:
     unitType: 1
-    health: 20
+    health: 30
     armor: 1
     toughness: 0
-    damageMin: 1
-    damageMax: 8
+    damageMin: 5
+    damageMax: 6
     weaponCauseAOE: 0
-    attackCD: 10
+    attackCD: 11
     moveSpeed: 1.5
+    moveStopDis: 0
     ProjectilePrefab: {fileID: 1957203459384285164, guid: 5bffc50d735db6247a90ac9e558a4118, type: 3}
     isJavelin: 0
-    shootDis: 33
-    arrowOffset: 1
-    arrowSpeed: 0.2
+    shootDis: 20
+    arrowOffset: 0.3
+    arrowSpeed: 0.22
     chargeSpeed_Accererate: 0
     chargeSpeed_Max: 0
     isSpear: 0

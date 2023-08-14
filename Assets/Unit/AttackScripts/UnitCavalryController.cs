@@ -63,14 +63,14 @@ public class UnitCavalryController : UnitAIController
             //[Freeze after attack]
             if (unit.attackCD > unit.data.attackCD * 0.3f)
             {
-                unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.NoObstacleAvoidance;
+                unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
 
                 Vector3 toPos = unit.transform.position + unit.transform.forward * 5f;
                 unit.agent.SetDestination(toPos);
 
  
-                bool canunitgo = unit.agent.CalculatePath(toPos, unit.agent.path);
-                if(!canunitgo) unit.agent.SetDestination(unit.transform.position + unit.transform.forward * -10f);
+                //bool canunitgo = unit.agent.CalculatePath(toPos, unit.agent.path);
+                //if(!canunitgo) unit.agent.SetDestination(unit.transform.position + unit.transform.forward * -10f);
 
             }
 
@@ -107,18 +107,18 @@ public class UnitCavalryController : UnitAIController
 
     public void AI_Cav_Attack()
     {
-        unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.NoObstacleAvoidance;
+        unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
         unit.attackCD = unit.data.attackCD + Random.Range(-2, 2);
 
         if (unit.data.weaponCauseAOE)
-           SetUpAttack(unit.data.damageMin, unit.data.damageMax, true);
+           SetUpAttack(unit.data.damageMin, unit.data.damageMax, true, unit.data.isAP);
 
         else
-           SetUpAttack(unit.data.damageMin, unit.data.damageMax, false);
+           SetUpAttack(unit.data.damageMin, unit.data.damageMax, false, unit.data.isAP);
     }
-    public override void SetUpAttack(int damMin, int damMax, bool causeAOE)
+    public override void SetUpAttack(int damMin, int damMax, bool causeAOE, bool causeAP)
     {
-        attackTrigger.InputData(this, damMin, damMax, causeAOE);
+        attackTrigger.InputData(this, damMin, damMax, causeAOE, causeAP);
     }
     public void TriggerAttack(string myanim)
     {
