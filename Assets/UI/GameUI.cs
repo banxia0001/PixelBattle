@@ -15,11 +15,52 @@ public class GameUI : MonoBehaviour
     PointerEventData myPointerEventData;
 
 
+    [Header("Team")]
+    public TMP_Text G_A;
+    public TMP_Text G_B;
+    public TMP_Text G_A_Turn;
+    public TMP_Text G_B_Turn;
+    public TMP_Text G_A_Pop;
+    public TMP_Text G_B_Pop;
+    public BarController goldBar;
+    public BarController scoreBar;
+
+    private void Start()
+    {
+        goldBar.SetValue_Initial(0.5f,1);
+        scoreBar.SetValue_Initial(0.5f,1);
+    }
+
+    public void UpdateGoldBar(float ratio)
+    {
+        goldBar.SetValue(ratio);
+    }
+    public void UpdateScoreBar(int Score, int ScoreMax)
+    {
+        float ratio = (float)Score / (float)ScoreMax;
+        Debug.Log("R" + ratio);
+        scoreBar.SetValue(ratio);
+    }
+
+    public void UpdateGTText(int GAT, int GBT)
+    {
+        G_A_Turn.text = GAT.ToString() + "G/S";
+        G_B_Turn.text = GBT.ToString() + "G/S";
+
+    }
+    public void UpdateGText(int GA, int GB)
+    {
+        G_A.text = GA.ToString();
+        G_B.text = GB.ToString();
+    }
+    public void UpdatePText(int GA, int GB)
+    {
+        G_A_Pop.text = GA.ToString() + "/50";
+        G_B_Pop.text = GB.ToString() + "/50";
+    }
     public void Update()
     {
         CheckUIRaycast();
-
-
     }
 
     public static Vector2 ScreenToRectPos(Vector2 screen_pos, Canvas canvas)

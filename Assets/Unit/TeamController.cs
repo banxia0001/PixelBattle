@@ -4,16 +4,23 @@ using UnityEngine;
 
 public class TeamController : MonoBehaviour
 {
+    public bool isControl_By_AIPlayer;
     private GameController GC;
+
+    [Header("TeamStats")]
     public int G;
+    public int P;
     public UnitRecruitList Rlist;
     public Unit.UnitTeam unitTeam;
 
+    [Header("TeamStartPos")]
     public int mapLength;
     public int startXAxis;
 
+    [Header("TeamButton")]
     public List<RecruitButton> buttons;
 
+    public int teamScore;
 
     public List<Unit> warriorList;
     [HideInInspector]
@@ -44,21 +51,25 @@ public class TeamController : MonoBehaviour
 
     public bool RecruitUnit(int G)
     {
-        if (G > this.G)
-            return false;
+        if (G > this.G) return false;
 
-        else
-        {
-            this.G = this.G - G;
-            GC.UpdateG();
-            return true;
-        }
+        this.G = this.G - G;
+        return true;
+    }
+
+    public bool Check_UnitPop(int P)
+    {
+        if (this.P + P > 50) return false;
+        else return true;
     }
 
     public void SpanwUnit(UnitData_Local data)
     {
         int num = data.Num;
-      
+
+        this.P = this.P + num;
+        GC.UpdatePText();
+
         Vector3 spawnPos = new Vector3(0, 0, 0);
         GameObject spawnOb = data.UnitPrefabA;
 
@@ -91,12 +102,16 @@ public class TeamController : MonoBehaviour
 
     public void TeamCheck_Action()
     {
+        float teamScore = 0;
+        int P = 0;
         if (warriorList != null)
             if (warriorList.Count != 0)
             {
                 foreach (Unit unit in warriorList)
                 {
                     unit.AI_DecideAction();
+                    teamScore += CalcualteUnitScore(unit);
+                    P++;
                 }
             }
 
@@ -106,6 +121,8 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in archerList)
                 {
                     unit.AI_DecideAction();
+                    teamScore += CalcualteUnitScore(unit);
+                    P++;
                 }
             }
 
@@ -115,6 +132,8 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in cavalryList)
                 {
                     unit.AI_DecideAction();
+                    teamScore += CalcualteUnitScore(unit);
+                    P++;
                 }
             }
 
@@ -124,6 +143,8 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in monsterList)
                 {
                     unit.AI_DecideAction();
+                    teamScore += CalcualteUnitScore(unit);
+                    P++;
                 }
             }
 
@@ -133,8 +154,35 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in artilleryList)
                 {
                     unit.AI_DecideAction();
+                    teamScore += CalcualteUnitScore(unit);
+                    P++;
                 }
             }
+
+        this.teamScore = (int)teamScore;
+        this.P = P;
+    }
+
+
+    public float CalcualteUnitScore(Unit unit)
+    {
+        UnitData_Local data = unit.data_local;
+        float cost = data.Gcost / data.Num;
+        float healthRatio = unit.health / data.data.health;
+
+        float armorValue = 1;
+        if (unit.data.armor > 10) armorValue = 1.1f;
+        if (unit.data.armor > 15) armorValue = 1.2f;
+        if (unit.data.armor > 20) armorValue = 1.3f;
+        if (unit.data.armor > 25) armorValue = 1.4f;
+
+        float value = healthRatio * cost * armorValue;
+
+        float xAxis = unit.transform.position.x - startXAxis;
+        if (unitTeam == Unit.UnitTeam.teamB) xAxis = startXAxis - unit.transform.position.x;
+
+
+        return (xAxis) + (cost * armorValue * healthRatio)/3;
     }
 
 }

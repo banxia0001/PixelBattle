@@ -62,6 +62,32 @@ public class UnitAIController : MonoBehaviour
                 unit.agent.SetDestination(unit.transform.position);
         }
     }
+
+    public virtual void AI_GoToEnemyBase(Unit.UnitTeam team)
+    {
+        //Debug.Log("Stay");
+        if (unit.agent.enabled)
+        {
+            if(team == Unit.UnitTeam.teamA)
+                unit.agent.SetDestination(unit.transform.position + new Vector3(10,0,0));
+
+            else
+                unit.agent.SetDestination(unit.transform.position + new Vector3(-10, 0, 0));
+        }
+    }
+
+    public virtual void AI_GoToBase(Unit.UnitTeam team)
+    {
+        //Debug.Log("Stay");
+        if (unit.agent.enabled)
+        {
+            if (team == Unit.UnitTeam.teamA)
+                unit.agent.SetDestination(unit.transform.position + new Vector3(-10, 0, 0));
+
+            else
+                unit.agent.SetDestination(unit.transform.position + new Vector3(10, 0, 0));
+        }
+    }
     public virtual void AI_MoveToward(Transform trans)
     {
         if (unit.agent.enabled)

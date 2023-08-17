@@ -10,7 +10,7 @@ public class UnitData
         Militia,
         LightInfantry,
         LightArcher,
-        JavelinInfantry,
+        Spearman,
         HeavyInfantry,
         HeavyCavalry,
         Sobek,
@@ -25,15 +25,15 @@ public class UnitData
 
     public UnitType unitType;
   
-    [Range(10, 200)]
+    [Range(10, 150)]
     public int health;
-    [Range(0, 20)]
+    [Range(0, 25)]
     public int armor;
     [Range(0, 10)]
     public int toughness;
-    [Range(1, 20)]
+    [Range(1, 30)]
     public int damageMin;
-    [Range(2, 20)]
+    [Range(2, 30)]
     public int damageMax;
     public bool weaponCauseAOE;
 
@@ -67,4 +67,5 @@ public class UnitData
     [Header("Traits")]
     public bool isSpear;
     public bool isAP;
+    public bool isShielded;
 }

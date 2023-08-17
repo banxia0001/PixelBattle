@@ -17,19 +17,19 @@ MonoBehaviour:
   UnitPrefabB: {fileID: 4620132254154690545, guid: f5e517f9cb540a3429ea09839b755469, type: 3}
   unitSpriteA: {fileID: 21300000, guid: dfe3f47cdb141664791702929d1d2868, type: 3}
   unitSpriteB: {fileID: 21300000, guid: 41b46cab66c53da49a628458281cc65e, type: 3}
-  Gcost: 65
-  Tcost: 10
+  Gcost: 70
+  Tcost: 28
   Num: 2
   trait1: {fileID: 11400000, guid: eacaf167c9a37df44a8574b8d05c44db, type: 2}
   trait2: {fileID: 11400000, guid: 300bec1d68df9104185a4672ba839477, type: 2}
   description: 
   data:
     unitType: 0
-    health: 60
-    armor: 8
+    health: 40
+    armor: 16
     toughness: 4
-    damageMin: 4
-    damageMax: 8
+    damageMin: 12
+    damageMax: 22
     weaponCauseAOE: 1
     attackCD: 14
     moveSpeed: 1
@@ -43,3 +43,4 @@ MonoBehaviour:
     chargeSpeed_Max: 0
     isSpear: 0
     isAP: 1
+    isShielded: 0

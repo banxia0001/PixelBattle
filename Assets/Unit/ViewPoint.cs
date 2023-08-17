@@ -40,7 +40,7 @@ public class ViewPoint : MonoBehaviour
             return false;
         }
     }
-    public virtual bool CheckSphere(string dir)
+    public virtual int CheckSphere(string dir)
     {
         List<Unit> units = null;
 
@@ -56,9 +56,9 @@ public class ViewPoint : MonoBehaviour
 
         if (units != null && units.Count != 0)
         {
-            return true;
+            return units.Count;
         }
-        else return false;
+        else return 0;
     }
 
     public virtual List<Unit> AI_Melee_FindAllUnit_InSphere(Vector3 postion, float range)

@@ -115,6 +115,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inAttacking: 0
   isCharging: 0
+  damBonus: 0
+  knockbackBonus: 0
+  canAttack_AOE: 0
 --- !u!114 &7917615870884319136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,6 +461,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: current_AI_Target
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data.ProjectilePrefab
       value: 
       objectReference: {fileID: 1957203459384285164, guid: 5bffc50d735db6247a90ac9e558a4118, type: 3}
@@ -476,6 +483,10 @@ PrefabInstance:
     - target: {fileID: 3026952450678620712, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834908224130398036, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: radius_EyeRough
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14a4628c74e685e49a318331739a93b1, type: 3}

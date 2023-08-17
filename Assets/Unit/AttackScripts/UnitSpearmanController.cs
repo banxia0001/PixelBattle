@@ -12,7 +12,7 @@ public class UnitSpearmanController : UnitAIController
         //[Stay]
         if (unit.attackTarget == null)
         {
-            AI_Stay(true);
+            AI_GoToEnemyBase(unit.unitTeam);
             return;
         }
 

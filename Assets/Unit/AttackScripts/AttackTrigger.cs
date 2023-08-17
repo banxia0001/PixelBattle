@@ -8,9 +8,10 @@ public class AttackTrigger : MonoBehaviour
     public bool inAttacking;
     public bool isCharging;
     public int damBonus;
+    public float knockbackBonus;
+    public bool canAttack_AOE;
 
     private bool canAttack;
-    private bool canAttack_AOE;
     private int damMin;
     private int damMax;
     private bool causeAP;
@@ -41,18 +42,18 @@ public class AttackTrigger : MonoBehaviour
                     damMax += (int)bonus;
                     damMin += (int)bonus;
 
-                    int dam = BattleFunction.DamageCalculate(damMin + damBonus, damMax + damBonus, unit, isCharging,false,causeAP);
+                    int dam = BattleFunction.DamageCalculate(damMin + damBonus, damMax + damBonus, unit, isCharging,false,causeAP, false);
 
                     BattleFunction.Attack(this.gameObject.transform, dam, unit);
 
                     if (isCharging)
                     {
-                        unit.AddKnockBack(USC.unit.transform, damMax / 2 + damMin / 2 + bonus/2 + damBonus/2, 0.1f);
+                        unit.AddKnockBack(USC.unit.transform, damMax / 2 + damMin / 2 + bonus/2 + damBonus/2 + knockbackBonus, 0.1f);
                     }
 
                     else
                     {
-                        unit.AddKnockBack(USC.unit.transform, damMax / 2 + damMin / 2 + damBonus/2, 0.1f);
+                        unit.AddKnockBack(USC.unit.transform, damMax / 2 + damMin / 2 + damBonus/2 + knockbackBonus, 0.1f);
                     }
 
                     if (!canAttack_AOE)

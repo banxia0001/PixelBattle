@@ -61,8 +61,7 @@ public class RecruitButton : MonoBehaviour
     {
         if (buttonState == ButtonState.WaitingForRecruit)
         {
-            bool canRecruit = TC.RecruitUnit(unit.Gcost);
-            if (canRecruit)
+            if (TC.RecruitUnit(unit.Gcost))
             {
                 StartTrainUnit();
             }
@@ -94,10 +93,26 @@ public class RecruitButton : MonoBehaviour
 
     private void SpawnUnit()
     {
-        buttonState = ButtonState.WaitingForRecruit;
-        TC.SpanwUnit(unit);
-        T_Image.SetActive(false);
-        T_Bar.gameObject.SetActive(false);
-        text.text = "X" + unit.Num + "<color=#FFD800>|" + unit.Gcost + "G" + "</color>";
+    
+
+        if (TC.Check_UnitPop(unit.Num))
+        {
+            buttonState = ButtonState.WaitingForRecruit;
+
+            TC.SpanwUnit(unit);
+            T_Image.SetActive(false);
+            T_Bar.gameObject.SetActive(false);
+            text.text = "X" + unit.Num + "<color=#FFD800>|" + unit.Gcost + "G" + "</color>";
+        }
+
+        else
+        { 
+            if(!TC.isControl_By_AIPlayer)
+            {
+                float offset = 120;
+                if (TC.unitTeam == Unit.UnitTeam.teamB) offset = -140;
+                BattleFunction.PopText(this.GetComponent<RectTransform>(), offset, "PopText_P");
+            }
+        }
     }
 }

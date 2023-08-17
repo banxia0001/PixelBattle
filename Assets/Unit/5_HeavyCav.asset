@@ -17,22 +17,22 @@ MonoBehaviour:
   UnitPrefabB: {fileID: 5678418641081850666, guid: e43960441169e5c46a1b2c6c33082e29, type: 3}
   unitSpriteA: {fileID: 21300000, guid: 1c80895486f1db84b995a461f157c9bc, type: 3}
   unitSpriteB: {fileID: 21300000, guid: d9cd0452537453d45a86eaeffe39fdb0, type: 3}
-  Gcost: 130
-  Tcost: 5
+  Gcost: 85
+  Tcost: 35
   Num: 1
   trait1: {fileID: 11400000, guid: eacaf167c9a37df44a8574b8d05c44db, type: 2}
   trait2: {fileID: 11400000, guid: 6d9f0e4c4079a7e4989c774e672d0e9a, type: 2}
   description: 
   data:
     unitType: 2
-    health: 60
-    armor: 8
+    health: 40
+    armor: 16
     toughness: 2
-    damageMin: 5
-    damageMax: 10
+    damageMin: 12
+    damageMax: 22
     weaponCauseAOE: 1
     attackCD: 15
-    moveSpeed: 2.5
+    moveSpeed: 2.22
     moveStopDis: 0
     ProjectilePrefab: {fileID: 0}
     isJavelin: 0
@@ -42,3 +42,5 @@ MonoBehaviour:
     chargeSpeed_Accererate: 2
     chargeSpeed_Max: 4
     isSpear: 0
+    isAP: 0
+    isShielded: 1

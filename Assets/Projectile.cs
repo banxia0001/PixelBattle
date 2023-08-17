@@ -59,7 +59,7 @@ public class Projectile : MonoBehaviour
             Unit targetUnit = BattleFunction.Find_ClosestUnitInList(BattleFunction.Find_UnitsInRange(targetAttackTeam, attackDistance, this.transform), this.transform);
             if (targetUnit != null)
             {
-                int dam = BattleFunction.DamageCalculate(damMin, damMax, targetUnit, false,isJave,false);
+                int dam = BattleFunction.DamageCalculate(damMin, damMax, targetUnit, false,isJave,false,true);
                 //Debug.Log("!!");
                 BattleFunction.Attack(this.transform, dam, targetUnit);
                 targetUnit.AddKnockBack(this.transform, damMax/2 + damMin/2, 0.01f);
@@ -75,7 +75,7 @@ public class Projectile : MonoBehaviour
                 {
                     foreach (Unit unit in targetUnits)
                     {
-                        int dam = BattleFunction.DamageCalculate(damMin, damMax, unit, false,isJave, false);
+                        int dam = BattleFunction.DamageCalculate(damMin, damMax, unit, false,isJave, false,true);
                         //Debug.Log("!!");
                         BattleFunction.Attack(this.transform, dam, unit);
                         unit.AddKnockBack(this.transform, damMax / 2 + damMin / 2, 0.01f);

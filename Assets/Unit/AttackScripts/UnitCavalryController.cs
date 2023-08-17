@@ -51,7 +51,7 @@ public class UnitCavalryController : UnitAIController
         //[Stay]
         if (unit.attackTarget == null)
         {
-            AI_Stay(true);
+            AI_GoToEnemyBase(unit.unitTeam);
             return;
         }
 
@@ -129,19 +129,19 @@ public class UnitCavalryController : UnitAIController
     {
         if (update_canAttack != true) return;
 
-        if (VP.CheckSphere("Middle"))
+        if (VP.CheckSphere("Middle") != 0)
         {
             TriggerAttack("attack");
             return;
         }
 
-        if (VP.CheckSphere("Right"))
+        if (VP.CheckSphere("Right") != 0)
         {
             TriggerAttack("attackR");
             return;
         }
 
-        if (VP.CheckSphere("Left"))
+        if (VP.CheckSphere("Left") != 0)
         {
             TriggerAttack("attackL");
             return;

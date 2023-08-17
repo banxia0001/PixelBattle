@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleFunction : MonoBehaviour
 {
@@ -94,7 +95,7 @@ public class BattleFunction : MonoBehaviour
         return unitList;
     }
 
-    public static int DamageCalculate(int damMin, int damMax, Unit defender, bool isCharge, bool isJave, bool isAP)
+    public static int DamageCalculate(int damMin, int damMax, Unit defender, bool isCharge, bool isJave, bool isAP, bool isRange)
     {
         int dam = Random.Range(damMin, damMax);
         int amr = defender.data.armor;
@@ -108,18 +109,19 @@ public class BattleFunction : MonoBehaviour
 
         if (isCharge)
         {
-            if (defender.data.isSpear)
-            {
-                finalDam = finalDam / 2;
-            }
-
+            if (defender.data.isSpear) finalDam = finalDam / 2;
         }
 
-        if (finalDam < 0)
+        if (isRange)
         {
-            finalDam = 0;
+            if (defender.data.isShielded) finalDam = finalDam / 2;
         }
-        return dam;
+
+        if (finalDam <= 0)
+        {
+            finalDam = 1;
+        }
+        return finalDam;
 
     }
     public static void Attack(Transform AttackerPos, int dam, Unit defender)
@@ -135,5 +137,64 @@ public class BattleFunction : MonoBehaviour
         Vector3 distantPosition = pointM + Quaternion.Euler(0, 0, MyTransform.transform.eulerAngles.y) * Vector3.right * -3f;
         Destroy(MyTransform);
         return distantPosition;
+    }
+
+    public static void PopText(RectTransform rect, float offsetY, string TextType)
+    {
+     
+        GameObject textOb = null;
+
+        textOb = Resources.Load<GameObject>("UI/" + TextType);
+     
+        GameObject go = Instantiate(textOb, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        go.transform.SetParent(rect.transform);
+
+        go.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, 0);
+        go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        go.GetComponent<RectTransform>().localPosition = new Vector3(offsetY, 0, 0);
+    }
+
+    public static int[,] CheckGTRate(float ratio)
+    {
+        ratio = ratio * 10;
+
+        if (ratio <= 3.4f)
+        {
+            return new int[9, 1];
+        }
+        if (ratio <= 3.8f)
+        {
+            return new int[8, 2];
+        }
+        if (ratio <= 4.2f)
+        {
+            return new int[7, 3];
+        }
+        if (ratio <= 4.6f)
+        {
+            return new int[6, 4];
+        }
+        if (ratio <= 5f)
+        {
+            return new int[5, 5];
+        }
+        if (ratio <= 5.4f)
+        {
+            return new int[4, 6];
+        }
+        if (ratio <= 5.8f)
+        {
+            return new int[3, 7];
+        }
+        if (ratio <= 6.2f)
+        {
+            return new int[4, 8];
+        }
+        if (ratio <= 6.6f)
+        {
+            return new int[1, 9];
+        }
+
+        else return new int[1, 9];
     }
 }

@@ -25,11 +25,11 @@ MonoBehaviour:
   description: 
   data:
     unitType: 1
-    health: 30
-    armor: 1
+    health: 15
+    armor: 4
     toughness: 0
-    damageMin: 5
-    damageMax: 6
+    damageMin: 4
+    damageMax: 8
     weaponCauseAOE: 0
     attackCD: 11
     moveSpeed: 1.5
@@ -42,3 +42,5 @@ MonoBehaviour:
     chargeSpeed_Accererate: 0
     chargeSpeed_Max: 0
     isSpear: 0
+    isAP: 0
+    isShielded: 0

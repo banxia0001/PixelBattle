@@ -12,24 +12,21 @@ public class UnitInfantryController : UnitAIController
         //[Stay]
         if (unit.attackTarget == null)
         {
-            AI_Stay(true);
+            AI_GoToEnemyBase(unit.unitTeam);
             return;
-        }
-
-
-        Unit closestCav = unit.AI_FindClosestTargetInList(UnitData.AI_State_FindTarget.findCavalry);
-        if (closestCav != null)
-        {
-            float dis_CavAlerm = Vector3.Distance(unit.transform.position, closestCav.transform.position);
-            if (dis_CavAlerm < 4f)
-            {
-                unit.attackTarget = closestCav;
-            }
-
         }
 
         float dis = Vector3.Distance(unit.transform.position, unit.attackTarget.transform.position);
         bool canAttack = false;
+
+        if (unit.attackTarget.data.unitType == UnitData.UnitType.cavalry)
+        {
+            if (dis > VP.radius_EyeRough * 3f)
+            {
+                AI_GoToEnemyBase(unit.unitTeam);
+                return;
+            }
+        }
 
         if (dis < VP.radius_EyeRough * 4f)
         {
@@ -68,7 +65,7 @@ public class UnitInfantryController : UnitAIController
         {
             if (unit.data_local.ID == UnitData.UnitListID.SpearKnight)
             {
-                if (VP.CheckSphere("Right"))
+                if (VP.CheckSphere("Right") != 0)
                 {
                     Debug.Log("!!R");
                     this.unit.agent.enabled = false;
@@ -78,7 +75,7 @@ public class UnitInfantryController : UnitAIController
                     return;
                 }
 
-                if (VP.CheckSphere("Left"))
+                if (VP.CheckSphere("Left") != 0)
                 {
                     Debug.Log("!!L");
                     this.unit.agent.enabled = false;

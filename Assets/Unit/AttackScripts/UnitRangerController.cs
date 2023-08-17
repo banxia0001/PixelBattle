@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UnitRangerController : UnitAIController
 {
+    private float restreatTimer;
     private bool canAttack;
     private Transform target;
 
@@ -13,6 +14,7 @@ public class UnitRangerController : UnitAIController
         canAttack = false;
         anim = this.GetComponent<Animator>();
         unit = this.transform.parent.GetComponent<Unit>();
+        VP = this.transform.parent.GetComponent<ViewPoint>();
     }
 
     public void AI_RangeUnit_Action()
@@ -22,7 +24,7 @@ public class UnitRangerController : UnitAIController
         //[Stay]
         if (unit.attackTarget == null)
         {
-            AI_Stay(true);
+            AI_GoToEnemyBase(unit.unitTeam);
             return;
         }
 
@@ -45,6 +47,10 @@ public class UnitRangerController : UnitAIController
         //[Find Enemy]
         else
         {
+            if (restreatTimer > 0)
+            {
+                AI_GoToBase(unit.unitTeam);
+            }
             if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.shoot_n_keepDis)
             {
                 bool shouldFlee = AI_CheckIfShouldFlee();
@@ -59,9 +65,15 @@ public class UnitRangerController : UnitAIController
 
             else if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.shoot)
             {
-                if (dis < unit.data.shootDis * 0.6f) AI_Stay(false);
+                
 
-                else if (dis < unit.data.shootDis * 0.2f) AI_Flee();
+                bool haveEnemy = VP.CheckHitShpere();
+
+                if (haveEnemy)
+                {
+                    restreatTimer = 5f;
+                }
+                else if (dis < unit.data.shootDis * 0.5f) AI_Stay(false);
 
                 else AI_MoveToward(unit.attackTarget.gameObject.transform);
             }
@@ -79,6 +91,7 @@ public class UnitRangerController : UnitAIController
     {
         //if (unit.attackCD <= unit.data.attackCD * 0.4f) unit.SetSpeed(0.1f);
         //else unit.SetSpeed(unit.data.moveSpeed);
+        restreatTimer -= Time.fixedDeltaTime;
 
         if (canAttack)
         {

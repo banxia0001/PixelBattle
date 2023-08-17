@@ -13,7 +13,7 @@ public class UnitData_Local : ScriptableObject
     public Sprite unitSpriteB;
     [Range(1,200)]
     public int Gcost;
-    [Range(1, 25)]
+    [Range(1, 50)]
     public int Tcost;
     [Range(1, 5)]
     public int Num;

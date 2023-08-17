@@ -34,10 +34,14 @@ public class Unit : MonoBehaviour
     private UnitCavalryController UCC;
     private UnitInfantryController UIC;
     private UnitSpearmanController USC;
+    private UnitDragonController UDC;
 
-    private Rigidbody rb;
+    [HideInInspector]
+    public  Rigidbody rb;
     private float chargeSpeed;
-    private float knockBackTimer;
+    [HideInInspector]
+    public float knockBackTimer;
+    [HideInInspector]
     public float currentAgentSpeed;
 
     [Header("UI")]
@@ -51,6 +55,7 @@ public class Unit : MonoBehaviour
         UCC = this.transform.GetChild(2).GetComponent<UnitCavalryController>();
         UIC = this.transform.GetChild(2).GetComponent<UnitInfantryController>();
         USC = this.transform.GetChild(2).GetComponent<UnitSpearmanController>();
+        UDC = this.transform.GetChild(2).GetComponent<UnitDragonController>();
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
@@ -59,7 +64,7 @@ public class Unit : MonoBehaviour
         if (data.unitType == UnitData.UnitType.cavalry) { agent.avoidancePriority = 50; }
         if (data.unitType == UnitData.UnitType.archer) { agent.avoidancePriority = 100; }
         if (data.unitType == UnitData.UnitType.monster) { agent.avoidancePriority = 20; }
-        if (data.unitType == UnitData.UnitType.infantry) { agent.avoidancePriority = 300; }
+        if (data.unitType == UnitData.UnitType.infantry) { agent.avoidancePriority = 300;}
 
         InputData();
     }
@@ -89,7 +94,9 @@ public class Unit : MonoBehaviour
         knockBackTimer -= 4 * Time.fixedDeltaTime;
         if (knockBackTimer < 0)
         {
+            rb.freezeRotation = false;
             agent.enabled = true;
+            GetComponent<CapsuleCollider>().isTrigger = false;
         } 
     }
     void LateUpdate()
@@ -164,6 +171,11 @@ public class Unit : MonoBehaviour
             {
                 UCC.AI_Cavalry_Action();
             }
+
+            if (data.unitType == UnitData.UnitType.monster)
+            {
+                UDC.AI_Monster_Action();
+            }
         }
     }
 
@@ -233,9 +245,9 @@ public class Unit : MonoBehaviour
     }
     public void AddKnockBack(Transform attacker, float knockBackForce, float waitTime)
     {
-        StartCoroutine(_AddKnockBack(attacker, knockBackForce, waitTime));
+        StartCoroutine(_AddKnockBack(attacker.position, knockBackForce, waitTime));
     }
-    private IEnumerator _AddKnockBack(Transform attacker, float knockBackForce, float waitTime)
+    private IEnumerator _AddKnockBack(Vector3 attacker, float knockBackForce, float waitTime)
     {
         //Debug.Log(knockBackForce);
 
@@ -249,8 +261,8 @@ public class Unit : MonoBehaviour
                 if (agent != null)
                 {
                     knockBackForce = knockBackForce -= data.toughness / 2;
-                    Debug.Log(knockBackForce);
-                    Vector3 newVector = this.transform.position - attacker.gameObject.transform.position;
+                    //Debug.Log(knockBackForce);
+                    Vector3 newVector = this.transform.position - attacker;
                     rb.velocity = Vector3.zero;
                     rb.AddForce(2f * newVector * knockBackForce, ForceMode.Impulse);
                     knockBackTimer = 0.1f + knockBackForce / 15;
