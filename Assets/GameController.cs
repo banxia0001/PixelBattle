@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     public GameUI UI;
 
     public int ConquerScore;
+    public static float frontLine;
 
     private float actionTimer;
     private int turn;
@@ -23,6 +24,8 @@ public class GameController : MonoBehaviour
     public static UnitData.AI_State_Wait waitState;
 
     public float teamScoreRate = 0;
+
+    public GameObject Frontline;
 
     private void Start()
     {
@@ -68,25 +71,55 @@ public class GameController : MonoBehaviour
                 TeamCheck();
 
                 //[Check MapConquer Income]
-                int falseScoreForEarlyTurn = 50 - turn;
-                if (falseScoreForEarlyTurn <= 1) falseScoreForEarlyTurn = 1;
 
-                float teamAScore = ((teamA.teamScore / falseScoreForEarlyTurn) + 100) * 100;
-                float teamBScore = ((teamB.teamScore / falseScoreForEarlyTurn) + 100) * 100;
 
-                teamScoreRate = teamAScore / (teamBScore + teamAScore);
+                frontLine = (teamA.teamFrontLine + 54 - teamB.teamFrontLine) / 2;
+
+                //Debug.Log("frontLine" + frontLine);
+
+                Frontline.transform.position = new Vector3(frontLine, 0.1f, 14.94f);
+
+                //int falseScoreForEarlyTurn = 50 - turn;
+                //if (falseScoreForEarlyTurn <= 1) falseScoreForEarlyTurn = 1;
+                float teamAScore = teamA.teamFrontLine + 10;
+                float teamBScore = teamB.teamFrontLine + 10;
+                float newFrontLine = (teamAScore + 54 - teamBScore) / 2;
+
+                teamScoreRate = newFrontLine / 54;
+                Debug.Log(teamScoreRate);
+
                 UI.UpdateGoldBar(teamScoreRate);
 
-                if (teamScoreRate > 0.54f) ConquerScore++;
-                if (teamScoreRate > 0.62f) ConquerScore++;
-                if (teamScoreRate > 0.66f) ConquerScore++;
-                if (teamScoreRate > 0.7f) ConquerScore += 2;
+                int ScoreA = 2;
+                int ScoreB = 2;
+                int ScoreAB = 0;
+                int ScoreBB = 0;
 
-                if (teamScoreRate < 0.46f) ConquerScore--;
-                if (teamScoreRate < 0.38f) ConquerScore--;
-                if (teamScoreRate < 0.34f) ConquerScore--;
-                if (teamScoreRate < 0.3f) ConquerScore -=2;
+   
+                if (turn > 40){ ScoreA++; ScoreB++;}
+                if (turn > 80){ ScoreA++; ScoreB++;}
+                if (turn > 120){ ScoreA++; ScoreB++;}
+                if (turn > 240){ ScoreA++; ScoreB++;}
+                if (turn > 480){ ScoreA++; ScoreB++;}
+                if (turn > 960){ ScoreA++; ScoreB++;}
+             
+
+                if (teamScoreRate > 0.6f) { ConquerScore++; ScoreAB += 5;}
+                if (teamScoreRate > 0.7f) { ConquerScore++; ScoreAB += 5;}
+                if (teamScoreRate > 0.8f) { ConquerScore++; ScoreAB += 5;}
+                if (teamScoreRate > 0.9f) { ConquerScore += 2; ScoreAB += 5;}
+
+                if (teamScoreRate < 0.4f) { ConquerScore--; ScoreBB += 5; }
+                if (teamScoreRate < 0.3f) { ConquerScore--; ScoreBB += 5; }
+                if (teamScoreRate < 0.2f) { ConquerScore--; ScoreBB += 5; }
+                if (teamScoreRate < 0.1f) { ConquerScore -= 2; ScoreBB += 5; }
                 UI.UpdateScoreBar(ConquerScore, 500);
+
+
+                if (ConquerScore <= 0 || ConquerScore > 500)
+                {
+                    StartCoroutine(GameWin());
+                }
 
 
                 //[Check G Income]
@@ -97,18 +130,18 @@ public class GameController : MonoBehaviour
                     canGainG = true; turn_GIncome = 0;
                 }
 
-                int[,] Income = BattleFunction.CheckGTRate(teamScoreRate);
+                int[,] Income = new int[ScoreA + ScoreAB, ScoreB + ScoreBB];
 
 
                 if (canGainG)
                 {
-                    teamA.G += Income.GetLength(1); if (teamA.G > 500) teamA.G = 500;
-                    teamB.G += Income.GetLength(0); if (teamB.G > 500) teamB.G = 500;
+                    teamA.G += Income.GetLength(0); if (teamA.G > 500) teamA.G = 500;
+                    teamB.G += Income.GetLength(1); if (teamB.G > 500) teamB.G = 500;
                 }
 
                 UpdateGText();
                 UpdatePText();
-                UI.UpdateGTText(Income.GetLength(1), Income.GetLength(0));
+                UI.UpdateGTText(ScoreA,ScoreB, ScoreAB, ScoreBB);
             }
         }  
     }
@@ -135,7 +168,29 @@ public class GameController : MonoBehaviour
     {
         teamA.TeamCheck_AddUnitToList();
         teamB.TeamCheck_AddUnitToList();
-        teamA.TeamCheck_Action();
-        teamB.TeamCheck_Action();
+
+        if (turn % 2 == 0)
+        {
+            teamA.TeamCheck_Action();
+            teamB.TeamCheck_Action();
+        }
+        else
+        {
+            teamB.TeamCheck_Action();
+            teamA.TeamCheck_Action();
+        }
+
+        if (teamA.isControl_By_AIPlayer)
+        {
+            teamA.AI.Action();
+        
+        }
+
+        if (teamB.isControl_By_AIPlayer)
+        {
+            teamB.AI.Action();
+
+        }
+
     }
 }

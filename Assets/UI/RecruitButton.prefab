@@ -1194,6 +1194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 2367860464173016682}
+  valueShould: 0
   healthBarImage: {fileID: 2367860463758590439}
 --- !u!1 &4704505177921164989
 GameObject:

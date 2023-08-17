@@ -31,7 +31,7 @@ public class BarController : MonoBehaviour
     void FixedUpdate()
     {
         slider.value = valueNow;
-        if (valueNow > valueShould) valueNow -= 0.1f * Time.fixedDeltaTime;
-        if (valueNow < valueShould) valueNow += 0.1f * Time.fixedDeltaTime;
+        if (valueNow > valueShould) valueNow -= 0.2f * Time.fixedDeltaTime;
+        if (valueNow < valueShould) valueNow += 0.2f * Time.fixedDeltaTime;
     }
 }

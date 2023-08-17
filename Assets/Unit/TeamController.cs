@@ -20,7 +20,7 @@ public class TeamController : MonoBehaviour
     [Header("TeamButton")]
     public List<RecruitButton> buttons;
 
-    public int teamScore;
+    public float teamFrontLine;
 
     public List<Unit> warriorList;
     [HideInInspector]
@@ -31,12 +31,19 @@ public class TeamController : MonoBehaviour
     public List<Unit> monsterList;
     [HideInInspector]
     public List<Unit> artilleryList;
+    [HideInInspector]
+    public AIPlayer AI;
 
 
 
     public void Awake()
     {
         GC = FindObjectOfType<GameController>();
+
+        AI = gameObject.GetComponent<AIPlayer>();
+        if (AI != null && AI.enabled == true) isControl_By_AIPlayer = true;
+        else isControl_By_AIPlayer = false;
+
         UploadDataToButtons();
         TeamCheck_AddUnitToList();
     }
@@ -102,7 +109,8 @@ public class TeamController : MonoBehaviour
 
     public void TeamCheck_Action()
     {
-        float teamScore = 0;
+        //float teamScore = 0;
+        float teamFrontLine = 0;
         int P = 0;
         if (warriorList != null)
             if (warriorList.Count != 0)
@@ -110,7 +118,9 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in warriorList)
                 {
                     unit.AI_DecideAction();
-                    teamScore += CalcualteUnitScore(unit);
+                    float x = CalcualteUnitFront(unit);
+                    //teamScore += CalcualteUnitValue(unit, x);
+                    teamFrontLine += x;
                     P++;
                 }
             }
@@ -121,7 +131,9 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in archerList)
                 {
                     unit.AI_DecideAction();
-                    teamScore += CalcualteUnitScore(unit);
+                    float x = CalcualteUnitFront(unit);
+                    //teamScore += CalcualteUnitValue(unit, x);
+                    teamFrontLine += x;
                     P++;
                 }
             }
@@ -132,7 +144,9 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in cavalryList)
                 {
                     unit.AI_DecideAction();
-                    teamScore += CalcualteUnitScore(unit);
+                    float x = CalcualteUnitFront(unit);
+                    //teamScore += CalcualteUnitValue(unit, x);
+                    teamFrontLine += x;
                     P++;
                 }
             }
@@ -143,7 +157,9 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in monsterList)
                 {
                     unit.AI_DecideAction();
-                    teamScore += CalcualteUnitScore(unit);
+                    float x = CalcualteUnitFront(unit);
+                    //teamScore += CalcualteUnitValue(unit, x);
+                    teamFrontLine += x;
                     P++;
                 }
             }
@@ -154,35 +170,32 @@ public class TeamController : MonoBehaviour
                 foreach (Unit unit in artilleryList)
                 {
                     unit.AI_DecideAction();
-                    teamScore += CalcualteUnitScore(unit);
+                    float x = CalcualteUnitFront(unit);
+                    //teamScore += CalcualteUnitValue(unit, x);
+                    teamFrontLine += x;
                     P++;
                 }
             }
 
-        this.teamScore = (int)teamScore;
+        //this.teamScore = (int)teamScore;
+        this.teamFrontLine = teamFrontLine/((float)P + 0.1f);
         this.P = P;
     }
 
 
-    public float CalcualteUnitScore(Unit unit)
+    //public float CalcualteUnitValue(Unit unit, float xAxis)
+    //{
+    //    UnitData_Local data = unit.data_local;
+    //    float cost = data.Gcost / data.Num;
+    //    return xAxis * data.UnitValue;
+    //}
+
+    public float CalcualteUnitFront(Unit unit)
     {
-        UnitData_Local data = unit.data_local;
-        float cost = data.Gcost / data.Num;
-        float healthRatio = unit.health / data.data.health;
-
-        float armorValue = 1;
-        if (unit.data.armor > 10) armorValue = 1.1f;
-        if (unit.data.armor > 15) armorValue = 1.2f;
-        if (unit.data.armor > 20) armorValue = 1.3f;
-        if (unit.data.armor > 25) armorValue = 1.4f;
-
-        float value = healthRatio * cost * armorValue;
-
         float xAxis = unit.transform.position.x - startXAxis;
         if (unitTeam == Unit.UnitTeam.teamB) xAxis = startXAxis - unit.transform.position.x;
 
-
-        return (xAxis) + (cost * armorValue * healthRatio)/3;
+        return xAxis * unit.data_local.UnitValue;
     }
 
 }

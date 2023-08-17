@@ -49,6 +49,14 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    public List<Unit> Arrow_FindAllUnit_InSphere()
+    {
+        Collider[] overlappingItems;
+        overlappingItems = Physics.OverlapSphere(this.transform.position, attackDistance, LayerMask.GetMask("Unit"));
+        if (overlappingItems == null) return null;
+        else return AIFunctions.AI_FindEnemyInList(targetAttackTeam, overlappingItems);
+    }
+
     public IEnumerator Death()
     {
         isDead = true;
@@ -56,32 +64,32 @@ public class Projectile : MonoBehaviour
         //[an arrow]
         if (!cuaseAOE)
         {
-            Unit targetUnit = BattleFunction.Find_ClosestUnitInList(BattleFunction.Find_UnitsInRange(targetAttackTeam, attackDistance, this.transform), this.transform);
+            Unit targetUnit = BattleFunction.Find_ClosestUnitInList(Arrow_FindAllUnit_InSphere(),this.transform);
             if (targetUnit != null)
             {
-                int dam = BattleFunction.DamageCalculate(damMin, damMax, targetUnit, false,isJave,false,true);
+                int dam = BattleFunction.DamageCalculate(damMin, damMax, targetUnit, false, isJave, false, true);
                 //Debug.Log("!!");
                 BattleFunction.Attack(this.transform, dam, targetUnit);
-                targetUnit.AddKnockBack(this.transform, damMax/2 + damMin/2, 0.01f);
+                targetUnit.AddKnockBack(this.transform, damMax / 2 + damMin / 2, 0.01f);
             }
         }
 
         //[an shell]
-        if (cuaseAOE)
-        {
-            List<Unit> targetUnits = BattleFunction.Find_UnitsInRange(attackDistance, this.transform);
-            if (targetUnits != null)
-                if (targetUnits.Count != 0)
-                {
-                    foreach (Unit unit in targetUnits)
-                    {
-                        int dam = BattleFunction.DamageCalculate(damMin, damMax, unit, false,isJave, false,true);
-                        //Debug.Log("!!");
-                        BattleFunction.Attack(this.transform, dam, unit);
-                        unit.AddKnockBack(this.transform, damMax / 2 + damMin / 2, 0.01f);
-                    }
-                }
-        }
+        //if (cuaseAOE)
+        //{
+        //    List<Unit> targetUnits = BattleFunction.Find_UnitsInRange(attackDistance, this.transform);
+        //    if (targetUnits != null)
+        //        if (targetUnits.Count != 0)
+        //        {
+        //            foreach (Unit unit in targetUnits)
+        //            {
+        //                int dam = BattleFunction.DamageCalculate(damMin, damMax, unit, false,isJave, false,true);
+        //                //Debug.Log("!!");
+        //                BattleFunction.Attack(this.transform, dam, unit);
+        //                unit.AddKnockBack(this.transform, damMax / 2 + damMin / 2, 0.01f);
+        //            }
+        //        }
+        //}
 
 
         yield return new WaitForSeconds(0.3f);

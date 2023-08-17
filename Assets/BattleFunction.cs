@@ -154,47 +154,5 @@ public class BattleFunction : MonoBehaviour
         go.GetComponent<RectTransform>().localPosition = new Vector3(offsetY, 0, 0);
     }
 
-    public static int[,] CheckGTRate(float ratio)
-    {
-        ratio = ratio * 10;
-
-        if (ratio <= 3.4f)
-        {
-            return new int[9, 1];
-        }
-        if (ratio <= 3.8f)
-        {
-            return new int[8, 2];
-        }
-        if (ratio <= 4.2f)
-        {
-            return new int[7, 3];
-        }
-        if (ratio <= 4.6f)
-        {
-            return new int[6, 4];
-        }
-        if (ratio <= 5f)
-        {
-            return new int[5, 5];
-        }
-        if (ratio <= 5.4f)
-        {
-            return new int[4, 6];
-        }
-        if (ratio <= 5.8f)
-        {
-            return new int[3, 7];
-        }
-        if (ratio <= 6.2f)
-        {
-            return new int[4, 8];
-        }
-        if (ratio <= 6.6f)
-        {
-            return new int[1, 9];
-        }
-
-        else return new int[1, 9];
-    }
+   
 }

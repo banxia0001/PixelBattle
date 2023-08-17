@@ -94,7 +94,7 @@ public class UnitDragonController : UnitAIController
     {
         Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
         if (unit.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
-        unit.attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, unit);
+        unit.attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, unit, false);
 
         if (unit.attackTarget != null)
         {

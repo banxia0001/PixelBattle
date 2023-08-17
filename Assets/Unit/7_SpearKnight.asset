@@ -17,9 +17,10 @@ MonoBehaviour:
   UnitPrefabB: {fileID: 319569230468927585, guid: 6946105a05dc559498e1c49213696712, type: 3}
   unitSpriteA: {fileID: 21300000, guid: 680bdd64f53a9444b81998c90f48d603, type: 3}
   unitSpriteB: {fileID: 21300000, guid: 534525a67d3a2f745a3cf07f0f2cee9f, type: 3}
-  Gcost: 70
-  Tcost: 28
+  Gcost: 55
+  Tcost: 20
   Num: 2
+  UnitValue: 4
   trait1: {fileID: 11400000, guid: eacaf167c9a37df44a8574b8d05c44db, type: 2}
   trait2: {fileID: 11400000, guid: dbf38734297068c47945ac8272726b55, type: 2}
   description: 

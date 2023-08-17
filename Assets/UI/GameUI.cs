@@ -38,14 +38,14 @@ public class GameUI : MonoBehaviour
     public void UpdateScoreBar(int Score, int ScoreMax)
     {
         float ratio = (float)Score / (float)ScoreMax;
-        Debug.Log("R" + ratio);
+        //Debug.Log("R" + ratio);
         scoreBar.SetValue(ratio);
     }
 
-    public void UpdateGTText(int GAT, int GBT)
+    public void UpdateGTText(int GAT, int GBT, int AB, int BB)
     {
-        G_A_Turn.text = GAT.ToString() + "G/S";
-        G_B_Turn.text = GBT.ToString() + "G/S";
+        G_A_Turn.text = GAT.ToString() + "+" + AB + "G";
+        G_B_Turn.text = GBT.ToString() + "+" + BB + "G";
 
     }
     public void UpdateGText(int GA, int GB)

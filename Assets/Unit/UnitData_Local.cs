@@ -17,6 +17,8 @@ public class UnitData_Local : ScriptableObject
     public int Tcost;
     [Range(1, 5)]
     public int Num;
+    [Range(1, 10)]
+    public float UnitValue;
 
     public Trait trait1, trait2;
     [TextArea(6, 3)]

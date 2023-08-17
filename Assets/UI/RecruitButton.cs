@@ -31,7 +31,7 @@ public class RecruitButton : MonoBehaviour
         if (buttonState == ButtonState.TrainingUnit)
         {
             Rtimer -= Time.fixedDeltaTime;
-            T_Bar.SetValue(Rtimer, unit.Tcost);
+            T_Bar.SetValue_Initial(Rtimer, (float)unit.Tcost);
             if (Rtimer < 0)
             {
                 UnitReady();

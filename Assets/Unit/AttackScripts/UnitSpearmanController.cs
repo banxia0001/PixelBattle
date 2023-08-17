@@ -16,7 +16,7 @@ public class UnitSpearmanController : UnitAIController
             return;
         }
 
-        Unit closestCav = unit.AI_FindClosestTargetInList(UnitData.AI_State_FindTarget.findCavalry);
+        Unit closestCav = unit.AI_FindClosestTargetInList(UnitData.AI_State_FindTarget.findCavalry, false);
         if (closestCav != null)
         {
             float dis_CavAlerm = Vector3.Distance(unit.transform.position, closestCav.transform.position);

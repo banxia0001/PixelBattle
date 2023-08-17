@@ -1,16 +1,7 @@
 fileFormatVersion: 2
-guid: a9c0476653e03b34cadec59a63394f67
+guid: 8ba300e406f87514583c7205efe73a2b
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -5948726890788524905
-    second: UIPanel_4 2_0
-  - first:
-      213: -4610079934817465589
-    second: UIPanel_4 2_1
-  - first:
-      213: 3540357292158183651
-    second: UIPanel_4 2_2
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -50,7 +41,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -98,70 +89,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: UIPanel_4 2_0
-      rect:
-        serializedVersion: 2
-        x: 4
-        y: 176
-        width: 111
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 79c6cb81960e17da0800000000000000
-      internalID: -5948726890788524905
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UIPanel_4 2_1
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 121
-        width: 111
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b0b8c0b79b4b500c0800000000000000
-      internalID: -4610079934817465589
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UIPanel_4 2_2
-      rect:
-        serializedVersion: 2
-        x: 137
-        y: 20
-        width: 49
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3e86d091330e12130800000000000000
-      internalID: 3540357292158183651
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []

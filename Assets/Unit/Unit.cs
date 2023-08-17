@@ -117,11 +117,11 @@ public class Unit : MonoBehaviour
         //[If target empty]
         if (attackTarget == null)
         {
-            attackTarget = AI_FindClosestTargetInList(current_AI_Target);
+            attackTarget = AI_FindClosestTargetInList(current_AI_Target, true);
 
             if (attackTarget == null)
             {
-                attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
+                attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this, false);
             }
         }
         //[See if there are new unit that are closer]
@@ -130,24 +130,27 @@ public class Unit : MonoBehaviour
             float dis = Vector3.Distance(this.transform.position, attackTarget.transform.position);
             if (data.unitType == UnitData.UnitType.infantry)
             {
-                attackTarget = AI_FindClosestTargetInList(current_AI_Target);
+                attackTarget = AI_FindClosestTargetInList(current_AI_Target, true);
             }
+
             else if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery)
             {
-                if (dis > data.shootDis * 1.2f) attackTarget = AI_FindClosestTargetInList(current_AI_Target);
+                if (dis > data.shootDis * 1.2f) attackTarget = AI_FindClosestTargetInList(current_AI_Target, false);
             } 
+
             else if (data.unitType == UnitData.UnitType.cavalry)
             {
-                if (dis > 4f) attackTarget = AI_FindClosestTargetInList(current_AI_Target);
+                if (dis > 4f) attackTarget = AI_FindClosestTargetInList(current_AI_Target,false);
             }
+
             else if (data.unitType == UnitData.UnitType.monster)
             {
-                if (dis > 3f) attackTarget = AI_FindClosestTargetInList(current_AI_Target);
+                if (dis > 3f) attackTarget = AI_FindClosestTargetInList(current_AI_Target, false);
             }
 
             if (attackTarget == null)
             {
-                attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
+                attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this, false);
             }
         }
 
@@ -180,35 +183,35 @@ public class Unit : MonoBehaviour
     }
 
 
-    public Unit AI_FindClosestTargetInList(UnitData.AI_State_FindTarget current_AI_Target)
+    public Unit AI_FindClosestTargetInList(UnitData.AI_State_FindTarget current_AI_Target, bool targrtFrontLine)
     {
         UnitTeam targetTeam = UnitTeam.teamB;
         if (unitTeam == UnitTeam.teamB) targetTeam = UnitTeam.teamA;
 
         if (current_AI_Target == UnitData.AI_State_FindTarget.findClosest)
         {
-          return AIFunctions.AI_Find_ClosestUnit(targetTeam, this);
+          return AIFunctions.AI_Find_ClosestUnit(targetTeam, this, true);
         }
 
         if (current_AI_Target == UnitData.AI_State_FindTarget.findWarrior)
         {
-            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.infantry, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.infantry, this, true);
         }
         if (current_AI_Target == UnitData.AI_State_FindTarget.findArcher)
         {
-            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.archer, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.archer, this, false);
         }
         if (current_AI_Target == UnitData.AI_State_FindTarget.findCavalry)
         {
-            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.cavalry, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.cavalry, this, false);
         }
         if (current_AI_Target == UnitData.AI_State_FindTarget.findMonster)
         {
-            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.monster, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.monster, this, false);
         }
         if (current_AI_Target == UnitData.AI_State_FindTarget.findArtillery)
         {
-            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.artillery, this);
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, UnitData.UnitType.artillery, this,false);
         }
 
         return null;
@@ -264,6 +267,7 @@ public class Unit : MonoBehaviour
                     //Debug.Log(knockBackForce);
                     Vector3 newVector = this.transform.position - attacker;
                     rb.velocity = Vector3.zero;
+                    if (knockBackForce > 30) knockBackForce = 30;
                     rb.AddForce(2f * newVector * knockBackForce, ForceMode.Impulse);
                     knockBackTimer = 0.1f + knockBackForce / 15;
                 }
