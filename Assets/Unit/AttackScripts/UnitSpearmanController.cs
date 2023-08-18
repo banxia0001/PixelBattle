@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class UnitSpearmanController : UnitAIController
 {
-    public void AI_Warrior_Action()
+    public void AI_Warrior_Action(bool dontChangeAttackTarget)
     {
 
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+
+        //[FindEnemy]
+        if(!dontChangeAttackTarget)
+        FindAttackTarget();
 
         //[Stay]
         if (unit.attackTarget == null)
@@ -16,7 +20,7 @@ public class UnitSpearmanController : UnitAIController
             return;
         }
 
-        Unit closestCav = unit.AI_FindClosestTargetInList(UnitData.AI_State_FindTarget.findCavalry, false);
+        Unit closestCav = AI_FindClosestTargetInList(UnitData.AI_State_FindTarget.findClosestCavalry, false);
         if (closestCav != null)
         {
             float dis_CavAlerm = Vector3.Distance(unit.transform.position, closestCav.transform.position);
@@ -32,7 +36,7 @@ public class UnitSpearmanController : UnitAIController
 
         if (dis < VP.radius_EyeRough * 4f)
         {
-            canAttack = VP.CheckHitShpere();
+            canAttack = VP.CheckHitShpere(1);
         }
 
         //[Set Attack]
@@ -42,13 +46,11 @@ public class UnitSpearmanController : UnitAIController
             AI_Stay(true);
         }
 
-        //[wait]
-        if (!CheckHoldStage()) { AI_Stay(true); return; }
 
         //[Find Enemy]
         else
         {
-            if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
+            if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
             {
                 if (dis < unit.data.moveStopDis) AI_Stay(false);
 
@@ -67,7 +69,7 @@ public class UnitSpearmanController : UnitAIController
             float dis = Vector3.Distance(unit.transform.position, unit.attackTarget.transform.position);
 
             //Check can attack
-            bool canAttack_InHitBox = VP.CheckHitShpere();
+            bool canAttack_InHitBox = VP.CheckHitShpere(1);
 
 
             if (dis < 3f && canAttack_InHitBox)

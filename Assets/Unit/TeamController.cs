@@ -41,8 +41,8 @@ public class TeamController : MonoBehaviour
         GC = FindObjectOfType<GameController>();
 
         AI = gameObject.GetComponent<AIPlayer>();
-        if (AI != null && AI.enabled == true) isControl_By_AIPlayer = true;
-        else isControl_By_AIPlayer = false;
+        //if (AI != null && AI.enabled == true) isControl_By_AIPlayer = true;
+        //else isControl_By_AIPlayer = false;
 
         UploadDataToButtons();
         TeamCheck_AddUnitToList();

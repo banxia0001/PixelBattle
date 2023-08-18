@@ -26,6 +26,9 @@ MonoBehaviour:
   description: 
   data:
     unitType: 0
+    current_AI_Tactic: 0
+    current_AI_Target: 2
+    current_AI_Target_Secondly: 4
     health: 20
     armor: 8
     toughness: 1

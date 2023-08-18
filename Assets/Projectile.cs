@@ -64,7 +64,7 @@ public class Projectile : MonoBehaviour
         //[an arrow]
         if (!cuaseAOE)
         {
-            Unit targetUnit = BattleFunction.Find_ClosestUnitInList(Arrow_FindAllUnit_InSphere(),this.transform);
+            Unit targetUnit = AIFunctions.Find_ClosestUnitInList(Arrow_FindAllUnit_InSphere(),this.transform);
             if (targetUnit != null)
             {
                 int dam = BattleFunction.DamageCalculate(damMin, damMax, targetUnit, false, isJave, false, true);

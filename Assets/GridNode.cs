@@ -11,5 +11,4 @@ public class GridNode
 
     public UnitData.AI_State_FindTarget target;
     public UnitData.AI_State_Tactic tactic;
-    public UnitData.AI_State_Wait wait;
 }

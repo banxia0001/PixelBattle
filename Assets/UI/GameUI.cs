@@ -14,6 +14,9 @@ public class GameUI : MonoBehaviour
     public EventSystem myEventSystem;
     PointerEventData myPointerEventData;
 
+    [Header("StartPanel")]
+    public GameObject panel;
+    public UnitRecruitList Rlist;
 
     [Header("Team")]
     public TMP_Text G_A;
@@ -30,6 +33,16 @@ public class GameUI : MonoBehaviour
         goldBar.SetValue_Initial(0.5f,1);
         scoreBar.SetValue_Initial(0.5f,1);
     }
+
+    public void GameStart()
+    {
+        FindObjectOfType<GameController>().GameStart();
+        panel.SetActive(false);
+    }
+
+
+
+
 
     public void UpdateGoldBar(float ratio)
     {
@@ -88,6 +101,7 @@ public class GameUI : MonoBehaviour
         myRaycaster.Raycast(myPointerEventData, results);
 
         Vector3 screenPos = GameUI.ScreenToRectPos(Input.mousePosition, canvas);
+        unitPanel.gameObject.SetActive(false);
 
         //if have result
         if (results.Count > 0)
@@ -99,7 +113,15 @@ public class GameUI : MonoBehaviour
                 if (RR.gameObject.tag == "UnitButton")
                 {
                     RecruitButton rc = RR.gameObject.transform.parent.GetComponent<RecruitButton>();
-                    rc.anim.SetBool("selected", true);
+                    //rc.anim.SetBool("selected", true);
+                    unitPanel.gameObject.SetActive(true);
+                    unitPanel.InputUnit(rc.unit);
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        rc.InputFromButton();
+                    }
+
                 }
             }
         }

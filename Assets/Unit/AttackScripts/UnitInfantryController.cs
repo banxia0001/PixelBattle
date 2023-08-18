@@ -5,9 +5,13 @@ using UnityEngine;
 public class UnitInfantryController : UnitAIController
 {
     public bool use3DirVP;
-    public void AI_Warrior_Action()
+    public void AI_Warrior_Action(bool dontChangeAttackTarget)
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+
+        //[FindTarget]
+        if(!dontChangeAttackTarget)
+        FindAttackTarget();
 
         //[Stay]
         if (unit.attackTarget == null)
@@ -30,7 +34,7 @@ public class UnitInfantryController : UnitAIController
 
         if (dis < VP.radius_EyeRough * 4f)
         {
-            canAttack = VP.CheckHitShpere();
+            canAttack = VP.CheckHitShpere(1);
         }
 
         //[Set Attack]
@@ -42,13 +46,11 @@ public class UnitInfantryController : UnitAIController
             AI_Stay(true);
         }
 
-        //[wait]
-        if (!CheckHoldStage()) { AI_Stay(true); return; }
 
         //[Find Enemy]
         else
         {
-            if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
+            if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
             {
                 if (dis < unit.data.moveStopDis) AI_Stay(false);
 

@@ -39,5 +39,7 @@ public class UnitPanel : MonoBehaviour
         trait2.InputTrait(_trait2);
         Gcost.text = unit.Gcost.ToString() + "G";
         Tcost.text = unit.Tcost.ToString() + "S";
+
+        image.sprite = unit.unitSpriteA;
     }
 }

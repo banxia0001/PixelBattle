@@ -19,12 +19,28 @@ public class UnitData
     }
  
     public enum UnitType { infantry, archer, cavalry, monster, artillery }
-    public enum AI_State_Wait { advance, hold5s, hold10S, hold15S }
     public enum AI_State_Tactic { attack, guard, shoot, shoot_n_keepDis }
-    public enum AI_State_FindTarget { findClosest, findWarrior, findArcher, findCavalry, findMonster, findArtillery }
+    public enum AI_State_FindTarget 
+    { 
+        findClosest,
+        findClosestWarrior,
+        findClosestTarget_InFrontline, 
+
+        findValueableTarget_InDistance,
+        findValueableTarget_InFrontline,
+
+        findClosestArcher,
+        findClosestCavalry,
+        findClosestMonster,
+        findClosestArtillery
+    }
 
     public UnitType unitType;
-  
+    public UnitData.AI_State_Tactic current_AI_Tactic;
+    public UnitData.AI_State_FindTarget current_AI_Target;
+    public UnitData.AI_State_FindTarget current_AI_Target_Secondly;
+    //public UnitData.AI_State_Wait current_AI_Wait;
+
     [Range(10, 150)]
     public int health;
     [Range(0, 25)]

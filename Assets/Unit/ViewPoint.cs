@@ -26,9 +26,9 @@ public class ViewPoint : MonoBehaviour
         Gizmos.DrawSphere(eyeRough.position, radius_EyeRough);
     }
 
-    public virtual bool CheckHitShpere()
+    public virtual bool CheckHitShpere(float xRate)
     {
-        List<Unit> units = AI_Melee_FindAllUnit_InSphere(eyeRough.position, radius_EyeRough);
+        List<Unit> units = BattleFunction.FindAllUnit_InSphere(eyeRough.position, xRate * radius_EyeRough, this.unit);
 
         if (units != null && units.Count != 0)
         {
@@ -45,13 +45,13 @@ public class ViewPoint : MonoBehaviour
         List<Unit> units = null;
 
         if (dir == "Middle")
-            units = AI_Melee_FindAllUnit_InSphere(eyeM.transform.position, radius);
+            units = BattleFunction.FindAllUnit_InSphere(eyeM.transform.position, radius,this.unit);
 
         if (dir == "Right")
-            units = AI_Melee_FindAllUnit_InSphere(eyeR.transform.position, radius);
+            units = BattleFunction.FindAllUnit_InSphere(eyeR.transform.position, radius, this.unit);
 
         if (dir == "Left")
-            units = AI_Melee_FindAllUnit_InSphere(eyeL.transform.position, radius);
+            units = BattleFunction.FindAllUnit_InSphere(eyeL.transform.position, radius, this.unit);
 
 
         if (units != null && units.Count != 0)
@@ -60,15 +60,6 @@ public class ViewPoint : MonoBehaviour
         }
         else return 0;
     }
-
-    public virtual List<Unit> AI_Melee_FindAllUnit_InSphere(Vector3 postion, float range)
-    {
-        Collider[] overlappingItems;
-        overlappingItems = Physics.OverlapSphere(postion, range, LayerMask.GetMask("Unit"));
-        if (overlappingItems == null) return null;
-        else return AIFunctions.AI_FindEnemyInList(unit, overlappingItems);
-    }
-
 
     public void CopyEyesVectors()
     {

@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public enum GameState { none, gameActive, gameFrozen }
-    public GameState state;
+    public enum GameState { none, gameInStartPanel, gameActive, gameFrozen }
+    public static GameState state;
 
     public static bool isOnUI;
    
@@ -14,41 +14,51 @@ public class GameController : MonoBehaviour
     public TeamController teamB;
     public GameUI UI;
 
+    [HideInInspector]
     public int ConquerScore;
+    public int ConquerScoreMax;
     public static float frontLine;
 
     private float actionTimer;
     private int turn;
     private int turn_GIncome;
 
-    public static UnitData.AI_State_Wait waitState;
+
 
     public float teamScoreRate = 0;
 
     public GameObject Frontline;
 
+
+
     private void Start()
     {
         actionTimer = 0;
-        waitState = UnitData.AI_State_Wait.advance;
-
-        ConquerScore = 250;
+        state = GameState.gameInStartPanel;
+        ConquerScore = ConquerScoreMax/2;
     }
 
+    public void GameStart()
+    {
+        state = GameState.gameActive;
+    }
 
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) teamA.buttons[0].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha2)) teamA.buttons[1].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha3)) teamA.buttons[2].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha4)) teamA.buttons[3].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha5)) teamA.buttons[4].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha6)) teamB.buttons[0].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha7)) teamB.buttons[1].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha8)) teamB.buttons[2].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha9)) teamB.buttons[3].InputFromButton();
-        if (Input.GetKeyDown(KeyCode.Alpha0)) teamB.buttons[4].InputFromButton();
+        if (state == GameState.gameActive)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) teamA.buttons[0].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha2)) teamA.buttons[1].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha3)) teamA.buttons[2].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha4)) teamA.buttons[3].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha5)) teamA.buttons[4].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha6)) teamB.buttons[0].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha7)) teamB.buttons[1].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha8)) teamB.buttons[2].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha9)) teamB.buttons[3].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha0)) teamB.buttons[4].InputFromButton();
+        }
     }
     void FixedUpdate()
     {
@@ -64,9 +74,6 @@ public class GameController : MonoBehaviour
                 turn++;
                
                 actionTimer = 0.33f;
-                if (turn > 16) waitState = UnitData.AI_State_Wait.hold5s;
-                if (turn > 32) waitState = UnitData.AI_State_Wait.hold10S;
-                if (turn > 48) waitState = UnitData.AI_State_Wait.hold15S;
 
                 TeamCheck();
 
@@ -86,7 +93,7 @@ public class GameController : MonoBehaviour
                 float newFrontLine = (teamAScore + 54 - teamBScore) / 2;
 
                 teamScoreRate = newFrontLine / 54;
-                Debug.Log(teamScoreRate);
+                //Debug.Log(teamScoreRate);
 
                 UI.UpdateGoldBar(teamScoreRate);
 
@@ -104,19 +111,19 @@ public class GameController : MonoBehaviour
                 if (turn > 960){ ScoreA++; ScoreB++;}
              
 
-                if (teamScoreRate > 0.6f) { ConquerScore++; ScoreAB += 5;}
-                if (teamScoreRate > 0.7f) { ConquerScore++; ScoreAB += 5;}
-                if (teamScoreRate > 0.8f) { ConquerScore++; ScoreAB += 5;}
-                if (teamScoreRate > 0.9f) { ConquerScore += 2; ScoreAB += 5;}
+                if (teamScoreRate > 0.6f) { ConquerScore++; ScoreAB += 3;}
+                if (teamScoreRate > 0.7f) { ConquerScore++; ScoreAB += 3;}
+                if (teamScoreRate > 0.8f) { ConquerScore++; ScoreAB += 3;}
+                if (teamScoreRate > 0.9f) { ConquerScore += 2; ScoreAB += 3;}
 
-                if (teamScoreRate < 0.4f) { ConquerScore--; ScoreBB += 5; }
-                if (teamScoreRate < 0.3f) { ConquerScore--; ScoreBB += 5; }
-                if (teamScoreRate < 0.2f) { ConquerScore--; ScoreBB += 5; }
-                if (teamScoreRate < 0.1f) { ConquerScore -= 2; ScoreBB += 5; }
-                UI.UpdateScoreBar(ConquerScore, 500);
+                if (teamScoreRate < 0.4f) { ConquerScore--; ScoreBB += 3; }
+                if (teamScoreRate < 0.3f) { ConquerScore--; ScoreBB += 3; }
+                if (teamScoreRate < 0.2f) { ConquerScore--; ScoreBB += 3; }
+                if (teamScoreRate < 0.1f) { ConquerScore -= 2; ScoreBB += 3; }
+                UI.UpdateScoreBar(ConquerScore, ConquerScoreMax);
 
 
-                if (ConquerScore <= 0 || ConquerScore > 500)
+                if (ConquerScore <= 0 || ConquerScore > ConquerScoreMax)
                 {
                     StartCoroutine(GameWin());
                 }

@@ -350,6 +350,8 @@ MonoBehaviour:
   inAttacking: 0
   isCharging: 0
   damBonus: 0
+  knockbackBonus: 0
+  canAttack_AOE: 0
 --- !u!114 &5136168888629052295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,6 +377,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 437509751827549360, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0615723
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751827549360, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.0615723
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751827549360, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.0615723
+      objectReference: {fileID: 0}
     - target: {fileID: 437509751958929160, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_RootOrder
       value: 0

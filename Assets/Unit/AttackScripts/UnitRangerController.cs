@@ -17,9 +17,13 @@ public class UnitRangerController : UnitAIController
         VP = this.transform.parent.GetComponent<ViewPoint>();
     }
 
-    public void AI_RangeUnit_Action()
+    public void AI_RangeUnit_Action(bool dontChangeAttackTarget)
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.NoObstacleAvoidance;
+
+        //[FindTarget]
+        if(!dontChangeAttackTarget)
+        FindAttackTarget();
 
         //[Stay]
         if (unit.attackTarget == null)
@@ -41,8 +45,7 @@ public class UnitRangerController : UnitAIController
             }
         }
 
-        //[Stay]
-        if (!CheckHoldStage()) {AI_Stay(false); return; }
+
 
         //[Find Enemy]
         else
@@ -51,27 +54,26 @@ public class UnitRangerController : UnitAIController
             {
                 AI_GoToBase(unit.unitTeam);
             }
-            if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.shoot_n_keepDis)
+            if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.shoot_n_keepDis)
             {
-                bool shouldFlee = AI_CheckIfShouldFlee();
-
-                if (dis < unit.data.shootDis * 0.7f) AI_Stay(false);
-
-                else if (dis < unit.data.shootDis * 0.35f || shouldFlee) AI_Flee();
+                bool haveEnemy = VP.CheckHitShpere(1.55f);
+                if (haveEnemy)
+                {
+                    restreatTimer = 3f;
+                }
+                else if (dis < unit.data.shootDis * 0.5f) AI_Stay(false);
 
                 else AI_MoveToward(unit.attackTarget.transform);
             }
 
 
-            else if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.shoot)
+            else if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.shoot)
             {
-                
-
-                bool haveEnemy = VP.CheckHitShpere();
+                bool haveEnemy = VP.CheckHitShpere(1);
 
                 if (haveEnemy)
                 {
-                    restreatTimer = 5f;
+                    restreatTimer = 3f;
                 }
                 else if (dis < unit.data.shootDis * 0.5f) AI_Stay(false);
 

@@ -35,7 +35,7 @@ public class UnitCavalryController : UnitAIController
         if (unit.attackCD > 0) return;
 
         //Check can attack
-        bool canAttack_InHitBox = VP.CheckHitShpere();
+        bool canAttack_InHitBox = VP.CheckHitShpere(1);
         if (!canAttack_InHitBox) return;
 
         //[Set Attack]
@@ -46,8 +46,12 @@ public class UnitCavalryController : UnitAIController
         }
     }
 
-    public void AI_Cavalry_Action()
+    public void AI_Cavalry_Action(bool dontChangeAttackTarget)
     {
+        //[FindTarget]
+        if(!dontChangeAttackTarget)
+        FindAttackTarget();
+
         //[Stay]
         if (unit.attackTarget == null)
         {
@@ -55,10 +59,9 @@ public class UnitCavalryController : UnitAIController
             return;
         }
 
-        if (!CheckHoldStage()) { AI_Stay(true); return; }
 
         //[Find Enemy]
-        if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
+        if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
         {
             //[Freeze after attack]
             if (unit.attackCD > unit.data.attackCD * 0.3f)
@@ -67,11 +70,6 @@ public class UnitCavalryController : UnitAIController
 
                 Vector3 toPos = unit.transform.position + unit.transform.forward * 5f;
                 unit.agent.SetDestination(toPos);
-
- 
-                //bool canunitgo = unit.agent.CalculatePath(toPos, unit.agent.path);
-                //if(!canunitgo) unit.agent.SetDestination(unit.transform.position + unit.transform.forward * -10f);
-
             }
 
             else
@@ -95,7 +93,6 @@ public class UnitCavalryController : UnitAIController
                     {
                         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.NoObstacleAvoidance;
                         unit.agent.SetDestination(unit.transform.position + unit.transform.forward * 6f);
-        
                     }
                 }
             }

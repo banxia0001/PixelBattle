@@ -5,63 +5,6 @@ using UnityEngine.UI;
 
 public class BattleFunction : MonoBehaviour
 {
-    public static List<Unit> Find_UnitsInRange(float range, Transform startPos)
-    {
-        GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
-        List<Unit> unitList = new List<Unit>();
-
-        if (allUnits != null)
-            foreach (GameObject unitOb in allUnits)
-            {
-                Unit unit = unitOb.GetComponent<Unit>();
-
-                float thisDis = Vector3.Distance(startPos.transform.position, unit.transform.position);
-                if (thisDis < range)
-                    unitList.Add(unit);
-            }
-        return unitList;
-    }
-    public static List<Unit> Find_UnitsInRange(Unit.UnitTeam targetTeam,float range, Transform startPos)
-    {
-        GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
-        List<Unit> unitList = new List<Unit>();
-
-        if (allUnits != null)
-            foreach (GameObject unitOb in allUnits)
-            {
-                Unit unit = unitOb.GetComponent<Unit>();
-
-                if (unit.unitTeam == targetTeam)
-                {
-                    float thisDis = Vector3.Distance(startPos.transform.position, unit.transform.position);
-                    if (thisDis < range)
-                        unitList.Add(unit);
-                }
-            }
-        return unitList;
-    }
-
-    public static Unit Find_ClosestUnitInList(List<Unit> unitGroup, Transform startPos)
-    {
-        if (unitGroup == null) return null;
-        if (unitGroup.Count == 0) return null;
-
-        Unit closedUnit = unitGroup[0];
-        float closetDis = 9999999;
-
-        for (int i = 0; i < unitGroup.Count; i++)
-        {
-            float thisDis = Vector3.Distance(startPos.transform.position, unitGroup[i].transform.position);
-
-            if (closetDis > thisDis)
-            {
-
-                closetDis = thisDis;
-                closedUnit = unitGroup[i];
-            }
-        }
-        return closedUnit;
-    }
     public static List<Unit> Find_TargetUnitGroup(Unit.UnitTeam targetTeam, UnitData.UnitType targetType)
     {
         GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
@@ -94,6 +37,27 @@ public class BattleFunction : MonoBehaviour
             }
         return unitList;
     }
+
+    public static List<Unit> FindAllUnit_InSphere(Vector3 postion, float range, Unit unit)
+    {
+        Collider[] overlappingItems;
+        overlappingItems = Physics.OverlapSphere(postion, range, LayerMask.GetMask("Unit"));
+        if (overlappingItems == null) return null;
+        else return AIFunctions.AI_FindEnemyInList(unit, overlappingItems);
+    }
+
+    public static List<Unit> FindAllUnit_InSphere(Vector3 postion, float range, Unit.UnitTeam unitTeamFrom)
+    {
+        Unit.UnitTeam targetTeam = Unit.UnitTeam.teamA;
+        if (unitTeamFrom == Unit.UnitTeam.teamA) targetTeam = Unit.UnitTeam.teamB;
+
+        Collider[] overlappingItems;
+        overlappingItems = Physics.OverlapSphere(postion, range, LayerMask.GetMask("Unit"));
+        if (overlappingItems == null) return null;
+        else return AIFunctions.AI_FindEnemyInList(targetTeam, overlappingItems);
+    }
+
+
 
     public static int DamageCalculate(int damMin, int damMax, Unit defender, bool isCharge, bool isJave, bool isAP, bool isRange)
     {

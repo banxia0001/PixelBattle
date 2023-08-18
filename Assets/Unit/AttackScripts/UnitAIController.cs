@@ -34,21 +34,99 @@ public class UnitAIController : MonoBehaviour
         return;
     }
 
-    public virtual bool CheckHoldStage()
+    public virtual void AI_DecideAttackTarget(Unit.UnitTeam targetTeam, bool targetFrontline)
     {
-        int stateNum = (int)GameController.waitState;
+        int choice = Random.Range(0, 20);
+        if (choice < 12) unit.attackTarget = AI_FindClosestTargetInList(unit.data.current_AI_Target, targetFrontline);
+        else unit.attackTarget = AI_FindClosestTargetInList(unit.data.current_AI_Target_Secondly, targetFrontline);
 
-        if (unit.current_AI_Wait == UnitData.AI_State_Wait.advance) return true;
+        if (unit.attackTarget == null)
+        {
+            if (choice < 12) unit.attackTarget = AI_FindClosestTargetInList(unit.data.current_AI_Target_Secondly, targetFrontline);
+            else unit.attackTarget = AI_FindClosestTargetInList(unit.data.current_AI_Target, targetFrontline);
+        }
 
-        if (unit.current_AI_Wait == UnitData.AI_State_Wait.hold5s && stateNum >= 1) return true;
-
-        if (unit.current_AI_Wait == UnitData.AI_State_Wait.hold10S && stateNum >= 2) return true;
-
-        if (unit.current_AI_Wait == UnitData.AI_State_Wait.hold15S && stateNum >= 3) return true;
-
-        //Debug.Log(stateNum);
-        return false;
+        if (unit.attackTarget == null)
+        {
+            unit.attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, unit, false, targetFrontline);
+        }
     }
+
+    public Unit AI_FindClosestTargetInList(UnitData.AI_State_FindTarget current_AI_Target, bool targrtFrontLine)
+    {
+        Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
+        if (unit.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
+
+        if (current_AI_Target == UnitData.AI_State_FindTarget.findValueableTarget_InDistance)
+        {
+            return AIFunctions.AI_Find_ValueableUnit(targetTeam, unit, false);
+        }
+
+        if (current_AI_Target == UnitData.AI_State_FindTarget.findValueableTarget_InFrontline)
+        {
+            return AIFunctions.AI_Find_ValueableUnit(targetTeam, unit, true);
+        }
+
+        if (current_AI_Target == UnitData.AI_State_FindTarget.findClosest)
+        {
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, unit, true, true);
+        }
+
+        if (current_AI_Target == UnitData.AI_State_FindTarget.findClosestWarrior || current_AI_Target == UnitData.AI_State_FindTarget.findClosestTarget_InFrontline)
+        {
+            return AIFunctions.AI_Find_ClosestUnit_2(targetTeam, current_AI_Target, unit, true);
+        }
+
+        else
+        {
+            return AIFunctions.AI_Find_ClosestUnit_2(targetTeam, current_AI_Target, unit, false);
+        }
+    }
+
+    public virtual void FindAttackTarget()
+    {
+        Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
+        if (unit.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
+
+        bool focusFrontline = false;
+
+        if (unit.data.unitType == UnitData.UnitType.archer ||
+            unit.data.unitType == UnitData.UnitType.artillery ||
+            unit.data.unitType == UnitData.UnitType.cavalry) focusFrontline = false;
+
+        else focusFrontline = true;
+
+        //[If target empty]
+        if (unit.attackTarget == null)
+        {
+            AI_DecideAttackTarget(targetTeam, focusFrontline);
+        }
+        //[See if there are new unit that are closer]
+        else
+        {
+            float dis = Vector3.Distance(this.transform.position, unit.attackTarget.transform.position);
+            if (unit.data.unitType == UnitData.UnitType.infantry)
+            {
+                if (dis > 2.5f) AI_DecideAttackTarget(targetTeam, focusFrontline);
+            }
+
+            else if (unit.data.unitType == UnitData.UnitType.archer || unit.data.unitType == UnitData.UnitType.artillery)
+            {
+                if (dis > unit.data.shootDis * 1.2f) AI_DecideAttackTarget(targetTeam, focusFrontline);
+            }
+
+            else if (unit.data.unitType == UnitData.UnitType.cavalry)
+            {
+                if (dis > 5f) AI_DecideAttackTarget(targetTeam, focusFrontline);
+            }
+
+            else
+            {
+                if (dis > 3f) unit.attackTarget = AI_FindClosestTargetInList(unit.data.current_AI_Target, false);
+            }
+        }
+    }
+   
 
     public virtual void AI_Stay(bool minorMove)
     {
@@ -111,24 +189,7 @@ public class UnitAIController : MonoBehaviour
             unit.agent.SetDestination(newPos);
         }
     }
-    public virtual bool AI_CheckIfShouldFlee()
-    {
-        Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
-        if (unit.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
-
-        List<Unit> unitList = BattleFunction.Find_UnitsInRange(targetTeam, unit.data.shootDis * 0.2f, unit.transform);
-        if (unitList != null)
-        {
-            if (unitList.Count != 0)
-            {
-                unit.attackTarget = BattleFunction.Find_ClosestUnitInList(unitList, unit.transform);
-                //Debug.Log("moveTarget:" + attackTarget.name);
-                return true;
-            }
-            else return false;
-        }
-        else return false;
-    }
+  
 
     public virtual void AI_MoveForward()
     {

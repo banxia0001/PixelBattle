@@ -18,7 +18,7 @@ public class UnitDragonController : UnitAIController
     }
 
 
-    public void AI_Monster_Action()
+    public void AI_Monster_Action(bool dontChangeAttackTarget)
     {
         if (isAttacking)
         {
@@ -34,6 +34,10 @@ public class UnitDragonController : UnitAIController
 
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
 
+        //[FindTarget]
+        if(!dontChangeAttackTarget)
+        FindAttackTarget();
+
         //[Stay]
         if (unit.attackTarget == null)
         {
@@ -41,7 +45,7 @@ public class UnitDragonController : UnitAIController
             return;
         }
 
-        bool canAttack = VP.CheckHitShpere();
+        bool canAttack = VP.CheckHitShpere(1);
 
         if (unit.attackCD <= 0 && canAttack)
         {
@@ -67,13 +71,11 @@ public class UnitDragonController : UnitAIController
             }
         }
 
-        //[wait]
-        if (!CheckHoldStage()) { AI_Stay(true); return; }
 
         //[Find Enemy]
         else
         {
-            if (unit.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
+            if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
             {
                 AI_MoveToward(unit.attackTarget.gameObject.transform);
             }
@@ -94,7 +96,7 @@ public class UnitDragonController : UnitAIController
     {
         Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
         if (unit.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
-        unit.attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, unit, false);
+        unit.attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, unit, false, true);
 
         if (unit.attackTarget != null)
         {

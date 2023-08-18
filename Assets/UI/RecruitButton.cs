@@ -26,6 +26,10 @@ public class RecruitButton : MonoBehaviour
     public enum ButtonState { WaitingForRecruit, TrainingUnit, UnitReady }
     public ButtonState buttonState;
 
+
+    private int RNum = -1;
+
+
     public void FixedUpdate()
     {
         if (buttonState == ButtonState.TrainingUnit)
@@ -37,7 +41,6 @@ public class RecruitButton : MonoBehaviour
                 UnitReady();
             }
         }
-
     }
 
     public void InputData(TeamController TC, UnitData_Local unit, int hotkey)
@@ -54,22 +57,35 @@ public class RecruitButton : MonoBehaviour
             image.sprite = unit.unitSpriteB;
             num += 5;
         }
+        if(hotkey != -10)
         text_HotKey.text = num.ToString();
     }
 
     public void InputFromButton()
     {
-        if (buttonState == ButtonState.WaitingForRecruit)
+        if (GameController.state == GameController.GameState.gameInStartPanel)
         {
-            if (TC.RecruitUnit(unit.Gcost))
-            {
-                StartTrainUnit();
-            }
+            RNum++;
+            if (RNum > 6) RNum = 0;
+
+            GameUI UI = FindObjectOfType<GameUI>();
+            InputData(this.TC, UI.Rlist.UnitPrefabs[RNum], -10);  
         }
 
-        if (buttonState == ButtonState.UnitReady)
+        else if (GameController.state == GameController.GameState.gameActive)
         {
-            SpawnUnit();
+            if (buttonState == ButtonState.WaitingForRecruit)
+            {
+                if (TC.RecruitUnit(unit.Gcost))
+                {
+                    StartTrainUnit();
+                }
+            }
+
+            if (buttonState == ButtonState.UnitReady)
+            {
+                SpawnUnit();
+            }
         }
     }
 
@@ -93,8 +109,6 @@ public class RecruitButton : MonoBehaviour
 
     private void SpawnUnit()
     {
-    
-
         if (TC.Check_UnitPop(unit.Num))
         {
             buttonState = ButtonState.WaitingForRecruit;

@@ -26,13 +26,16 @@ MonoBehaviour:
   description: 
   data:
     unitType: 3
-    health: 75
+    current_AI_Tactic: 0
+    current_AI_Target: 1
+    current_AI_Target_Secondly: 2
+    health: 110
     armor: 10
     toughness: 5
-    damageMin: 12
-    damageMax: 16
+    damageMin: 14
+    damageMax: 18
     weaponCauseAOE: 1
-    attackCD: 22
+    attackCD: 20
     moveSpeed: 1.44
     moveStopDis: 0.5
     ProjectilePrefab: {fileID: 0}
