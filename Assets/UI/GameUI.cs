@@ -32,6 +32,7 @@ public class GameUI : MonoBehaviour
     {
         goldBar.SetValue_Initial(0.5f,1);
         scoreBar.SetValue_Initial(0.5f,1);
+        panel.SetActive(true);
     }
 
     public void GameStart()
@@ -39,10 +40,6 @@ public class GameUI : MonoBehaviour
         FindObjectOfType<GameController>().GameStart();
         panel.SetActive(false);
     }
-
-
-
-
 
     public void UpdateGoldBar(float ratio)
     {
@@ -55,10 +52,10 @@ public class GameUI : MonoBehaviour
         scoreBar.SetValue(ratio);
     }
 
-    public void UpdateGTText(int GAT, int GBT, int AB, int BB)
+    public void UpdateGTText(int GAT, int GBT)
     {
-        G_A_Turn.text = GAT.ToString() + "+" + AB + "G";
-        G_B_Turn.text = GBT.ToString() + "+" + BB + "G";
+        G_A_Turn.text = GAT.ToString() + "G/S";
+        G_B_Turn.text = GBT.ToString() + "G/S";
 
     }
     public void UpdateGText(int GA, int GB)

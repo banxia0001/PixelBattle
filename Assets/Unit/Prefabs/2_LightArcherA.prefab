@@ -249,6 +249,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 2_LightArcherA
       objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929166, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: m_Mass
+      value: 0.66
+      objectReference: {fileID: 0}
     - target: {fileID: 3026952450678620712, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

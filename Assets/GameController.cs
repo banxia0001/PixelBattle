@@ -12,35 +12,34 @@ public class GameController : MonoBehaviour
    
     public TeamController teamA;
     public TeamController teamB;
+    public static TeamConquerManager conquerManager;
     public GameUI UI;
 
-    [HideInInspector]
-    public int ConquerScore;
-    public int ConquerScoreMax;
-    public static float frontLine;
 
     private float actionTimer;
-    private int turn;
+    [HideInInspector]
+    public int turn;
     private int turn_GIncome;
-
-
-
     public float teamScoreRate = 0;
 
-    public GameObject Frontline;
-
+    public int Score,ScoreMax;
 
 
     private void Start()
     {
         actionTimer = 0;
         state = GameState.gameInStartPanel;
-        ConquerScore = ConquerScoreMax/2;
+        conquerManager = FindObjectOfType<TeamConquerManager>();
+        Score = ScoreMax / 2;
+        //teamScoreRate = 0.5f;
     }
 
     public void GameStart()
     {
+        conquerManager.SetUp();
         state = GameState.gameActive;
+        Score = ScoreMax / 2;
+        actionTimer = 0;
     }
 
 
@@ -76,84 +75,82 @@ public class GameController : MonoBehaviour
                 actionTimer = 0.33f;
 
                 TeamCheck();
-
-                //[Check MapConquer Income]
-
-
-                frontLine = (teamA.teamFrontLine + 54 - teamB.teamFrontLine) / 2;
-
-                //Debug.Log("frontLine" + frontLine);
-
-                Frontline.transform.position = new Vector3(frontLine, 0.1f, 14.94f);
-
-                //int falseScoreForEarlyTurn = 50 - turn;
-                //if (falseScoreForEarlyTurn <= 1) falseScoreForEarlyTurn = 1;
-                float teamAScore = teamA.teamFrontLine + 10;
-                float teamBScore = teamB.teamFrontLine + 10;
-                float newFrontLine = (teamAScore + 54 - teamBScore) / 2;
-
-                teamScoreRate = newFrontLine / 54;
-                //Debug.Log(teamScoreRate);
-
-                UI.UpdateGoldBar(teamScoreRate);
-
-                int ScoreA = 2;
-                int ScoreB = 2;
-                int ScoreAB = 0;
-                int ScoreBB = 0;
-
-   
-                if (turn > 40){ ScoreA++; ScoreB++;}
-                if (turn > 80){ ScoreA++; ScoreB++;}
-                if (turn > 120){ ScoreA++; ScoreB++;}
-                if (turn > 240){ ScoreA++; ScoreB++;}
-                if (turn > 480){ ScoreA++; ScoreB++;}
-                if (turn > 960){ ScoreA++; ScoreB++;}
-             
-
-                if (teamScoreRate > 0.6f) { ConquerScore++; ScoreAB += 3;}
-                if (teamScoreRate > 0.7f) { ConquerScore++; ScoreAB += 3;}
-                if (teamScoreRate > 0.8f) { ConquerScore++; ScoreAB += 3;}
-                if (teamScoreRate > 0.9f) { ConquerScore += 2; ScoreAB += 3;}
-
-                if (teamScoreRate < 0.4f) { ConquerScore--; ScoreBB += 3; }
-                if (teamScoreRate < 0.3f) { ConquerScore--; ScoreBB += 3; }
-                if (teamScoreRate < 0.2f) { ConquerScore--; ScoreBB += 3; }
-                if (teamScoreRate < 0.1f) { ConquerScore -= 2; ScoreBB += 3; }
-                UI.UpdateScoreBar(ConquerScore, ConquerScoreMax);
-
-
-                if (ConquerScore <= 0 || ConquerScore > ConquerScoreMax)
-                {
-                    StartCoroutine(GameWin());
-                }
-
-
-                //[Check G Income]
-                turn_GIncome++;
-                bool canGainG = false;
-                if (turn_GIncome >= 3)
-                {
-                    canGainG = true; turn_GIncome = 0;
-                }
-
-                int[,] Income = new int[ScoreA + ScoreAB, ScoreB + ScoreBB];
-
-
-                if (canGainG)
-                {
-                    teamA.G += Income.GetLength(0); if (teamA.G > 500) teamA.G = 500;
-                    teamB.G += Income.GetLength(1); if (teamB.G > 500) teamB.G = 500;
-                }
-
-                UpdateGText();
-                UpdatePText();
-                UI.UpdateGTText(ScoreA,ScoreB, ScoreAB, ScoreBB);
+                StartCoroutine(TurnCheck());
             }
         }  
     }
 
 
+    public IEnumerator TurnCheck()
+    {
+        yield return new WaitForSeconds(.05f);
+        conquerManager.CheckUnitInLand();
+        yield return new WaitForSeconds(.05f);
+        conquerManager.CheckLandScore();
+        conquerManager.CheckLandConquer_AutoOccup();
+        yield return new WaitForSeconds(.05f);
+        conquerManager.SetUpFrontLine();
+
+        float newFrontLine = (float)conquerManager.currentScore_ForRatio / (float)conquerManager.maxScoreAll;
+        teamScoreRate = newFrontLine;
+
+        if (conquerManager.frontLineMeet)
+        {
+            //[Check MapConquer Income]
+
+          
+                
+                //((float)conquerManager.scoreA + (float)conquerManager.scoreB);
+
+
+            //[TeamRate]
+        
+            UI.UpdateGoldBar(teamScoreRate);
+
+            int AScore = 0;
+            int BScore = 0;
+
+            if (teamScoreRate < 0.1) BScore++;
+            if (teamScoreRate < 0.2) BScore++;
+            if (teamScoreRate < 0.3) BScore++;
+
+            if (teamScoreRate > 0.7) AScore++;
+            if (teamScoreRate > 0.8) AScore++;
+            if (teamScoreRate > 0.9) AScore++;
+
+            //[Score]
+            Score += AScore - BScore;
+            float ratio = (float)Score / (float)ScoreMax;
+            UI.scoreBar.SetValue(ratio);
+
+            if (Score < 0 || Score > ScoreMax)
+            {
+                StartCoroutine(GameWin());
+            }
+        }
+
+        turn_GIncome++;
+        bool canGainG = false;
+
+        if (turn_GIncome >= 3)
+        {
+            canGainG = true; turn_GIncome = 0;
+        }
+
+        if (canGainG)
+        {
+            int GA = conquerManager.incomeA;
+            int GB = conquerManager.incomeB;
+
+            teamA.G += GA; if (teamA.G > 500) teamA.G = 500;
+            teamB.G += GB; if (teamB.G > 500) teamB.G = 500;
+
+            UpdateGText();
+            UpdatePText();
+            UI.UpdateGTText(GA,GB);
+        }
+
+    }
     public IEnumerator GameWin()
     {
         state = GameState.gameFrozen;

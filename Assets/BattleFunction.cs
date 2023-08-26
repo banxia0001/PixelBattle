@@ -38,7 +38,7 @@ public class BattleFunction : MonoBehaviour
         return unitList;
     }
 
-    public static List<Unit> FindAllUnit_InSphere(Vector3 postion, float range, Unit unit)
+    public static List<Unit> FindEnemyUnit_InSphere(Vector3 postion, float range, Unit unit)
     {
         Collider[] overlappingItems;
         overlappingItems = Physics.OverlapSphere(postion, range, LayerMask.GetMask("Unit"));

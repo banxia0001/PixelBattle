@@ -17,7 +17,7 @@ MonoBehaviour:
   UnitPrefabB: {fileID: 5678418641081850666, guid: e43960441169e5c46a1b2c6c33082e29, type: 3}
   unitSpriteA: {fileID: 21300000, guid: 1c80895486f1db84b995a461f157c9bc, type: 3}
   unitSpriteB: {fileID: 21300000, guid: d9cd0452537453d45a86eaeffe39fdb0, type: 3}
-  Gcost: 65
+  Gcost: 140
   Tcost: 35
   Num: 1
   UnitValue: 4
@@ -31,20 +31,23 @@ MonoBehaviour:
     current_AI_Target_Secondly: 3
     health: 40
     armor: 15
-    toughness: 2
     damageMin: 12
     damageMax: 20
+    knockBackForce: 14
     weaponCauseAOE: 1
     attackCD: 15
-    moveSpeed: 1.77
+    moveSpeed: 1.7
     moveStopDis: 0
+    toughness: 4
+    mass: 5
+    knockBackBonus: 1
     ProjectilePrefab: {fileID: 0}
     isJavelin: 0
     shootDis: 0
     arrowOffset: 0
     arrowSpeed: 0
-    chargeSpeed_Accererate: 1.6
-    chargeSpeed_Max: 4.2
+    chargeSpeed_Accererate: 1.2
+    chargeSpeed_Max: 2.2
     isSpear: 0
     isAP: 0
     isShielded: 1

@@ -86,7 +86,7 @@ public class UnitDragonController : UnitAIController
     {
         unit.agent.enabled = false;
         unit.rb.velocity = Vector3.zero;
-        unit.knockBackTimer = 0.44f;
+        unit.knockBackTimer = 0.23f;
         unit.rb.freezeRotation = true;
         unit.GetComponent<CapsuleCollider>().isTrigger = true;
         unit.rb.AddForce(force * unit.transform.forward, ForceMode.Impulse);

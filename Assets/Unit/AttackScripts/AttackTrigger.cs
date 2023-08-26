@@ -48,12 +48,12 @@ public class AttackTrigger : MonoBehaviour
 
                     if (isCharging)
                     {
-                        unit.AddKnockBack(USC.unit.transform, damMax / 2 + damMin / 2 + bonus/2 + damBonus/2 + knockbackBonus, 0.1f);
+                        unit.AddKnockBack(USC.unit.transform, (float)USC.unit.data.knockBackForce + this.knockbackBonus, 0.1f,false);
                     }
 
                     else
                     {
-                        unit.AddKnockBack(USC.unit.transform, damMax / 2 + damMin / 2 + damBonus/2 + knockbackBonus, 0.1f);
+                        unit.AddKnockBack(USC.unit.transform, (float)USC.unit.data.knockBackForce + this.knockbackBonus, 0.1f,false);
                     }
 
                     if (!canAttack_AOE)

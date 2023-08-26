@@ -141,6 +141,12 @@ public class UnitAIController : MonoBehaviour
         }
     }
 
+    //public virtual void AI_GoToConquerLand(float minus)
+    //{
+    //    Vector3 gotoPos = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition(unit, minus), 0, unit.transform.position.z);
+    //    unit.agent.SetDestination(gotoPos);
+    //}
+
     public virtual void AI_GoToEnemyBase(Unit.UnitTeam team)
     {
         //Debug.Log("Stay");

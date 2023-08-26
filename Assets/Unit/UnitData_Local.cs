@@ -11,14 +11,14 @@ public class UnitData_Local : ScriptableObject
     public GameObject UnitPrefabB;
     public Sprite unitSpriteA;
     public Sprite unitSpriteB;
-    [Range(1,200)]
+    [Range(1,500)]
     public int Gcost;
     [Range(1, 50)]
     public int Tcost;
     [Range(1, 5)]
     public int Num;
-    [Range(1, 10)]
-    public float UnitValue;
+    [Range(1, 15)]
+    public int UnitValue;
 
     public Trait trait1, trait2;
     [TextArea(6, 3)]

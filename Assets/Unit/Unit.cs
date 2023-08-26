@@ -51,6 +51,7 @@ public class Unit : MonoBehaviour
 
     void Start()
     {
+        this.gameObject.name = data_local.data.unitType.ToString() +"||"+ unitTeam.ToString();
         UAC = this.transform.GetChild(2).GetComponent<UnitAIController>();
         URC = this.transform.GetChild(2).GetComponent<UnitRangerController>();
         UCC = this.transform.GetChild(2).GetComponent<UnitCavalryController>();
@@ -86,6 +87,9 @@ public class Unit : MonoBehaviour
         else
             BC.gameObject.transform.GetChild(1).GetChild(0).
                 GetComponent<Image>().color = new Color32(99, 255, 0, 255);
+
+
+        rb.mass = data.mass;
     }
 
     public void UnitSelect()
@@ -245,29 +249,47 @@ public class Unit : MonoBehaviour
 
         agent.speed = data.moveSpeed + chargeSpeed;
     }
-    public void AddKnockBack(Transform attacker, float knockBackForce, float waitTime)
+    public void AddKnockBack(Transform attacker, float knockBackForce, float waitTime, bool isRange)
     {
-        StartCoroutine(_AddKnockBack(attacker.position, knockBackForce, waitTime));
+        StartCoroutine(_AddKnockBack(attacker.position, knockBackForce, waitTime, isRange));
     }
-    private IEnumerator _AddKnockBack(Vector3 attacker, float knockBackForce, float waitTime)
+    public void AddKnockBack(Vector3 attacker, float knockBackForce, float waitTime, bool isRange)
+    {
+        StartCoroutine(_AddKnockBack(attacker, knockBackForce, waitTime, isRange));
+    }
+    private IEnumerator _AddKnockBack(Vector3 attacker, float knockBackForce, float waitTime, bool isRange)
     {
         //Debug.Log(knockBackForce);
 
         if (knockBackForce > (float)data.toughness/2)
         {
             agent.enabled = false;
-            yield return new WaitForSeconds(waitTime);
+            yield return new WaitForSeconds(waitTime/2);
+            rb.velocity = Vector3.zero;
+            yield return new WaitForSeconds(waitTime/2);
 
             if (attacker != null)
             {
                 if (agent != null)
                 {
                     knockBackForce = knockBackForce -= data.toughness / 2;
-                    //Debug.Log(knockBackForce);
+
                     Vector3 newVector = this.transform.position - attacker;
-                    rb.velocity = Vector3.zero;
+                    
                     if (knockBackForce > 30) knockBackForce = 30;
-                    rb.AddForce(2f * newVector * knockBackForce, ForceMode.Impulse);
+
+                    //knockBackForce = knockBackForce + (30 - knockBackForce) * 0.5f;
+
+                    if (isRange)
+                    {
+                        rb.AddForce(data.knockBackBonus * newVector * knockBackForce * 5f);
+                    }
+
+                    else
+                    {
+                        rb.AddForce(2f * data.knockBackBonus * newVector * knockBackForce, ForceMode.Impulse);
+                    }
+                  
                     knockBackTimer = 0.1f + knockBackForce / 15;
                 }
             }

@@ -28,7 +28,7 @@ public class ViewPoint : MonoBehaviour
 
     public virtual bool CheckHitShpere(float xRate)
     {
-        List<Unit> units = BattleFunction.FindAllUnit_InSphere(eyeRough.position, xRate * radius_EyeRough, this.unit);
+        List<Unit> units = BattleFunction.FindEnemyUnit_InSphere(eyeRough.position, xRate * radius_EyeRough, this.unit);
 
         if (units != null && units.Count != 0)
         {
@@ -45,13 +45,13 @@ public class ViewPoint : MonoBehaviour
         List<Unit> units = null;
 
         if (dir == "Middle")
-            units = BattleFunction.FindAllUnit_InSphere(eyeM.transform.position, radius,this.unit);
+            units = BattleFunction.FindEnemyUnit_InSphere(eyeM.transform.position, radius,this.unit);
 
         if (dir == "Right")
-            units = BattleFunction.FindAllUnit_InSphere(eyeR.transform.position, radius, this.unit);
+            units = BattleFunction.FindEnemyUnit_InSphere(eyeR.transform.position, radius, this.unit);
 
         if (dir == "Left")
-            units = BattleFunction.FindAllUnit_InSphere(eyeL.transform.position, radius, this.unit);
+            units = BattleFunction.FindEnemyUnit_InSphere(eyeL.transform.position, radius, this.unit);
 
 
         if (units != null && units.Count != 0)

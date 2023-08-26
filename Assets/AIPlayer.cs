@@ -20,7 +20,7 @@ public class AIPlayer : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             RecruitButton RB = team.buttons[i];
-            Debug.Log(recruitNum);
+            //Debug.Log(recruitNum);
             if (RB.buttonState == RecruitButton.ButtonState.UnitReady)
             {
                 RB.InputFromButton();
@@ -37,7 +37,7 @@ public class AIPlayer : MonoBehaviour
                         //int num = Random.Range(0, 3);
                         //if (num != 2) 
                         recruitNum++;
-                        if (recruitNum == 4 || recruitNum == 5) recruitNum = 0;
+                        if (recruitNum == 5) recruitNum = 0;
                         RB.InputFromButton();
                     }
                 }

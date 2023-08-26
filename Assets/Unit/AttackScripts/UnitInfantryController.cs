@@ -16,6 +16,7 @@ public class UnitInfantryController : UnitAIController
         //[Stay]
         if (unit.attackTarget == null)
         {
+            //AI_GoToConquerLand(-1.1f);
             AI_GoToEnemyBase(unit.unitTeam);
             return;
         }
@@ -23,10 +24,17 @@ public class UnitInfantryController : UnitAIController
         float dis = Vector3.Distance(unit.transform.position, unit.attackTarget.transform.position);
         bool canAttack = false;
 
+        //if (!VP.CheckHitShpere(3))
+        //{
+        //    AI_GoToConquerLand(-1.1f);
+        //    return;
+        //}
+
         if (unit.attackTarget.data.unitType == UnitData.UnitType.cavalry)
         {
             if (dis > VP.radius_EyeRough * 3f)
             {
+                //AI_GoToConquerLand(-1.1f);
                 AI_GoToEnemyBase(unit.unitTeam);
                 return;
             }

@@ -84,7 +84,54 @@ public class AIFunctions : MonoBehaviour
             }
             if (targetFrontline)
             {
-                Vector3 pos1 = new Vector3(GameController.frontLine, 0, startUnit.transform.position.z * 2);
+
+                Vector3 pos1 = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
+                Vector3 pos2 = new Vector3(unitGroup[i].transform.position.x, 0, unitGroup[i].transform.position.z * 2);
+                thisDis = Vector3.Distance(pos1, pos2) - value;
+            }
+
+            else
+            {
+                Vector3 pos1 = new Vector3(startUnit.transform.position.x, 0, startUnit.transform.position.z * 2);
+                Vector3 pos2 = new Vector3(unitGroup[i].transform.position.x, 0, unitGroup[i].transform.position.z * 2);
+                thisDis = Vector3.Distance(pos1, pos2) - value;
+            }
+
+
+            if (closetDis > thisDis)
+            {
+                closetDis = thisDis;
+                closedUnit = unitGroup[i];
+            }
+        }
+        return closedUnit;
+    }
+
+    public static Unit AI_Find_ClosestUnit(List<Unit> unitGroup, Unit startUnit, bool targetFrontline, bool targetValue)
+    {
+        if (unitGroup == null) return null;
+        if (unitGroup.Count == 0) return null;
+
+        Unit closedUnit = unitGroup[0];
+        float closetDis = 9999999;
+
+        for (int i = 0; i < unitGroup.Count; i++)
+        {
+            if (unitGroup[i] == null) continue;
+
+            float thisDis = 0;
+
+            float value = 0;
+
+            if (targetValue)
+            {
+                value = unitGroup[i].data_local.UnitValue * 3;
+
+            }
+            if (targetFrontline)
+            {
+
+                Vector3 pos1 = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
                 Vector3 pos2 = new Vector3(unitGroup[i].transform.position.x, 0, unitGroup[i].transform.position.z * 2);
                 thisDis = Vector3.Distance(pos1, pos2) - value;
             }
@@ -116,8 +163,8 @@ public class AIFunctions : MonoBehaviour
 
         if (targetFrontline)
         {
-            Vector3 pos = new Vector3(GameController.frontLine, 0, startUnit.transform.position.z);
-            unitGroup = BattleFunction.FindAllUnit_InSphere(pos, 8f, startUnit);
+            Vector3 pos = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z);
+            unitGroup = BattleFunction.FindEnemyUnit_InSphere(pos, 8f, startUnit);
         }
 
         else
@@ -125,7 +172,7 @@ public class AIFunctions : MonoBehaviour
             float offset = 5f;
             if (startUnit.unitTeam == Unit.UnitTeam.teamB) offset = -5f;
             Vector3 pos = new Vector3(startUnit.transform.position.x + offset, 0, startUnit.transform.position.z);
-            unitGroup = BattleFunction.FindAllUnit_InSphere(pos, 8f, startUnit);
+            unitGroup = BattleFunction.FindEnemyUnit_InSphere(pos, 8f, startUnit);
         }
 
         if (unitGroup == null) return null;
@@ -156,8 +203,8 @@ public class AIFunctions : MonoBehaviour
 
         if (targetType == UnitData.AI_State_FindTarget.findClosestTarget_InFrontline)
         {
-            Vector3 pos = new Vector3(GameController.frontLine, 0, startUnit.transform.position.z);
-            unitGroup = BattleFunction.FindAllUnit_InSphere(pos, 8f, startUnit);
+            Vector3 pos = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z);
+            unitGroup = BattleFunction.FindEnemyUnit_InSphere(pos, 8f, startUnit);
         }
 
         if (targetType == UnitData.AI_State_FindTarget.findClosest)
@@ -165,7 +212,7 @@ public class AIFunctions : MonoBehaviour
             float offset = 5f;
             if (startUnit.unitTeam == Unit.UnitTeam.teamB) offset = -5f;
              Vector3 pos = new Vector3(startUnit.transform.position.x + offset, 0, startUnit.transform.position.z);
-            unitGroup = BattleFunction.FindAllUnit_InSphere(pos, 8f, startUnit);
+            unitGroup = BattleFunction.FindEnemyUnit_InSphere(pos, 8f, startUnit);
         }
 
         if (targetType == UnitData.AI_State_FindTarget.findClosestArcher) unitGroup = targetUnitTeam.archerList;
@@ -185,7 +232,7 @@ public class AIFunctions : MonoBehaviour
 
             if (targetFrontline)
             {
-                Vector3 pos1 = new Vector3(GameController.frontLine, 0, startUnit.transform.position.z * 2);
+                Vector3 pos1 = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
                 Vector3 pos2 = new Vector3(unitGroup[i].transform.position.x, 0, unitGroup[i].transform.position.z * 2);
                 thisDis = Vector3.Distance(pos1, pos2);
             }

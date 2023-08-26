@@ -35,6 +35,13 @@ public class UnitRangerController : UnitAIController
         //[Attack]
         float dis = Vector3.Distance(this.transform.position, unit.attackTarget.transform.position);
 
+        //if (dis > unit.data.shootDis)
+        //{
+        //    AI_GoToConquerLand(2);
+        //    return;
+        //}
+
+
         if (dis < unit.data.shootDis && unit.attackCD <= 0)
         {
             if (unit.data.unitType == UnitData.UnitType.archer)
@@ -59,11 +66,11 @@ public class UnitRangerController : UnitAIController
                 bool haveEnemy = VP.CheckHitShpere(1.55f);
                 if (haveEnemy)
                 {
-                    restreatTimer = 3f;
+                    restreatTimer = 2f;
                 }
                 else if (dis < unit.data.shootDis * 0.5f) AI_Stay(false);
 
-                else AI_MoveToward(unit.attackTarget.transform);
+                else AI_MoveToward(unit.attackTarget.gameObject.transform);
             }
 
 
@@ -78,9 +85,23 @@ public class UnitRangerController : UnitAIController
                 else if (dis < unit.data.shootDis * 0.5f) AI_Stay(false);
 
                 else AI_MoveToward(unit.attackTarget.gameObject.transform);
+
             }
         }
     }
+
+
+    //public virtual void AI_MoveTowardBaseOnConqueredLand_Archer(Transform trans)
+    //{
+    //    float gotoDir = trans.position.x;
+    //    float maxDir = GameController.conquerManager.ReturnUnitFrontLinePosition(unit, 2f);
+    //    if (gotoDir > maxDir) gotoDir = maxDir;
+
+    //    if (unit.agent.enabled)
+    //        unit.agent.SetDestination(new Vector3(gotoDir, 0, Random.Range(-0.1f, 0.1f)));
+    //}
+
+
     public void SetUpAttack(Transform target, int damMin, int damMax, bool causeAOE)
     {
         AI_LookAt(target);
@@ -124,6 +145,6 @@ public class UnitRangerController : UnitAIController
         offset = offset * dis / 15;
 
         Vector3 targetPos = target.transform.position + new Vector3(Random.Range(-offset, offset), 0, Random.Range(-offset, offset));
-        ArrowScript.SetUpArror(targetPos, damMin, damMax, unit.data.arrowSpeed, targetTeam, unit.data.isJavelin);
+        ArrowScript.SetUpArror(targetPos,this.unit.transform.position, damMin, damMax, unit.data.knockBackForce, unit.data.arrowSpeed, targetTeam, unit.data.isJavelin);
     }
 }

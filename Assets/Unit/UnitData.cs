@@ -45,12 +45,13 @@ public class UnitData
     public int health;
     [Range(0, 25)]
     public int armor;
-    [Range(0, 10)]
-    public int toughness;
+
     [Range(1, 30)]
     public int damageMin;
     [Range(2, 30)]
     public int damageMax;
+    [Range(1, 30)]
+    public int knockBackForce = 1;
     public bool weaponCauseAOE;
 
     [Range(1, 30)]
@@ -60,6 +61,15 @@ public class UnitData
     public float moveSpeed;
     public float moveStopDis;
 
+    [Header("Mass")]
+    [Range(0, 10)]
+    public int toughness;
+
+    [Range(0, 20)]
+    public float mass = 1;
+
+    [Range(0, 1)]
+    public float knockBackBonus = 1;
 
     [Header("Archer")]
     public GameObject ProjectilePrefab;

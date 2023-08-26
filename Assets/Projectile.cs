@@ -10,8 +10,10 @@ public class Projectile : MonoBehaviour
     public bool isJave;
     public float attackDistance;
     private Vector3 arrowDropLocation;
+    private Vector3 arrowStartLocation;
     private int damMin;
     private int damMax;
+    private int knockBackBonus;
     private Unit.UnitTeam targetAttackTeam;
     private bool isDead = false;
 
@@ -20,9 +22,10 @@ public class Projectile : MonoBehaviour
         
     }
 
-    public void SetUpArror(Vector3 arrowDropLocation, int damMin, int damMax, float flySpeed, Unit.UnitTeam targetAttackTeam, bool isJave)
+    public void SetUpArror(Vector3 arrowDropLocation,Vector3 arrowStartLocation, int damMin, int damMax, int knockback,float flySpeed, Unit.UnitTeam targetAttackTeam, bool isJave)
     {
         this.arrowDropLocation = arrowDropLocation;
+        this.arrowStartLocation = arrowStartLocation;
         this.flySpeed = flySpeed;
         this.damMin = damMin;
         this.damMax = damMax;
@@ -30,7 +33,9 @@ public class Projectile : MonoBehaviour
         transform.LookAt(arrowDropLocation);
         this.targetAttackTeam = targetAttackTeam;
         isDead = false;
-      
+        this.knockBackBonus = knockback;
+
+
     }
 
     // Update is called once per frame
@@ -70,7 +75,7 @@ public class Projectile : MonoBehaviour
                 int dam = BattleFunction.DamageCalculate(damMin, damMax, targetUnit, false, isJave, false, true);
                 //Debug.Log("!!");
                 BattleFunction.Attack(this.transform, dam, targetUnit);
-                targetUnit.AddKnockBack(this.transform, damMax / 2 + damMin / 2, 0.01f);
+                targetUnit.AddKnockBack(arrowStartLocation, knockBackBonus, 0.01f,true);
             }
         }
 
