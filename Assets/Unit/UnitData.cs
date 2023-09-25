@@ -7,15 +7,15 @@ public class UnitData
 {
     public enum UnitListID
     {
-        Militia,
-        LightInfantry,
-        LightArcher,
-        Spearman,
-        HeavyInfantry,
-        HeavyCavalry,
-        Sobek,
-        SpearKnight,
-        FootKnight,
+        Militia = 0,
+        LightInfantry = 1,
+        LightArcher = 2,
+        Spearman = 3,
+        LightCavalry = 4,
+        HeavyCavalry = 5,
+        Sobek = 6,
+        SpearKnight = 7,
+        FootKnight = 8,
     }
  
     public enum UnitType { infantry, archer, cavalry, monster, artillery }
@@ -52,7 +52,8 @@ public class UnitData
     public int damageMax;
     [Range(1, 30)]
     public int knockBackForce = 1;
-    public bool weaponCauseAOE;
+    public int weaponAOENum;
+
 
     [Range(1, 30)]
     public int attackCD;

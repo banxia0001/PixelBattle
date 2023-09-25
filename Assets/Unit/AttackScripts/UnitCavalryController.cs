@@ -68,8 +68,16 @@ public class UnitCavalryController : UnitAIController
             {
                 unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
 
-                Vector3 toPos = unit.transform.position + unit.transform.forward * 5f;
-                unit.agent.SetDestination(toPos);
+                bool unitIsInEdge = AIFunctions.AI_Check_UnitInEdge(unit.transform.position);
+                if (unitIsInEdge)
+                {
+                    AI_GoToBase(unit.unitTeam);
+                }
+                else
+                {
+                    Vector3 toPos = unit.transform.position + unit.transform.forward * 5f;
+                    unit.agent.SetDestination(toPos);
+                }
             }
 
             else
@@ -107,15 +115,11 @@ public class UnitCavalryController : UnitAIController
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
         unit.attackCD = unit.data.attackCD + Random.Range(-2, 2);
 
-        if (unit.data.weaponCauseAOE)
-           SetUpAttack(unit.data.damageMin, unit.data.damageMax, true, unit.data.isAP);
-
-        else
-           SetUpAttack(unit.data.damageMin, unit.data.damageMax, false, unit.data.isAP);
+        SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponAOENum, unit.data.isAP);
     }
-    public override void SetUpAttack(int damMin, int damMax, bool causeAOE, bool causeAP)
+    public override void SetUpAttack(int damMin, int damMax, int weaponCauseNum, bool causeAP)
     {
-        attackTrigger.InputData(this, damMin, damMax, causeAOE, causeAP);
+        attackTrigger.InputData(this, damMin, damMax, weaponCauseNum, causeAP);
     }
     public void TriggerAttack(string myanim)
     {

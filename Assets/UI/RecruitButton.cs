@@ -66,9 +66,10 @@ public class RecruitButton : MonoBehaviour
         if (GameController.state == GameController.GameState.gameInStartPanel)
         {
             RNum++;
-            if (RNum > 6) RNum = 0;
-
             GameUI UI = FindObjectOfType<GameUI>();
+            if (RNum >= UI.Rlist.UnitPrefabs.Count) RNum = 0;
+
+         
             InputData(this.TC, UI.Rlist.UnitPrefabs[RNum], -10);  
         }
 

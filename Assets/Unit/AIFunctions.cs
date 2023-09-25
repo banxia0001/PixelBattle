@@ -211,7 +211,7 @@ public class AIFunctions : MonoBehaviour
         {
             float offset = 5f;
             if (startUnit.unitTeam == Unit.UnitTeam.teamB) offset = -5f;
-             Vector3 pos = new Vector3(startUnit.transform.position.x + offset, 0, startUnit.transform.position.z);
+            Vector3 pos = new Vector3(startUnit.transform.position.x + offset, 0, startUnit.transform.position.z);
             unitGroup = BattleFunction.FindEnemyUnit_InSphere(pos, 8f, startUnit);
         }
 
@@ -282,6 +282,27 @@ public class AIFunctions : MonoBehaviour
         if (attacker.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
         List<Unit> finalList = new List<Unit>();
 
+        if (overlappingItems == null) return null;
+        if (overlappingItems.Length == 0) return null;
+
+        foreach (Collider coll in overlappingItems)
+        {
+            Unit unit = coll.gameObject.GetComponent<Unit>();
+
+            if (unit.unitTeam == targetTeam)
+            {
+                finalList.Add(unit);
+            }
+        }
+        return finalList;
+    }
+
+    public static List<Unit> AI_FindFriendlInList(Unit attacker, Collider[] overlappingItems)
+    {
+        Unit.UnitTeam targetTeam = Unit.UnitTeam.teamA;
+        if (attacker.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamB;
+        List<Unit> finalList = new List<Unit>();
+
         foreach (Collider coll in overlappingItems)
         {
             Unit unit = coll.gameObject.GetComponent<Unit>();
@@ -311,4 +332,12 @@ public class AIFunctions : MonoBehaviour
         return finalList;
     }
 
+    public static bool AI_Check_UnitInEdge(Vector3 pos)
+    {
+        if (pos.x < 4) return true;
+        if (pos.x > 50) return true;
+        if (pos.z < 4) return true;
+        if (pos.z > 26) return true;
+        else return false;
+    }
 }

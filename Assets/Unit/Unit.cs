@@ -56,7 +56,7 @@ public class Unit : MonoBehaviour
         URC = this.transform.GetChild(2).GetComponent<UnitRangerController>();
         UCC = this.transform.GetChild(2).GetComponent<UnitCavalryController>();
         UIC = this.transform.GetChild(2).GetComponent<UnitInfantryController>();
-        USC = this.transform.GetChild(2).GetComponent<UnitSpearmanController>();
+        USC = this.transform.GetChild(2).GetChild(0).GetComponent<UnitSpearmanController>();
         UDC = this.transform.GetChild(2).GetComponent<UnitDragonController>();
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -145,12 +145,7 @@ public class Unit : MonoBehaviour
             GetComponent<CapsuleCollider>().isTrigger = false;
         } 
     }
-    void LateUpdate()
-    {
-        this.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-        this.transform.GetChild(2).transform.localEulerAngles = new Vector3(90, 0, 90);
-        unitSprite.transform.eulerAngles = new Vector3(0, 0, 0);
-    }
+
 
    
     public void AI_DecideAction()
@@ -223,7 +218,7 @@ public class Unit : MonoBehaviour
     public void AddDamage(int dam)
     {
         health -= dam;
-        BC.SetValue(health, data.health);
+        BC.SetValue_Initial(health, data.health);
         if (health <= 0)
         {
             StartCoroutine(Death());
@@ -273,9 +268,10 @@ public class Unit : MonoBehaviour
                 if (agent != null)
                 {
                     knockBackForce = knockBackForce -= data.toughness / 2;
+                    if (data.isShielded) knockBackForce = knockBackForce / 2;
 
                     Vector3 newVector = this.transform.position - attacker;
-                    
+
                     if (knockBackForce > 30) knockBackForce = 30;
 
                     //knockBackForce = knockBackForce + (30 - knockBackForce) * 0.5f;

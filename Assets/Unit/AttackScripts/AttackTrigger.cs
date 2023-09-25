@@ -9,18 +9,20 @@ public class AttackTrigger : MonoBehaviour
     public bool isCharging;
     public int damBonus;
     public float knockbackBonus;
-    public bool canAttack_AOE;
+    public int weaponCauseNum;
 
     private bool canAttack;
     private int damMin;
     private int damMax;
     private bool causeAP;
 
-    public void InputData(UnitAIController USC, int damMin, int damMax,  bool canAttack_AOE, bool causeAP)
+
+    public void InputData(UnitAIController USC, int damMin, int damMax,  int weaponCauseNum, bool causeAP)
     {
+        weaponCauseNum = 1;
         this.canAttack = true;
         this.USC = USC;
-        this.canAttack_AOE = canAttack_AOE;
+        this.weaponCauseNum = weaponCauseNum;
         this.damMin = damMin;
         this.damMax = damMax;
         this.causeAP = causeAP;
@@ -36,6 +38,8 @@ public class AttackTrigger : MonoBehaviour
 
                 if (unit.unitTeam != this.USC.unit.unitTeam)
                 {
+                    weaponCauseNum--;
+
                     float bonus = 0;
                     if (isCharging) bonus = USC.unit.currentAgentSpeed;
 
@@ -56,7 +60,7 @@ public class AttackTrigger : MonoBehaviour
                         unit.AddKnockBack(USC.unit.transform, (float)USC.unit.data.knockBackForce + this.knockbackBonus, 0.1f,false);
                     }
 
-                    if (!canAttack_AOE)
+                    if (weaponCauseNum <= 0)
                     canAttack = false;
                 }
             }

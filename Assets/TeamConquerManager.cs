@@ -141,7 +141,7 @@ public class TeamConquerManager : MonoBehaviour
             currentScore_ForRatio += maxScoreInLand + lands[i];
         }
 
-        Debug.Log(AScore + "," + BScore);
+        //Debug.Log(AScore + "," + BScore);
         scoreA = AScore;
         scoreB = Mathf.Abs(BScore);
         incomeA = AIncome;

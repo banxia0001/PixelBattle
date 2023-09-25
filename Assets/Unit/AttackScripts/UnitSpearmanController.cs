@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class UnitSpearmanController : UnitAIController
 {
+    public override void Start()
+    {
+      
+        unit = this.transform.parent.parent.GetComponent<Unit>();
+        VP = this.transform.parent.parent.GetChild(1).GetComponent<ViewPoint>();
+        anim = this.GetComponent<Animator>();
+        parentOB = this.transform.parent;
+        angleShould = parentOB.parent.transform.eulerAngles.y + 5f;
+        angleNow = angleShould;
+    }
+
+    public enum SpearmanState
+    { 
+        moveToTarget,
+        moveAwayFromTarget,
+    }
+
+    public SpearmanState spearmanState;
+
+    private float changeBodyRatio;
     public void AI_Warrior_Action(bool dontChangeAttackTarget)
     {
 
@@ -32,59 +52,105 @@ public class UnitSpearmanController : UnitAIController
         }
 
         float dis = Vector3.Distance(unit.transform.position, unit.attackTarget.transform.position);
-        bool canAttack = false;
-
-        if (dis < VP.radius_EyeRough * 4f)
-        {
-            canAttack = VP.CheckHitShpere(1);
-        }
-
-        //[Set Attack]
-        if (unit.attackCD <= 0 && canAttack)
-        {
-            unit.SetChargeSpeed(0);
-            AI_Stay(true);
-        }
-
+        //if (unit.debug_Unit) Debug.Log(dis);
 
         //[Find Enemy]
-        else
+        if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
         {
-            if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
-            {
-                if (dis < unit.data.moveStopDis) AI_Stay(false);
+            //Debug.Log(dis);
 
-                else AI_MoveToward(unit.attackTarget.gameObject.transform);
+            if (spearmanState == SpearmanState.moveAwayFromTarget) 
+            {
+                gobackT--;
+                if(gobackT == 0) spearmanState = SpearmanState.moveToTarget;
+            }
+            if (dis < unit.data.moveStopDis * 2.5f && unit.attackCD < unit.data.attackCD/2)
+            {
+                if (spearmanState != SpearmanState.moveAwayFromTarget)
+                {
+                    gobackT = 4;
+                    angleNow = this.parentOB.transform.eulerAngles.y;
+                    spearmanState = SpearmanState.moveAwayFromTarget;
+                }
+            }
+
+            if (spearmanState == SpearmanState.moveAwayFromTarget)
+            {
+                AI_GoToBase(unit.unitTeam);
+            }
+
+            else
+            {
+                AI_MoveToward(unit.attackTarget.gameObject.transform);
             }
         }
     }
 
-
-    public void Update()
+    private int gobackT;
+    public float angleNow;
+    public float angleShould;
+    public override void LateUpdate()
     {
-        if (unit.attackCD > 0) return;
+        parentOB.parent.GetChild(1).eulerAngles = new Vector3(0, this.transform.parent.parent.eulerAngles.y, 0);
+        this.unit.unitSprite.transform.eulerAngles = new Vector3(0, 0, 0);
+        this.transform.localEulerAngles = new Vector3(90, 0, 90);
 
-        if (unit.attackTarget != null)
+        ////[Setup Attack]
+        if (unit.attackTarget != null && unit.attackCD < 0)
         {
-            float dis = Vector3.Distance(unit.transform.position, unit.attackTarget.transform.position);
-
+            //float dis = Vector3.Distance(unit.transform.position, unit.attackTarget.transform.position);
             //Check can attack
             bool canAttack_InHitBox = VP.CheckHitShpere(1);
 
-
-            if (dis < 3f && canAttack_InHitBox)
+            if (canAttack_InHitBox)
             {
-                
+                AI_LookAt(unit.attackTarget.transform);
+                angleNow = parentOB.parent.transform.eulerAngles.y + 5f;
                 unit.attackCD = unit.data.attackCD + Random.Range(-1, 1);
-                SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponCauseAOE, unit.data.isAP);
+                SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponAOENum, unit.data.isAP);
             }
         }
 
+        angleShould = parentOB.parent.transform.eulerAngles.y + 5f;
+        parentOB.eulerAngles = new Vector3(0, angleNow, 0);
+        if (gobackT < 2)
+        {
+            if (Mathf.Abs(angleNow - angleShould) < 5)
+            {
+                angleNow = angleShould;
+            }
+            else
+            {
+                if (angleNow > angleShould) angleNow -= 120 * Time.deltaTime;
+                if (angleNow < angleShould) angleNow += 120 * Time.deltaTime;
+            }
+        }
     }
 
-    public override void SetUpAttack(int damMin, int damMax, bool causeAOE, bool causeAP)
+    public Transform parentOB;
+
+    float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
     {
-        attackTrigger.InputData(this, damMin, damMax, causeAOE, causeAP);
+        Vector3 perp = Vector3.Cross(fwd, targetDir);
+        float dir = Vector3.Dot(perp, up);
+
+        if (dir > 0f)
+        {
+            return 1f;
+        }
+        else if (dir < 0f)
+        {
+            return -1f;
+        }
+        else
+        {
+            return 0f;
+        }
+    }
+
+    public override void SetUpAttack(int damMin, int damMax, int weaponAOENum, bool causeAP)
+    {
+        attackTrigger.InputData(this, damMin, damMax, weaponAOENum, causeAP);
 
         //if (VP.CheckSphere("Right"))
         //{

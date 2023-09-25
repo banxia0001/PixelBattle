@@ -18,7 +18,7 @@ MonoBehaviour:
   unitSpriteA: {fileID: 21300000, guid: 1c80895486f1db84b995a461f157c9bc, type: 3}
   unitSpriteB: {fileID: 21300000, guid: d9cd0452537453d45a86eaeffe39fdb0, type: 3}
   Gcost: 140
-  Tcost: 35
+  Tcost: 25
   Num: 1
   UnitValue: 4
   trait1: {fileID: 11400000, guid: eacaf167c9a37df44a8574b8d05c44db, type: 2}
@@ -28,15 +28,15 @@ MonoBehaviour:
     unitType: 2
     current_AI_Tactic: 0
     current_AI_Target: 4
-    current_AI_Target_Secondly: 3
-    health: 40
+    current_AI_Target_Secondly: 5
+    health: 45
     armor: 15
     damageMin: 12
     damageMax: 20
     knockBackForce: 14
-    weaponCauseAOE: 1
+    weaponAOENum: 5
     attackCD: 15
-    moveSpeed: 1.7
+    moveSpeed: 2.77
     moveStopDis: 0
     toughness: 4
     mass: 5
@@ -47,7 +47,7 @@ MonoBehaviour:
     arrowOffset: 0
     arrowSpeed: 0
     chargeSpeed_Accererate: 1.2
-    chargeSpeed_Max: 2.2
+    chargeSpeed_Max: 3.3
     isSpear: 0
     isAP: 0
     isShielded: 1

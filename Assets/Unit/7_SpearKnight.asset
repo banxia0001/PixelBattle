@@ -34,7 +34,7 @@ MonoBehaviour:
     damageMin: 8
     damageMax: 12
     knockBackForce: 9
-    weaponCauseAOE: 1
+    weaponAOENum: 4
     attackCD: 6
     moveSpeed: 0.7
     moveStopDis: 0.6

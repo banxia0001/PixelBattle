@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class ViewPoint : MonoBehaviour
 {
-    private Unit unit;
+    public Unit unit;
     public Transform eyeL, eyeM, eyeR, eyeRough;
-    private void Start()
-    {
-        unit = this.transform.GetComponent<Unit>();
-    }
 
     [Header("Circles")]
     [Range(0.1f, 3f)]
@@ -33,6 +29,22 @@ public class ViewPoint : MonoBehaviour
         if (units != null && units.Count != 0)
         {
             return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    public virtual bool CheckHitShpere_If_BlockedByFrienlyUnit(float xRate, int num)
+    {
+        List<Unit> units = BattleFunction.FindFreindlyUnit_InSphere(eyeRough.position, xRate * radius_EyeRough, this.unit);
+
+        if (units != null && units.Count != 0)
+        {
+            if (units.Count > num) return true;
+            else return false;
         }
 
         else

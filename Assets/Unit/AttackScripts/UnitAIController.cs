@@ -20,6 +20,13 @@ public class UnitAIController : MonoBehaviour
         anim = this.GetComponent<Animator>();
         unit = this.transform.parent.GetComponent<Unit>();
     }
+
+    public virtual void LateUpdate()
+    {
+        this.transform.parent.GetChild(1).eulerAngles = new Vector3(0, this.transform.parent.eulerAngles.y, 0);
+        this.transform.localEulerAngles = new Vector3(90, 0, 90);
+        unit.unitSprite.transform.eulerAngles = new Vector3(0, 0, 0);
+    }
     public virtual void SetUp()
     {
         this.transform.localPosition = new Vector3(0, 0.1f, -0.278f);
@@ -29,7 +36,7 @@ public class UnitAIController : MonoBehaviour
         unit = this.transform.parent.GetComponent<Unit>();
     }
 
-    public virtual void SetUpAttack(int damMin, int damMax, bool causeAOE, bool causeAP)
+    public virtual void SetUpAttack(int damMin, int damMax, int weaponCauseNum, bool causeAP)
     {
         return;
     }
@@ -177,6 +184,24 @@ public class UnitAIController : MonoBehaviour
         if (unit.agent.enabled)
             unit.agent.SetDestination(trans.position + new Vector3(Random.Range(-0.1f, 0.1f), 0, Random.Range(-0.1f, 0.1f)));
     }
+
+
+    public virtual void AI_MoveToward_WithAI(Transform trans)
+    {
+        if (!unit.agent.enabled) return;
+        bool smarterMove = VP.CheckHitShpere_If_BlockedByFrienlyUnit(1.2f, 3);
+        if (smarterMove)
+        {
+            unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        }
+
+        else
+        {
+            unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+        }
+
+        unit.agent.SetDestination(trans.position + new Vector3(Random.Range(-0.1f, 0.1f), 0, Random.Range(-0.1f, 0.1f)));
+    }
     public virtual void AI_LookAt(Transform pos)
     {
         unit.agent.enabled = false;
@@ -202,5 +227,13 @@ public class UnitAIController : MonoBehaviour
         if (unit.agent.enabled)
             unit.agent.SetDestination(unit.transform.position + unit.transform.forward * 3f);
     }
- 
+
+    public virtual void AI_MoveBackward()
+    {
+        if (unit.agent.enabled)
+            unit.agent.SetDestination(unit.transform.position - unit.transform.forward * 3f);
+    }
+
+
+
 }

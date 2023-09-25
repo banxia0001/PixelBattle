@@ -1003,6 +1003,7 @@ MonoBehaviour:
   length: 3
   maxScoreInLand: 30
   maxScoreAll: 5000
+  currentScore_ForRatio: 5000
   frontLineMeet: 0
   lands: 640000006400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   unitInlands_A: 
@@ -1240,6 +1241,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660048221}
   m_CullTransparentMesh: 1
+--- !u!1 &1665032808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1665032809}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1665032809
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665032808}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 52.99, y: 0, z: 29.61}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1701074933
 GameObject:
   m_ObjectHideFlags: 0
@@ -1568,6 +1599,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameUI
       objectReference: {fileID: 0}
+    - target: {fileID: 229532428149499144, guid: 3487d9dfbb392c248bb4815a7bc5073a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2590451650072063743, guid: 3487d9dfbb392c248bb4815a7bc5073a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1677,7 +1712,7 @@ PrefabInstance:
       objectReference: {fileID: 1083412695}
     - target: {fileID: 6164786401390023342, guid: 3487d9dfbb392c248bb4815a7bc5073a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3487d9dfbb392c248bb4815a7bc5073a, type: 3}

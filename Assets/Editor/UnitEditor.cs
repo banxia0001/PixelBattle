@@ -31,6 +31,18 @@ public class UnitEditor2 : Editor
     }
 }
 
+[CustomEditor(typeof(UnitSpearmanController))]
+public class UnitEditor_Spearman : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        UnitSpearmanController unit = (UnitSpearmanController)target;
+
+        if (GUILayout.Button("SetUpBone"))
+            unit.SetUp();
+    }
+}
 
 [CustomEditor(typeof(UnitCavalryController))]
 public class UnitEditor3 : Editor

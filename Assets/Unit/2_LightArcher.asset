@@ -18,7 +18,7 @@ MonoBehaviour:
   unitSpriteA: {fileID: 21300000, guid: 649be5dd067e52540af7ad52e6e4488c, type: 3}
   unitSpriteB: {fileID: 21300000, guid: 8af7802df08617f4b860580e769f9fbe, type: 3}
   Gcost: 60
-  Tcost: 6
+  Tcost: 8
   Num: 3
   UnitValue: 1
   trait1: {fileID: 11400000, guid: 41dfcb00599763a48896bf65eaec5318, type: 2}
@@ -34,7 +34,7 @@ MonoBehaviour:
     damageMin: 6
     damageMax: 10
     knockBackForce: 3
-    weaponCauseAOE: 0
+    weaponAOENum: 1
     attackCD: 14
     moveSpeed: 1.1
     moveStopDis: 0

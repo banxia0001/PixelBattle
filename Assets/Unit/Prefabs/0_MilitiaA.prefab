@@ -65,7 +65,7 @@ MonoBehaviour:
   isCharging: 0
   damBonus: 0
   knockbackBonus: 0
-  canAttack_AOE: 0
+  weaponCauseNum: 0
 --- !u!1 &7145161749973820302
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,6 +262,10 @@ PrefabInstance:
     - target: {fileID: 6834908224130398036, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: hitboxExtend
       value: 1.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834908224130398036, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: radius_EyeRough
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7379125719560751887, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_LocalPosition.x

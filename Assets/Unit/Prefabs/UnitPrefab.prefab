@@ -232,6 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug_Unit: 0
+  state: 0
   unitTeam: 0
   data_local: {fileID: 0}
   data:
@@ -241,13 +242,16 @@ MonoBehaviour:
     current_AI_Target_Secondly: 0
     health: 40
     armor: 2
-    toughness: 0
     damageMin: 0
     damageMax: 0
-    weaponCauseAOE: 0
+    knockBackForce: 1
+    weaponAOENum: 0
     attackCD: 10
     moveSpeed: 1
     moveStopDis: 0
+    toughness: 0
+    mass: 1
+    knockBackBonus: 1
     ProjectilePrefab: {fileID: 0}
     isJavelin: 0
     shootDis: 0
@@ -261,13 +265,13 @@ MonoBehaviour:
   health: 0
   attackCD: 0
   attackTarget: {fileID: 0}
-  unitSprite: {fileID: 437509751992264078}
   agent: {fileID: 0}
   rb: {fileID: 0}
   knockBackTimer: 0
   currentAgentSpeed: 0
   BC: {fileID: 9133468955189136455}
   selectionCircle: {fileID: 437509751827549367}
+  unitSprite: {fileID: 437509751992264078}
 --- !u!54 &437509751958929166
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -332,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe63e27e4033b941b8dd7b13a50c152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unit: {fileID: 437509751958929161}
   eyeL: {fileID: 7379125719560751887}
   eyeM: {fileID: 3362138919651632438}
   eyeR: {fileID: 5649350245957753736}

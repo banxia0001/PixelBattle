@@ -49,7 +49,7 @@ public class UnitInfantryController : UnitAIController
         if (unit.attackCD <= 0 && canAttack)
         {
             unit.attackCD = unit.data.attackCD + Random.Range(-1, 1);
-            SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponCauseAOE, unit.data.isAP);
+            SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponAOENum, unit.data.isAP);
             unit.SetChargeSpeed(0);
             AI_Stay(true);
         }
@@ -62,14 +62,21 @@ public class UnitInfantryController : UnitAIController
             {
                 if (dis < unit.data.moveStopDis) AI_Stay(false);
 
+                else if(dis < VP.radius_EyeRough * 4f)
+                {
+
+                    AI_MoveToward_WithAI(unit.attackTarget.gameObject.transform);
+                }
+
                 else AI_MoveToward(unit.attackTarget.gameObject.transform);
+
             }
         }
     }
 
-    public override void SetUpAttack(int damMin, int damMax, bool causeAOE, bool causeAP)
+    public override void SetUpAttack(int damMin, int damMax, int weaponAOENum, bool causeAP)
     {
-        attackTrigger.InputData(this, damMin, damMax, causeAOE, causeAP);
+        attackTrigger.InputData(this, damMin, damMax, weaponAOENum, causeAP);
 
         if (use3DirVP)
         {
