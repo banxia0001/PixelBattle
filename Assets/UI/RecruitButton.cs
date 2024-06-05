@@ -63,17 +63,15 @@ public class RecruitButton : MonoBehaviour
 
     public void InputFromButton()
     {
-        if (GameController.state == GameController.GameState.gameInStartPanel)
-        {
-            RNum++;
-            GameUI UI = FindObjectOfType<GameUI>();
-            if (RNum >= UI.Rlist.UnitPrefabs.Count) RNum = 0;
+        //if (GameController.state == GameController.GameState.gameInStartPanel)
+        //{
+        //    RNum++;
+        //    GameUI UI = FindObjectOfType<GameUI>();
+        //    if (RNum >= UI.Rlist.UnitPrefabs.Count) RNum = 0;
+        //    InputData(this.TC, UI.Rlist.UnitPrefabs[RNum], -10);  
+        //}
 
-         
-            InputData(this.TC, UI.Rlist.UnitPrefabs[RNum], -10);  
-        }
-
-        else if (GameController.state == GameController.GameState.gameActive)
+        if (GameController.state == GameController.GameState.gameActive)
         {
             if (buttonState == ButtonState.WaitingForRecruit)
             {

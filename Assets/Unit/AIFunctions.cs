@@ -85,7 +85,7 @@ public class AIFunctions : MonoBehaviour
             if (targetFrontline)
             {
 
-                Vector3 pos1 = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
+                Vector3 pos1 = new Vector3(GameController.land.Get_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
                 Vector3 pos2 = new Vector3(unitGroup[i].transform.position.x, 0, unitGroup[i].transform.position.z * 2);
                 thisDis = Vector3.Distance(pos1, pos2) - value;
             }
@@ -131,7 +131,7 @@ public class AIFunctions : MonoBehaviour
             if (targetFrontline)
             {
 
-                Vector3 pos1 = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
+                Vector3 pos1 = new Vector3(GameController.land.Get_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
                 Vector3 pos2 = new Vector3(unitGroup[i].transform.position.x, 0, unitGroup[i].transform.position.z * 2);
                 thisDis = Vector3.Distance(pos1, pos2) - value;
             }
@@ -156,14 +156,12 @@ public class AIFunctions : MonoBehaviour
     public static Unit AI_Find_ValueableUnit(Unit.UnitTeam targetTeam, Unit startUnit, bool targetFrontline)
     {
         GameController GC = FindObjectOfType<GameController>(false);
-        TeamController targetUnitTeam = null;
-        if (targetTeam == Unit.UnitTeam.teamA) targetUnitTeam = GC.teamA;
-        if (targetTeam == Unit.UnitTeam.teamB) targetUnitTeam = GC.teamB;
+        TeamController targetUnitTeam = GC.teams[(int)targetTeam];
         List<Unit> unitGroup = new List<Unit>();
 
         if (targetFrontline)
         {
-            Vector3 pos = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z);
+            Vector3 pos = new Vector3(GameController.land.Get_GuideLine(startUnit).x, 0, startUnit.transform.position.z);
             unitGroup = BattleFunction.FindEnemyUnit_InSphere(pos, 8f, startUnit);
         }
 
@@ -195,15 +193,13 @@ public class AIFunctions : MonoBehaviour
     public static Unit AI_Find_ClosestUnit_2(Unit.UnitTeam targetTeam, UnitData.AI_State_FindTarget targetType, Unit startUnit, bool targetFrontline)
     {
         GameController GC = FindObjectOfType<GameController>(false);
-        TeamController targetUnitTeam = null;
-        if (targetTeam == Unit.UnitTeam.teamA) targetUnitTeam = GC.teamA;
-        if (targetTeam == Unit.UnitTeam.teamB) targetUnitTeam = GC.teamB;
+        TeamController targetUnitTeam = GC.teams[(int)targetTeam];
 
         List<Unit> unitGroup = new List<Unit>();
 
         if (targetType == UnitData.AI_State_FindTarget.findClosestTarget_InFrontline)
         {
-            Vector3 pos = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z);
+            Vector3 pos = new Vector3(GameController.land.Get_GuideLine(startUnit).x, 0, startUnit.transform.position.z);
             unitGroup = BattleFunction.FindEnemyUnit_InSphere(pos, 8f, startUnit);
         }
 
@@ -232,7 +228,7 @@ public class AIFunctions : MonoBehaviour
 
             if (targetFrontline)
             {
-                Vector3 pos1 = new Vector3(GameController.conquerManager.ReturnUnitFrontLinePosition_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
+                Vector3 pos1 = new Vector3(GameController.land.Get_GuideLine(startUnit).x, 0, startUnit.transform.position.z * 2);
                 Vector3 pos2 = new Vector3(unitGroup[i].transform.position.x, 0, unitGroup[i].transform.position.z * 2);
                 thisDis = Vector3.Distance(pos1, pos2);
             }
@@ -273,8 +269,6 @@ public class AIFunctions : MonoBehaviour
     //    if (overlappingItems == null) return null;
     //    else return AIFunctions.AI_FindEnemyInList(targetTeam, overlappingItems);
     //}
-
-
 
     public static List<Unit> AI_FindEnemyInList(Unit attacker, Collider[] overlappingItems)
     {
@@ -317,7 +311,6 @@ public class AIFunctions : MonoBehaviour
 
     public static List<Unit> AI_FindEnemyInList(Unit.UnitTeam targetTeam, Collider[] overlappingItems)
     {
-
         List<Unit> finalList = new List<Unit>();
 
         foreach (Collider coll in overlappingItems)

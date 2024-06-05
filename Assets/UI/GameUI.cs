@@ -19,12 +19,10 @@ public class GameUI : MonoBehaviour
     public UnitRecruitList Rlist;
 
     [Header("Team")]
-    public TMP_Text G_A;
-    public TMP_Text G_B;
-    public TMP_Text G_A_Turn;
-    public TMP_Text G_B_Turn;
-    public TMP_Text G_A_Pop;
-    public TMP_Text G_B_Pop;
+    public TMP_Text[] G;
+    public TMP_Text[] G_Per;
+    public TMP_Text[] Pop;
+
     public BarController goldBar;
     public BarController scoreBar;
 
@@ -41,33 +39,33 @@ public class GameUI : MonoBehaviour
         panel.SetActive(false);
     }
 
-    public void UpdateGoldBar(float ratio)
+    #region UI Updates
+    public void UpdateGBar(float ratio)
     {
         goldBar.SetValue(ratio);
     }
     public void UpdateScoreBar(int Score, int ScoreMax)
     {
         float ratio = (float)Score / (float)ScoreMax;
-        //Debug.Log("R" + ratio);
         scoreBar.SetValue(ratio);
     }
 
-    public void UpdateGTText(int GAT, int GBT)
+    public void Update_GPer(int G_Per, int i)
     {
-        G_A_Turn.text = GAT.ToString() + "G/S";
-        G_B_Turn.text = GBT.ToString() + "G/S";
+        this.G_Per[i].text = G_Per.ToString() + "G/S";
+    }
+    public void Update_G(int G, int i)
+    {
+        this.G[i].text = G.ToString();
+    }
+    public void Update_Population(int Pop, int i)
+    {
+        this.Pop[i].text = Pop.ToString() + "/50";
+    }
+    #endregion
 
-    }
-    public void UpdateGText(int GA, int GB)
-    {
-        G_A.text = GA.ToString();
-        G_B.text = GB.ToString();
-    }
-    public void UpdatePText(int GA, int GB)
-    {
-        G_A_Pop.text = GA.ToString() + "/50";
-        G_B_Pop.text = GB.ToString() + "/50";
-    }
+
+    #region RayCast
     public void Update()
     {
         CheckUIRaycast();
@@ -103,7 +101,7 @@ public class GameUI : MonoBehaviour
         //if have result
         if (results.Count > 0)
         {
-            GameController.isOnUI = true;
+            GameController.mouseOnUI = true;
             foreach (RaycastResult RR in results)
             {
                 //Debug.Log(RR.gameObject.name);
@@ -122,7 +120,7 @@ public class GameUI : MonoBehaviour
                 }
             }
         }
-        else GameController.isOnUI = false;
+        else GameController.mouseOnUI = false;
     }
-
+    #endregion
 }

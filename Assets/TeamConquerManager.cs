@@ -2,165 +2,146 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamConquerManager : MonoBehaviour
+public class LandManager : MonoBehaviour
 {
-    public int length;
-    public int maxScoreInLand = 5000;
-    public int maxScoreAll = 5000;
-    public int currentScore_ForRatio = 5000;
+    [Header("Map Data")]
+    public float landLength;
+    public float landHeight;
+    public int landNum;
+
+    public int scorePerLand;
+    private int scoreTotal;
+    private int scoreNow;
 
 
-    public bool frontLineMeet;
+    [Header("LandStats")]
     public int[] lands;
-    public int[] unitInlands_A;
-    public int[] unitInlands_B;
-
-    public int scoreA,scoreB;
-    public int incomeA,incomeB;
-    public GameObject frontLineGuide_A;
-    public GameObject frontLineGuide_B;
+    [HideInInspector]public bool frontLineMeet;
+    [HideInInspector] public int[] units_A;
+    [HideInInspector] public int[] units_B;
 
 
-    //public UnitListInLand[] allUnitsInLands_A;
-    //public UnitListInLand[] allUnitsInLands_B;
-    //public List<Unit> unitsInFrontline_A;
-    //public List<Unit> unitsInFrontline_B;
 
-
-    [HideInInspector]
-    public int ConquerScore;
-    public int ConquerScoreMax;
+    [Header("Score")]
+    public int[] score;
+    public int[] income;
+    public GameObject[] frontLine;
     private GameController GC;
 
 
-    private void Start()
+    private void Awake()
     {
         frontLineMeet = false;
         GC = FindObjectOfType<GameController>();
-        maxScoreAll = maxScoreInLand * lands.Length * 2;
-        //allUnitsInLands_A = new UnitListInLand[lands.Length];
-        //allUnitsInLands_B = new UnitListInLand[lands.Length];
+        scoreTotal = scorePerLand * lands.Length * 2;
     }
-
-
 
     public void SetUp()
     {
-        ConquerScore = ConquerScoreMax / 2;
-
-        for (int i = 0; i < lands.Length; i++)
+        lands = new int[landNum];
+        for (int i = 0; i < landNum; i++)
         {
             lands[i] = 0;
         }
     }
-
+    public float GetLandConquerRatio()
+    {
+        return (float)scoreNow / (float)scoreTotal;
+    }
     public void SetUpFrontLine()
     {
-        float Length = (float)this.length;
-        Length = Length / maxScoreInLand;
-
+        float length = landLength / scoreTotal;
 
         if (!frontLineMeet)
         {
-            frontLineGuide_A.transform.position = new Vector3((float)scoreA * Length, 0.1f, 15);
-            frontLineGuide_B.transform.position = new Vector3((54 - ((float)scoreB * Length)), 0.1f, 15);
+            frontLine[0].transform.position = new Vector3((float)score[0] * length, 0.1f, landHeight/2);
+            frontLine[1].transform.position = new Vector3((landLength - ((float)score[1] * length)), 0.1f, landHeight/2);
         }
 
         else
         {
-            //int scoreB2 = maxScoreAll - scoreA; 
-            float aDis = (float)GC.teamScoreRate * 54;
-            frontLineGuide_A.transform.position = new Vector3(aDis, 0.1f, 15);
-            frontLineGuide_B.transform.position = new Vector3(aDis, 0.1f, 15);
+            float aDis = (float)GC.teamScoreRate * landLength;
+            frontLine[0].transform.position = new Vector3(aDis, 0.1f, landHeight/2);
+            frontLine[1].transform.position = new Vector3(aDis, 0.1f, landHeight/2);
         }
     }
-    public void CheckUnitInLand()
+    public void UpdateLand()
     {
-        unitInlands_A = new int[lands.Length];
-        unitInlands_B = new int[lands.Length];
-
+        units_A = new int[lands.Length];
+        units_B = new int[lands.Length];
         GameObject[] units = GameObject.FindGameObjectsWithTag("Unit");
 
+        //[Add Unit to the Land List]
         foreach (GameObject ob in units)
         {
             for (int i = 1; i < lands.Length + 1; i++)
             {
-                if (ob.transform.position.x < i * length)
+                if (ob.transform.position.x < i * landLength/ landNum)
                 {
-                    AddUnitToLand(ob, i-1);
+                    AddUnitToLand(ob, i - 1);
                     break;
                 }
             }
         }
 
+        //[Calculate Unit Occup Score]
         for (int i = 0; i < lands.Length; i++)
         {
             if (!frontLineMeet)
             {
                 bool AAppear = false;
                 bool BAppear = false;
+                if (units_A[i] > 0) AAppear = true;
+                if (units_B[i] > 0) BAppear = true;
 
-                if (unitInlands_A[i] > 0) AAppear = true;
-                if (unitInlands_B[i] > 0) BAppear = true;
-                if (AAppear && BAppear)
-                {
-                    frontLineMeet = true;
-                }
-                else
-                {
-                    if (AAppear) lands[i] += 20;
-                    if (BAppear) lands[i] += -20;
-                }
+                if (AAppear && BAppear) frontLineMeet = true;
+                else if (AAppear) lands[i] += 60;
+                else if (BAppear) lands[i] += -60;
             }
-            else
-            {
-                lands[i] += unitInlands_A[i] - unitInlands_B[i];
-            }
+            else lands[i] += units_A[i] - units_B[i];
 
-            if (lands[i] > maxScoreInLand) lands[i] = maxScoreInLand;
-            if (lands[i] < -maxScoreInLand) lands[i] = -maxScoreInLand;
+            if (lands[i] > scorePerLand) lands[i] = scorePerLand;
+            if (lands[i] < -scorePerLand) lands[i] = -scorePerLand;
         }
     }
-    public void CheckLandScore()
+    public void UpdateScore()
     {
         int AScore = 0;
         int BScore = 0;
-
         int AIncome = 0;
         int BIncome = 0;
-        currentScore_ForRatio = 0;
+        scoreNow = 0;
 
-        for (int i = 0; i < lands.Length; i++)
+        for (int i = 0; i < landNum; i++)
         {
             if (lands[i] > 0) AScore += lands[i];
             if (lands[i] < 0) BScore += lands[i];
 
-            if (lands[i] > maxScoreInLand / 2) AIncome++;
-            if (lands[i] < -maxScoreInLand / 2) BIncome++;
+            if (lands[i] > scorePerLand / 2) AIncome++;
+            if (lands[i] < -scorePerLand / 2) BIncome++;
 
-            currentScore_ForRatio += maxScoreInLand + lands[i];
+            scoreNow += scorePerLand + lands[i];
         }
 
-        //Debug.Log(AScore + "," + BScore);
-        scoreA = AScore;
-        scoreB = Mathf.Abs(BScore);
-        incomeA = AIncome;
-        incomeB = BIncome;
+        score[0] = AScore;
+        score[1] = Mathf.Abs(BScore);
+        income[0] = AIncome;
+        income[1] = BIncome;
     }
 
-    public void CheckLandConquer_AutoOccup()
+    public void AutoOccup()
     {
         for (int i = 0; i < lands.Length; i++)
         {
             if (i != 0 && i != lands.Length - 1)
             {
-                if (lands[i - 1] > maxScoreInLand / 2 && lands[i + 1] > maxScoreInLand / 2)
+                if (lands[i - 1] > scorePerLand / 2 && lands[i + 1] > scorePerLand / 2)
                 {
-                    lands[i] += 20;
+                    lands[i] += 30;
                 }
-                if (lands[i - 1] < -maxScoreInLand / 2 && lands[i + 1] < -maxScoreInLand / 2)
+                if (lands[i - 1] < -scorePerLand / 2 && lands[i + 1] < -scorePerLand / 2)
                 {
-                    lands[i] -= 20;
+                    lands[i] -= 30;
                 }
             }      
         }
@@ -168,13 +149,13 @@ public class TeamConquerManager : MonoBehaviour
     private void AddUnitToLand(GameObject unitOb, int i)
     {
         Unit unit = unitOb.GetComponent<Unit>();
-        if (unit.unitTeam == Unit.UnitTeam.teamA) unitInlands_A[i] += unit.data_local.UnitValue;
-        else unitInlands_B[i] += unit.data_local.UnitValue;
+        if (unit.unitTeam == Unit.UnitTeam.teamA) units_A[i] += unit.data_local.UnitValue;
+        else units_B[i] += unit.data_local.UnitValue;
     }
 
-    public Vector3 ReturnUnitFrontLinePosition_GuideLine(Unit unit)
+    public Vector3 Get_GuideLine(Unit unit)
     {
-        if (unit.unitTeam == Unit.UnitTeam.teamA) return frontLineGuide_A.transform.position;
-       else return frontLineGuide_B.transform.position;
+        if (unit.unitTeam == Unit.UnitTeam.teamA) return frontLine[0].transform.position;
+        else return frontLine[1].transform.position;
     }
 }

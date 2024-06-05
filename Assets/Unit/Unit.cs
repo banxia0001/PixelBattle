@@ -136,7 +136,6 @@ public class Unit : MonoBehaviour
     void FixedUpdate()
     {
         currentAgentSpeed = agent.velocity.magnitude;
-     
         knockBackTimer -= 4 * Time.fixedDeltaTime;
         if (knockBackTimer < 0)
         {
