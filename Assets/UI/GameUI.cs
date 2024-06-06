@@ -9,6 +9,7 @@ public class GameUI : MonoBehaviour
 {
     public UnitPanel unitPanel;
     public Canvas canvas;
+
     [Header("GraphicRaycaster")]
     public GraphicRaycaster myRaycaster;
     public EventSystem myEventSystem;
@@ -30,7 +31,6 @@ public class GameUI : MonoBehaviour
     {
         goldBar.SetValue_Initial(0.5f,1);
         scoreBar.SetValue_Initial(0.5f,1);
-        panel.SetActive(true);
     }
 
     public void GameStart()

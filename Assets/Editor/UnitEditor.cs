@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(UnitInfantryController))]
+[CustomEditor(typeof(Infantry))]
 public class UnitEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        UnitInfantryController unit = (UnitInfantryController)target;
+        Infantry unit = (Infantry)target;
 
 
         if (GUILayout.Button("SetUpBone"))
@@ -18,52 +18,52 @@ public class UnitEditor : Editor
 }
 
 
-[CustomEditor(typeof(UnitRangerController))]
+[CustomEditor(typeof(Ranger))]
 public class UnitEditor2 : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        UnitRangerController unit = (UnitRangerController)target;
+        Ranger unit = (Ranger)target;
 
         if (GUILayout.Button("SetUpBone"))
             unit.SetUp();
     }
 }
 
-[CustomEditor(typeof(UnitSpearmanController))]
+[CustomEditor(typeof(Spearman))]
 public class UnitEditor_Spearman : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        UnitSpearmanController unit = (UnitSpearmanController)target;
+        Spearman unit = (Spearman)target;
 
         if (GUILayout.Button("SetUpBone"))
             unit.SetUp();
     }
 }
 
-[CustomEditor(typeof(UnitCavalryController))]
+[CustomEditor(typeof(Cavarly))]
 public class UnitEditor3 : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        UnitCavalryController unit = (UnitCavalryController)target;
+        Cavarly unit = (Cavarly)target;
 
         if (GUILayout.Button("SetUpBone"))
             unit.SetUp();
     }
 }
 
-[CustomEditor(typeof(UnitDragonController))]
+[CustomEditor(typeof(DragonMonster))]
 public class UnitEditor4 : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        UnitDragonController script = (UnitDragonController)target;
+        DragonMonster script = (DragonMonster)target;
 
         if (GUILayout.Button("SetUp"))
             script.SetUp();

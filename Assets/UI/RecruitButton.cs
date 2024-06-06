@@ -120,7 +120,7 @@ public class RecruitButton : MonoBehaviour
 
         else
         { 
-            if(!TC.isControl_By_AIPlayer)
+            if(!TC.isAIControl)
             {
                 float offset = 120;
                 if (TC.unitTeam == Unit.UnitTeam.teamB) offset = -140;

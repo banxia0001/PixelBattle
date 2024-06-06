@@ -4,40 +4,64 @@ using UnityEngine;
 
 public class CamFollower : MonoBehaviour
 {
+    [Header("Camera")]
+    public Transform camFolder;
     public Camera cam;
-    public float speedModi = 1;
+    public float camSpeed = 1f;
+    private float camZoom = 15f;
+    private float camZoom_Now = 15f;
 
-    private Vector3 targetMove;
-    // Start is called before the first frame update
-    void Start()
+
+    private Vector3 followPos;
+
+    private void Start()
     {
-        targetMove = this.transform.position;
+        followPos = this.transform.position;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        camZoom -= Input.GetAxis("Mouse ScrollWheel") * 10f;
+        if (camZoom >= 15f) camZoom = 15f;
+        if (camZoom <= 5f) camZoom = 5f;
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) CamInMove(1);
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) CamInMove(2);
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) CamInMove(3);
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) CamInMove(4);
+    }
+    private void LateUpdate()
+    {
+        CamUpdate();
+    }
+    private void CamUpdate()
+    {
+        this.transform.position = Vector3.Lerp(this.transform.position, followPos, 0.12f);
+        camZoom_Now = Mathf.MoveTowards(camZoom_Now, camZoom, Time.deltaTime * 30f);
+        cam.orthographicSize = camZoom_Now;
+    }
+    private void CamInMove(int Dir)
+    {
+        if (Dir == 1)
         {
-            targetMove += transform.up * Time.deltaTime * 30f * speedModi;
-        }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        {
-            targetMove += transform.up * Time.deltaTime * -30f * speedModi;
-        }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            targetMove += transform.right * Time.deltaTime * -30f * speedModi;
-        }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            targetMove += transform.right * Time.deltaTime * 30f * speedModi;
+            if (followPos.z >= LandManager._landHeight) return;
+            followPos += transform.forward * Time.deltaTime * camSpeed * camZoom;
         }
 
-        this.transform.position = Vector3.Lerp(this.transform.position, targetMove, 0.9f);
+        if (Dir == 2)
+        {
+            if (followPos.z <= 0) return;
+            followPos += transform.forward * Time.deltaTime * camSpeed * camZoom * -1;
+        }
 
-        cam.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * 30f;
-        if (cam.orthographicSize > 15.5f) cam.orthographicSize = 15.5f;
-        if (cam.orthographicSize < 5f) cam.orthographicSize = 5f;
+        if (Dir == 3)
+        {
+            if (followPos.x <= 0) return;
+            followPos += transform.right * Time.deltaTime * camSpeed * camZoom * -1;
+        }
+
+        if (Dir == 4)
+        {
+            if (followPos.x >= LandManager._landLength) return;
+            followPos += transform.right * Time.deltaTime * camSpeed * camZoom;
+        }
     }
 }

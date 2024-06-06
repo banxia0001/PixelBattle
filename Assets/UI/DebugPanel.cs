@@ -21,17 +21,15 @@ public class DebugPanel : MonoBehaviour
     }
     public void switch_AutoRecruit()
     {
-        Debug.Log("!");
-     
-        if (TeamA.isControl_By_AIPlayer == true)
+        if (TeamA.isAIControl == true)
         {
-            TeamA.isControl_By_AIPlayer = false;
+            TeamA.isAIControl = false;
             autoR_T.text = "On";
         }
 
         else
         {
-            TeamA.isControl_By_AIPlayer = true;
+            TeamA.isAIControl = true;
             autoR_T.text = "Off";
         }
     }
