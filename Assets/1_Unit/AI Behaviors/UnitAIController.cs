@@ -5,12 +5,11 @@ using UnityEngine;
 public class UnitAIController : MonoBehaviour
 {
     public AttackTrigger attackTrigger;
-    [HideInInspector]
-    public ViewPoint viewPoint;
-    [HideInInspector]
-    public Animator anim;
-    [HideInInspector]
-    public Unit unit;
+    [HideInInspector] public ViewPoint viewPoint;
+    [HideInInspector] public Animator anim;
+    [HideInInspector] public Unit unit;
+
+
     public virtual void Start()
     {
         unit = this.transform.parent.GetComponent<Unit>();
@@ -34,7 +33,7 @@ public class UnitAIController : MonoBehaviour
         unit = this.transform.parent.GetComponent<Unit>();
     }
 
-    public virtual void SetUpAttack(int damMin, int damMax, int weaponCauseNum, bool causeAP)
+    public virtual void SetUpAttack(Vector2Int damage, int weaponCauseNum, bool causeAP)
     {
         return;
     }

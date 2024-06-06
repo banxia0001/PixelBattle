@@ -12,30 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afb10edd3e552e448a34c088b002c8b8, type: 3}
   m_Name: 6_Sobek
   m_EditorClassIdentifier: 
+  names: []
+  descriptions: []
+  unitSprites:
+  - {fileID: 21300000, guid: 8ba300e406f87514583c7205efe73a2b, type: 3}
+  - {fileID: 21300000, guid: 9d15930ed0891934d9f5f1115919e9e3, type: 3}
   ID: 6
-  UnitPrefabA: {fileID: 8329677498275411390, guid: 8ad9cf91352e40741b461d9e1b913bea, type: 3}
-  UnitPrefabB: {fileID: 6887915599633879684, guid: 91e0f1dcee79fc74487f1b167aa7e2d4, type: 3}
-  unitSpriteA: {fileID: 21300000, guid: 8ba300e406f87514583c7205efe73a2b, type: 3}
-  unitSpriteB: {fileID: 21300000, guid: 9d15930ed0891934d9f5f1115919e9e3, type: 3}
+  prefabs:
+  - {fileID: 8399350352586376884, guid: 03805d91983336c4cab35d8f2ebdd4b2, type: 3}
+  - {fileID: -3294265233598615061, guid: e8d9baf22dbf2ce49be3b517fd932933, type: 3}
   Gcost: 200
   Tcost: 50
   Num: 1
   UnitValue: 7
   trait1: {fileID: 11400000, guid: 957e3d1267c75e84bb479485028121b1, type: 2}
   trait2: {fileID: 11400000, guid: 957e3d1267c75e84bb479485028121b1, type: 2}
-  description: 
   data:
     unitType: 3
     current_AI_Tactic: 0
     current_AI_Target: 1
     current_AI_Target_Secondly: 2
-    health: 110
-    armor: 10
-    damageMin: 14
-    damageMax: 18
+    health: 140
+    protection: 40
+    damage: {x: 12, y: 18}
+    attackCD: 12
     knockBackForce: 14
     weaponAOENum: 7
-    attackCD: 20
     moveSpeed: 1
     moveStopDis: 0.5
     toughness: 6

@@ -39,7 +39,7 @@ public class GameUI : MonoBehaviour
         panel.SetActive(false);
     }
 
-    #region UI Updates
+    #region UpdateBar
     public void UpdateGBar(float ratio)
     {
         goldBar.SetValue(ratio);
@@ -49,7 +49,10 @@ public class GameUI : MonoBehaviour
         float ratio = (float)Score / (float)ScoreMax;
         scoreBar.SetValue(ratio);
     }
+    #endregion
 
+
+    #region UpdateText
     public void Update_GPer(int G_Per, int i)
     {
         this.G_Per[i].text = G_Per.ToString() + "G/S";
@@ -60,7 +63,7 @@ public class GameUI : MonoBehaviour
     }
     public void Update_Population(int Pop, int i)
     {
-        this.Pop[i].text = Pop.ToString() + "/50";
+        this.Pop[i].text = Pop.ToString() + "/" + GameController._popMax;
     }
     #endregion
 

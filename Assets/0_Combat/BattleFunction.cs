@@ -38,6 +38,8 @@ public class BattleFunction : MonoBehaviour
         return unitList;
     }
 
+
+
     public static List<Unit> FindEnemyUnit_InSphere(Vector3 postion, float range, Unit unit)
     {
         Collider[] overlappingItems;
@@ -46,7 +48,7 @@ public class BattleFunction : MonoBehaviour
         else return AIFunctions.AI_FindEnemyInList(unit, overlappingItems);
     }
 
-    public static List<Unit> FindFreindlyUnit_InSphere(Vector3 postion, float range, Unit unit)
+    public static List<Unit> FindFriendlyUnit_InSphere(Vector3 postion, float range, Unit unit)
     {
         Collider[] overlappingItems;
         overlappingItems = Physics.OverlapSphere(postion, range, LayerMask.GetMask("Unit"));
@@ -67,40 +69,38 @@ public class BattleFunction : MonoBehaviour
     }
 
 
-
-    public static int DamageCalculate(int damMin, int damMax, Unit defender, bool isCharge, bool isJave, bool isAP, bool isRange)
+    public static int GetDamage(Vector2Int damage, Unit defender, bool isCharge, bool isJave, bool isAP, bool isRange)
     {
-        int dam = Random.Range(damMin, damMax);
-        int amr = defender.data.armor;
+        int dam = Random.Range(damage.x, damage.y);
+        int prot = defender.data.protection;
 
-        if (isJave || isAP)
-        {
-            amr = amr / 2;
-        }
+        if (isJave || isAP) prot = prot / 2;
 
-        int finalDam = dam - amr + Random.Range(-4, 4);
-
+        float finalDam = (float)dam * (100 - (float)prot)/100;
         if (isCharge)
         {
-            if (defender.data.isSpear) finalDam = finalDam / 2;
+            if (defender.data.isSpear) 
+                finalDam = finalDam / 2;
         }
 
         if (isRange)
         {
-            if (defender.data.isShielded) finalDam = finalDam / 2;
+            if (defender.data.isShielded) 
+                finalDam = finalDam / 2;
         }
 
         if (finalDam <= 0)
         {
             finalDam = 1;
         }
-        return finalDam;
-
+        return (int)finalDam;
     }
     public static void Attack(Transform AttackerPos, int dam, Unit defender)
     {
         defender.AddDamage(dam);
     }
+
+
 
 
     public static Vector3 DistantPoint(Vector3 pointS, Vector3 pointM)
@@ -114,7 +114,6 @@ public class BattleFunction : MonoBehaviour
 
     public static void PopText(RectTransform rect, float offsetY, string TextType)
     {
-     
         GameObject textOb = null;
 
         textOb = Resources.Load<GameObject>("UI/" + TextType);
@@ -126,6 +125,4 @@ public class BattleFunction : MonoBehaviour
         go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         go.GetComponent<RectTransform>().localPosition = new Vector3(offsetY, 0, 0);
     }
-
-   
 }

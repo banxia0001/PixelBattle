@@ -12,30 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afb10edd3e552e448a34c088b002c8b8, type: 3}
   m_Name: 1_LightInfantry
   m_EditorClassIdentifier: 
+  names: []
+  descriptions: []
+  unitSprites:
+  - {fileID: 21300000, guid: 2d5d268c9f21d3c4386facf440c121a6, type: 3}
+  - {fileID: 21300000, guid: de05c91de697be04aa518c5606703546, type: 3}
   ID: 1
-  UnitPrefabA: {fileID: 4538235908834789508, guid: 58730de9fdffb8f4eb551023c2f89ca9, type: 3}
-  UnitPrefabB: {fileID: 4724036186802065626, guid: 7507cf23ebc68cd40904392448e83a06, type: 3}
-  unitSpriteA: {fileID: 21300000, guid: 2d5d268c9f21d3c4386facf440c121a6, type: 3}
-  unitSpriteB: {fileID: 21300000, guid: de05c91de697be04aa518c5606703546, type: 3}
+  prefabs:
+  - {fileID: -6714617645294193871, guid: 6c1fbb91c6105e54a98b12c9249721aa, type: 3}
+  - {fileID: -6714617645294193871, guid: 727f658e55906aa4490b1372157b5f82, type: 3}
   Gcost: 55
   Tcost: 5
   Num: 3
   UnitValue: 1
   trait1: {fileID: 11400000, guid: 300bec1d68df9104185a4672ba839477, type: 2}
   trait2: {fileID: 11400000, guid: 957e3d1267c75e84bb479485028121b1, type: 2}
-  description: 
   data:
     unitType: 0
     current_AI_Tactic: 0
     current_AI_Target: 2
     current_AI_Target_Secondly: 4
     health: 20
-    armor: 8
-    damageMin: 4
-    damageMax: 12
+    protection: 30
+    damage: {x: 3, y: 5}
+    attackCD: 10
     knockBackForce: 5
     weaponAOENum: 1
-    attackCD: 10
     moveSpeed: 0.8
     moveStopDis: 0.2
     toughness: 1
@@ -43,9 +45,9 @@ MonoBehaviour:
     knockBackBonus: 0.68
     ProjectilePrefab: {fileID: 0}
     isJavelin: 0
-    shootDis: 0
-    arrowOffset: 0
-    arrowSpeed: 0
+    shootDis: 5
+    arrowOffset: 0.2
+    arrowSpeed: 0.2
     chargeSpeed_Accererate: 0
     chargeSpeed_Max: 0
     isSpear: 0

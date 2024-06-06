@@ -15,16 +15,18 @@ public class Cavarly : UnitAIController
         unit = this.transform.parent.GetComponent<Unit>();
     }
 
-    public void Update()
+    //[Updates]
+    private void FixedUpdate()
     {
         unit.AddChargeSpeed();
-
         if (unit.currentAgentSpeed > 1)
         {
             anim.SetBool("move", true);
         }
         else anim.SetBool("move", false);
-
+    }
+    public void Update()
+    {
         if (update_canAttack)
         {
             CheckAttackDirection();
@@ -44,6 +46,9 @@ public class Cavarly : UnitAIController
             AI_Cav_Attack();
         }
     }
+
+
+
 
     public void AI_Cavalry_Action(bool dontChangeAttackTarget)
     {
@@ -113,12 +118,11 @@ public class Cavarly : UnitAIController
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
         unit.attackCD = unit.data.attackCD + Random.Range(-2, 2);
-
-        SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponAOENum, unit.data.isAP);
+        SetUpAttack(unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
     }
-    public override void SetUpAttack(int damMin, int damMax, int weaponCauseNum, bool causeAP)
+    public override void SetUpAttack(Vector2Int damage, int weaponCauseNum, bool causeAP)
     {
-        attackTrigger.InputData(this, damMin, damMax, weaponCauseNum, causeAP);
+        attackTrigger.InputData(this, damage, weaponCauseNum, causeAP);
     }
     public void TriggerAttack(string myanim)
     {
@@ -147,6 +151,4 @@ public class Cavarly : UnitAIController
             return;
         }
     }
-
-   
 }

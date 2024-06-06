@@ -39,7 +39,7 @@ public class ViewPoint : MonoBehaviour
 
     public virtual bool CheckHitShpere_If_BlockedByFrienlyUnit(float xRate, int num)
     {
-        List<Unit> units = BattleFunction.FindFreindlyUnit_InSphere(eyeRough.position, xRate * radius_EyeRough, this.unit);
+        List<Unit> units = BattleFunction.FindFriendlyUnit_InSphere(eyeRough.position, xRate * radius_EyeRough, this.unit);
 
         if (units != null && units.Count != 0)
         {
@@ -64,7 +64,6 @@ public class ViewPoint : MonoBehaviour
 
         if (dir == "Left")
             units = BattleFunction.FindEnemyUnit_InSphere(eyeL.transform.position, radius, this.unit);
-
 
         if (units != null && units.Count != 0)
         {

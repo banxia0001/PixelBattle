@@ -12,30 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afb10edd3e552e448a34c088b002c8b8, type: 3}
   m_Name: 7_SpearKnight
   m_EditorClassIdentifier: 
+  names: []
+  descriptions: []
+  unitSprites:
+  - {fileID: 21300000, guid: 680bdd64f53a9444b81998c90f48d603, type: 3}
+  - {fileID: 21300000, guid: 534525a67d3a2f745a3cf07f0f2cee9f, type: 3}
   ID: 7
-  UnitPrefabA: {fileID: 7562882002624147215, guid: 6b504e81e751a9344ae4018e13b61146, type: 3}
-  UnitPrefabB: {fileID: 319569230468927585, guid: 6946105a05dc559498e1c49213696712, type: 3}
-  unitSpriteA: {fileID: 21300000, guid: 680bdd64f53a9444b81998c90f48d603, type: 3}
-  unitSpriteB: {fileID: 21300000, guid: 534525a67d3a2f745a3cf07f0f2cee9f, type: 3}
+  prefabs:
+  - {fileID: 9044970539650723983, guid: 912928215faf21248881753b30303e41, type: 3}
+  - {fileID: -7359132192604050097, guid: 8fe5b107c8e361d45b22645e52a11b52, type: 3}
   Gcost: 120
   Tcost: 22
   Num: 2
   UnitValue: 4
   trait1: {fileID: 11400000, guid: eacaf167c9a37df44a8574b8d05c44db, type: 2}
   trait2: {fileID: 11400000, guid: dbf38734297068c47945ac8272726b55, type: 2}
-  description: 
   data:
     unitType: 0
     current_AI_Tactic: 0
     current_AI_Target: 3
     current_AI_Target_Secondly: 2
     health: 35
-    armor: 14
-    damageMin: 8
-    damageMax: 12
+    protection: 50
+    damage: {x: 6, y: 9}
+    attackCD: 6
     knockBackForce: 9
     weaponAOENum: 4
-    attackCD: 6
     moveSpeed: 0.7
     moveStopDis: 0.6
     toughness: 4
@@ -43,9 +45,9 @@ MonoBehaviour:
     knockBackBonus: 1
     ProjectilePrefab: {fileID: 0}
     isJavelin: 0
-    shootDis: 0
-    arrowOffset: 0
-    arrowSpeed: 0
+    shootDis: 5
+    arrowOffset: 0.2
+    arrowSpeed: 0.2
     chargeSpeed_Accererate: 0
     chargeSpeed_Max: 0
     isSpear: 1

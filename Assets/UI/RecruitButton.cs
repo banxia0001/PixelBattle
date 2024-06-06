@@ -6,12 +6,9 @@ using TMPro;
 
 public class RecruitButton : MonoBehaviour
 {
-    [HideInInspector]
-    public TeamController TC;
-    [HideInInspector]
-    public int RNumber;
-    [HideInInspector]
-    public UnitData_Local unit;
+    [HideInInspector] public TeamController team;
+    [HideInInspector] public int RNumber;
+    [HideInInspector] public UnitData_Local unit;
 
     public Image image;
     public BarController T_Bar;
@@ -20,15 +17,11 @@ public class RecruitButton : MonoBehaviour
     public TMP_Text text_HotKey;
 
     private float Rtimer;
-
     public Animator anim;
 
     public enum ButtonState { WaitingForRecruit, TrainingUnit, UnitReady }
     public ButtonState buttonState;
-
-
     private int RNum = -1;
-
 
     public void FixedUpdate()
     {
@@ -36,46 +29,30 @@ public class RecruitButton : MonoBehaviour
         {
             Rtimer -= Time.fixedDeltaTime;
             T_Bar.SetValue_Initial(Rtimer, (float)unit.Tcost);
-            if (Rtimer < 0)
-            {
-                UnitReady();
-            }
+
+            if (Rtimer < 0) UnitReady();
         }
     }
 
-    public void InputData(TeamController TC, UnitData_Local unit, int hotkey)
+    public void InputData(TeamController team, UnitData_Local unit, int hotkey)
     {
-        this.TC = TC;
+        this.team = team;
         this.unit = unit;
         int num = hotkey + 1;
         text.text = "X" + unit.Num + "<color=#FFD800>|" + unit.Gcost + "G" + "</color>";
-        if (TC.unitTeam == Unit.UnitTeam.teamA)
-            image.sprite = unit.unitSpriteA;
+        image.sprite = unit.unitSprites[(int)team.unitTeam];
 
-        else
-        {
-            image.sprite = unit.unitSpriteB;
-            num += 5;
-        }
-        if(hotkey != -10)
-        text_HotKey.text = num.ToString();
+        if (team.unitTeam == Unit.UnitTeam.teamB) num += 5;
+        if (hotkey != -10) text_HotKey.text = num.ToString();
     }
 
     public void InputFromButton()
     {
-        //if (GameController.state == GameController.GameState.gameInStartPanel)
-        //{
-        //    RNum++;
-        //    GameUI UI = FindObjectOfType<GameUI>();
-        //    if (RNum >= UI.Rlist.UnitPrefabs.Count) RNum = 0;
-        //    InputData(this.TC, UI.Rlist.UnitPrefabs[RNum], -10);  
-        //}
-
         if (GameController.state == GameController.GameState.gameActive)
         {
             if (buttonState == ButtonState.WaitingForRecruit)
             {
-                if (TC.RecruitUnit(unit.Gcost))
+                if (team.RecruitUnit(unit.Gcost))
                 {
                     StartTrainUnit();
                 }
@@ -108,11 +85,11 @@ public class RecruitButton : MonoBehaviour
 
     private void SpawnUnit()
     {
-        if (TC.Check_UnitPop(unit.Num))
+        if (team.Check_UnitPop(unit.Num))
         {
             buttonState = ButtonState.WaitingForRecruit;
 
-            TC.SpanwUnit(unit);
+            team.SpanwUnit(unit);
             T_Image.SetActive(false);
             T_Bar.gameObject.SetActive(false);
             text.text = "X" + unit.Num + "<color=#FFD800>|" + unit.Gcost + "G" + "</color>";
@@ -120,10 +97,10 @@ public class RecruitButton : MonoBehaviour
 
         else
         { 
-            if(!TC.isAIControl)
+            if(!team.isAIControl)
             {
                 float offset = 120;
-                if (TC.unitTeam == Unit.UnitTeam.teamB) offset = -140;
+                if (team.unitTeam == Unit.UnitTeam.teamB) offset = -140;
                 BattleFunction.PopText(this.GetComponent<RectTransform>(), offset, "PopText_P");
             }
         }

@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class AttackTrigger : MonoBehaviour
 {
-    private UnitAIController USC;
-    public bool inAttacking;
-    public bool isCharging;
+    [Header("Dynamic Stats")]
     public int damBonus;
     public float knockbackBonus;
     public int weaponCauseNum;
 
+    [Header("Static Statis")]
+    [HideInInspector] public bool inAttacking;
+    [HideInInspector] public bool isCharging;
+    private UnitAIController AI;
     private bool canAttack;
-    private int damMin;
-    private int damMax;
+    private Vector2Int damage;
     private bool causeAP;
 
-
-    public void InputData(UnitAIController USC, int damMin, int damMax,  int weaponCauseNum, bool causeAP)
+    public void InputData(UnitAIController AI, Vector2Int damage,  int weaponCauseNum, bool causeAP)
     {
-        weaponCauseNum = 1;
         this.canAttack = true;
-        this.USC = USC;
+        this.AI = AI;
         this.weaponCauseNum = weaponCauseNum;
-        this.damMin = damMin;
-        this.damMax = damMax;
+        this.damage = damage;
         this.causeAP = causeAP;
     }
 
@@ -35,29 +33,26 @@ public class AttackTrigger : MonoBehaviour
             if (other.tag == "Unit")
             {
                 Unit unit = other.gameObject.GetComponent<Unit>();
-
-                if (unit.unitTeam != this.USC.unit.unitTeam)
+                if (unit.unitTeam != this.AI.unit.unitTeam)
                 {
                     weaponCauseNum--;
 
-                    float bonus = 0;
-                    if (isCharging) bonus = USC.unit.currentAgentSpeed;
+                    float bonus = damBonus;
+                    if (isCharging) bonus += AI.unit.currentAgentSpeed;
+                    damage.x += (int)bonus;
+                    damage.y += (int)bonus;
 
-                    damMax += (int)bonus;
-                    damMin += (int)bonus;
-
-                    int dam = BattleFunction.DamageCalculate(damMin + damBonus, damMax + damBonus, unit, isCharging,false,causeAP, false);
-
+                    int dam = BattleFunction.GetDamage(damage, unit, isCharging,false,causeAP, false);
                     BattleFunction.Attack(this.gameObject.transform, dam, unit);
 
+                    //[Knock Back]
                     if (isCharging)
                     {
-                        unit.AddKnockBack(USC.unit.transform, (float)USC.unit.data.knockBackForce + this.knockbackBonus, 0.1f,false);
+                        unit.AddKnockBack(AI.unit.transform, (float)AI.unit.data.knockBackForce + this.knockbackBonus, 0.1f,false);
                     }
-
                     else
                     {
-                        unit.AddKnockBack(USC.unit.transform, (float)USC.unit.data.knockBackForce + this.knockbackBonus, 0.1f,false);
+                        unit.AddKnockBack(AI.unit.transform, (float)AI.unit.data.knockBackForce + this.knockbackBonus, 0.1f,false);
                     }
 
                     if (weaponCauseNum <= 0)

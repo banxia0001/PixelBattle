@@ -41,7 +41,7 @@ public class TeamController : MonoBehaviour
         GC = FindObjectOfType<GameController>();
         AI = gameObject.GetComponent<AIPlayer>();
         UploadDataToButtons();
-        TeamCheck_AddUnitToList();
+        UpdateUnitList();
     }
     private void Start()
     {
@@ -61,28 +61,26 @@ public class TeamController : MonoBehaviour
     public bool RecruitUnit(int G)
     {
         if (G > this.G) return false;
-
         this.G = this.G - G;
         return true;
     }
 
     public bool Check_UnitPop(int P)
     {
-        if (this.P + P > 50) return false;
+        if (this.P + P > GameController._popMax) return false;
         else return true;
     }
 
     public void SpanwUnit(UnitData_Local data)
     {
+        //Increase Pop
         int num = data.Num;
-
         this.P = this.P + num;
         GC.UpdatePText();
 
         Vector3 spawnPos = new Vector3(0, 0, 0);
-        GameObject spawnOb = data.UnitPrefabA;
+        GameObject spawnOb = data.prefabs[(int)unitTeam];
 
-        if(unitTeam == Unit.UnitTeam.teamB) spawnOb = data.UnitPrefabB;
         float y = Random.Range(5, mapHeight - 5);
         if (data.Num == 2) y = Random.Range(5, mapHeight - 7);
         if (data.Num == 3) y = Random.Range(5, mapHeight - 8);
@@ -91,16 +89,13 @@ public class TeamController : MonoBehaviour
 
         for (int i = 0; i < num; i++)
         {
-           GameObject ob =  Instantiate(spawnOb, new Vector3(startX, 0.1f, y + i), Quaternion.identity);
-
-            if (unitTeam == Unit.UnitTeam.teamB) 
-            ob.transform.eulerAngles = new Vector3(0, -90, 0);
-
+            GameObject ob = Instantiate(spawnOb, new Vector3(startX, 0.1f, y + i), Quaternion.identity);
+            if (unitTeam == Unit.UnitTeam.teamB) ob.transform.eulerAngles = new Vector3(0, -90, 0);
             else ob.transform.eulerAngles = new Vector3(0, 90, 0);
         }
     }
 
-    public void TeamCheck_AddUnitToList()
+    public void UpdateUnitList()
     {
         warriorList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.infantry);
         archerList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.archer);
@@ -109,48 +104,25 @@ public class TeamController : MonoBehaviour
         artilleryList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.artillery);
     }
 
-    public void TeamCheck_Action()
+    public void UpdateAction()
     {
-        int P = 0;
-        if (warriorList != null && warriorList.Count != 0)
-            foreach (Unit unit in warriorList)
-            {
-                unit.AI_DecideAction();
-                P++;
-            }
-
-        if (archerList != null && archerList.Count != 0)
-            foreach (Unit unit in archerList)
-            {
-                unit.AI_DecideAction();
-                P++;
-            }
-
-        if (cavalryList != null && cavalryList.Count != 0)
-            foreach (Unit unit in cavalryList)
-            {
-                unit.AI_DecideAction();
-                P++;
-            }
-
-        if (monsterList != null && monsterList.Count != 0)
-            foreach (Unit unit in monsterList)
-            {
-                unit.AI_DecideAction();
-                P++;
-            }
-
-        if (artilleryList != null && artilleryList.Count != 0)
-            foreach (Unit unit in artilleryList)
-            {
-                unit.AI_DecideAction();
-                P++;
-            }
-
-        this.P = P;
+        this.P = 0;
+        UpdateAction_2(warriorList);
+        UpdateAction_2(archerList);
+        UpdateAction_2(cavalryList);
+        UpdateAction_2(monsterList);
+        UpdateAction_2(artilleryList);
     }
 
-
+    private void UpdateAction_2(List<Unit> units)
+    {
+        if (units != null && units.Count != 0)
+            foreach (Unit unit in units)
+            {
+                unit.AI_DecideAction();
+                P++;
+            }
+    }
 
     public float CalcualteUnitFront(Unit unit)
     {
@@ -158,5 +130,4 @@ public class TeamController : MonoBehaviour
         if (unitTeam == Unit.UnitTeam.teamB) xAxis = startX - unit.transform.position.x;
         return xAxis * unit.data_local.UnitValue;
     }
-
 }

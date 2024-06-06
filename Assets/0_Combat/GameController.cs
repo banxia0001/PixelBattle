@@ -7,6 +7,10 @@ public class GameController : MonoBehaviour
 {
     public enum GameState { none, gameActive, gameFrozen }
 
+    [Header("Modify")]
+    public int popMax = 75;
+    public static int _popMax;
+
     [Header("Stage")]
     public static GameState state;
     public static bool mouseOnUI;
@@ -22,6 +26,13 @@ public class GameController : MonoBehaviour
     public TeamController[] teams;
     public static LandManager land;
     public GameUI UI;
+
+
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+        _popMax = popMax;
+    }
 
     private void Start()
     {
@@ -128,20 +139,20 @@ public class GameController : MonoBehaviour
     }
     private void TeamCheck()
     {
-        teams[0].TeamCheck_AddUnitToList();
-        teams[1].TeamCheck_AddUnitToList();
+        teams[0].UpdateUnitList();
+        teams[1].UpdateUnitList();
 
         if (turn % 2 == 0)
         {
-            teams[0].TeamCheck_Action();
-            teams[1].TeamCheck_Action();
+            teams[0].UpdateAction();
+            teams[1].UpdateAction();
             if (teams[0].isAIControl) teams[0].AI.Action();
             if (teams[1].isAIControl) teams[1].AI.Action();
         }
         else
         {
-            teams[1].TeamCheck_Action();
-            teams[0].TeamCheck_Action();
+            teams[1].UpdateAction();
+            teams[0].UpdateAction();
             if (teams[1].isAIControl) teams[1].AI.Action();
             if (teams[0].isAIControl) teams[0].AI.Action();
         }

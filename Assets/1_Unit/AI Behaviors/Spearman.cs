@@ -4,33 +4,38 @@ using UnityEngine;
 
 public class Spearman : UnitAIController
 {
-    public override void Start()
-    {
-      
-        unit = this.transform.parent.parent.GetComponent<Unit>();
-        viewPoint = this.transform.parent.parent.GetChild(1).GetComponent<ViewPoint>();
-        anim = this.GetComponent<Animator>();
-        parentOB = this.transform.parent;
-        angleShould = parentOB.parent.transform.eulerAngles.y + 5f;
-        angleNow = angleShould;
-    }
-
     public enum SpearmanState
-    { 
+    {
         moveToTarget,
         moveAwayFromTarget,
     }
-
     public SpearmanState spearmanState;
 
+    [Header("Angle")]
+    private int gobackT;
+    public float angleNow;
+    public float angleShould;
+    public Transform parentTrans;
     private float changeBodyRatio;
-    public void AI_Warrior_Action(bool dontChangeAttackTarget)
-    {
 
+    public override void Start()
+    {
+        unit = this.transform.parent.parent.GetComponent<Unit>();
+        viewPoint = this.transform.parent.parent.GetChild(1).GetComponent<ViewPoint>();
+        anim = this.GetComponent<Animator>();
+
+        parentTrans = this.transform.parent;
+        angleShould = parentTrans.parent.transform.eulerAngles.y + 5f;
+        angleNow = angleShould;
+    }
+
+
+    public void AI_Warrior_Action(bool remainAttackTarget)
+    {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
 
         //[FindEnemy]
-        if(!dontChangeAttackTarget)
+        if(!remainAttackTarget)
         FindAttackTarget();
 
         //[Stay]
@@ -69,7 +74,7 @@ public class Spearman : UnitAIController
                 if (spearmanState != SpearmanState.moveAwayFromTarget)
                 {
                     gobackT = 4;
-                    angleNow = this.parentOB.transform.eulerAngles.y;
+                    angleNow = this.parentTrans.transform.eulerAngles.y;
                     spearmanState = SpearmanState.moveAwayFromTarget;
                 }
             }
@@ -86,12 +91,10 @@ public class Spearman : UnitAIController
         }
     }
 
-    private int gobackT;
-    public float angleNow;
-    public float angleShould;
+    //[Update]
     public override void LateUpdate()
     {
-        parentOB.parent.GetChild(1).eulerAngles = new Vector3(0, this.transform.parent.parent.eulerAngles.y, 0);
+        parentTrans.parent.GetChild(1).eulerAngles = new Vector3(0, this.transform.parent.parent.eulerAngles.y, 0);
         this.unit.unitSprite.transform.eulerAngles = new Vector3(0, 0, 0);
         this.transform.localEulerAngles = new Vector3(90, 0, 90);
 
@@ -105,14 +108,14 @@ public class Spearman : UnitAIController
             if (canAttack_InHitBox)
             {
                 AI_LookAt(unit.attackTarget.transform);
-                angleNow = parentOB.parent.transform.eulerAngles.y + 5f;
+                angleNow = parentTrans.parent.transform.eulerAngles.y + 5f;
                 unit.attackCD = unit.data.attackCD + Random.Range(-1, 1);
-                SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponAOENum, unit.data.isAP);
+                SetUpAttack(unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
             }
         }
 
-        angleShould = parentOB.parent.transform.eulerAngles.y + 5f;
-        parentOB.eulerAngles = new Vector3(0, angleNow, 0);
+        angleShould = parentTrans.parent.transform.eulerAngles.y + 5f;
+        parentTrans.eulerAngles = new Vector3(0, angleNow, 0);
         if (gobackT < 2)
         {
             if (Mathf.Abs(angleNow - angleShould) < 5)
@@ -127,45 +130,20 @@ public class Spearman : UnitAIController
         }
     }
 
-    public Transform parentOB;
 
     float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
     {
         Vector3 perp = Vector3.Cross(fwd, targetDir);
         float dir = Vector3.Dot(perp, up);
 
-        if (dir > 0f)
-        {
-            return 1f;
-        }
-        else if (dir < 0f)
-        {
-            return -1f;
-        }
-        else
-        {
-            return 0f;
-        }
+        if (dir > 0f) return 1f;
+        else if (dir < 0f) return -1f;
+        else return 0f;
     }
 
-    public override void SetUpAttack(int damMin, int damMax, int weaponAOENum, bool causeAP)
+    public override void SetUpAttack(Vector2Int damage, int weaponAOENum, bool causeAP)
     {
-        attackTrigger.InputData(this, damMin, damMax, weaponAOENum, causeAP);
-
-        //if (VP.CheckSphere("Right"))
-        //{
-        //    AI_LookAt(VP.eyeR.transform);
-        //    anim.SetTrigger("attack");
-        //    return;
-        //}
-
-        //if (VP.CheckSphere("Left"))
-        //{
-        //    AI_LookAt(VP.eyeL.transform);
-        //    anim.SetTrigger("attack");
-        //    return;
-        //}
-
+        attackTrigger.InputData(this, damage, weaponAOENum, causeAP);
         anim.SetTrigger("attack");
     }
 }

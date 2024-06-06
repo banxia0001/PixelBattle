@@ -6,15 +6,11 @@ using TMPro;
 
 public class Unit : MonoBehaviour
 {
-    
     public bool debug_Unit;
     public enum UnitTeam { teamA, teamB }
-    public enum Unit_State { AIDecide, CommandMoveTo, CommandAttackTo }
-    public Unit_State state;
 
     [Header("UnitData")]
     public UnitTeam unitTeam;
-   
     public UnitData_Local data_local;
     public UnitData data;
     public int health;
@@ -29,20 +25,18 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent agent;
 
-
+    [Header("AI Behaviors")]
     private Ranger ranger;
     private Cavarly cavarly;
     private Infantry infantry;
     private Spearman spearman;
     private DragonMonster dragonMonster;
 
-    [HideInInspector]
-    public  Rigidbody rb;
+    [Header("Physics")]
+    [HideInInspector] public Rigidbody rb;
     private float chargeSpeed;
-    [HideInInspector]
-    public float knockBackTimer;
-    [HideInInspector]
-    public float currentAgentSpeed;
+    [HideInInspector] public float knockBackTimer;
+    [HideInInspector] public float currentAgentSpeed;
 
     [Header("UI")]
     public BarController BC;
@@ -52,21 +46,23 @@ public class Unit : MonoBehaviour
     {
         this.gameObject.name = data_local.data.unitType.ToString() +"||"+ unitTeam.ToString();
 
+        //[Get All the AI Behavior Scripts]
         ranger = this.transform.GetChild(2).GetComponent<Ranger>();
         cavarly = this.transform.GetChild(2).GetComponent<Cavarly>();
         infantry = this.transform.GetChild(2).GetComponent<Infantry>();
         spearman = this.transform.GetChild(2).GetChild(0).GetComponent<Spearman>();
         dragonMonster = this.transform.GetChild(2).GetComponent<DragonMonster>();
 
+        //[NavMesh]
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
-        attackTarget = null;
-
         if (data.unitType == UnitData.UnitType.cavalry) { agent.avoidancePriority = 50; }
         if (data.unitType == UnitData.UnitType.archer) { agent.avoidancePriority = 100; }
         if (data.unitType == UnitData.UnitType.monster) { agent.avoidancePriority = 20; }
-        if (data.unitType == UnitData.UnitType.infantry) { agent.avoidancePriority = 300;}
+        if (data.unitType == UnitData.UnitType.infantry) { agent.avoidancePriority = 300; }
 
+
+        attackTarget = null;
         InputData();
         //selectionCircle.SetActive(false);
     }
@@ -76,8 +72,9 @@ public class Unit : MonoBehaviour
         this.data = data_local.data;
         health = data.health;
         attackCD = 0;
+
         BC.SetValue_Initial(health, data.health);
-        SetSpeed(data.moveSpeed);
+        agent.speed = data.moveSpeed;
 
         if (unitTeam == UnitTeam.teamA)
             BC.gameObject.transform.GetChild(1).GetChild(0).
@@ -87,44 +84,16 @@ public class Unit : MonoBehaviour
             BC.gameObject.transform.GetChild(1).GetChild(0).
                 GetComponent<Image>().color = new Color32(99, 255, 0, 255);
 
-
         rb.mass = data.mass;
     }
 
-    public void UnitAddTargetUnit(Unit _attackTarget)
-    {
-        if (_attackTarget == null) return;
-        Debug.Log("3Count:" + _attackTarget.gameObject.name);
-
-        float dis = Vector3.Distance(this.transform.position, _attackTarget.gameObject.transform.position);
-        float timer = 3 + 1f * (float)dis / (float)data.moveSpeed;
-
-        Debug.Log("timer:" + timer);
-        CommandTimer = (int)timer;
-        //selectionCircle.SetActive(false);
-        this.attackTarget = _attackTarget;
-        state = Unit_State.CommandAttackTo;
-    }
-
-    public void UnitAddTargetPos(Vector3 attackPos)
-    {
-        Debug.Log(attackPos);
-        float dis = Vector3.Distance(this.transform.position, attackTarget.transform.position);
-        float timer = 3 + 1f * (float)dis / (float)data.moveSpeed;
-
-        Debug.Log("timer:" + timer);
-        CommandTimer = (int)timer;
-
-        //selectionCircle.SetActive(false);
-        this.movetoTarget_Command = attackPos;
-        state = Unit_State.CommandMoveTo;
-    }
-
+   
 
     void FixedUpdate()
     {
         currentAgentSpeed = agent.velocity.magnitude;
         knockBackTimer -= 4 * Time.fixedDeltaTime;
+
         if (knockBackTimer < 0)
         {
             rb.freezeRotation = false;
@@ -132,7 +101,6 @@ public class Unit : MonoBehaviour
             GetComponent<CapsuleCollider>().isTrigger = false;
         } 
     }
-
 
    
     public void AI_DecideAction()
@@ -142,54 +110,17 @@ public class Unit : MonoBehaviour
 
         if (agent.enabled)
         {
-
-            //Move
-            if (state == Unit_State.CommandMoveTo)
+            if (data.unitType == UnitData.UnitType.infantry)
             {
-                CommandTimer--;
-
-                float dis = Vector3.Distance(this.transform.position, movetoTarget_Command);
-
-                if (CommandTimer < 0 || dis < 1)
-                {
-                    state = Unit_State.AIDecide;
-                }
-                else
-                {
-                    agent.SetDestination(movetoTarget_Command);
-                }
+                if (infantry != null) infantry.AI_Warrior_Action(false);
+                if (spearman != null) spearman.AI_Warrior_Action(false);
             }
 
-
-            //Attack
-            bool dontChangeAttackTarget = false;
-            if (state == Unit_State.CommandAttackTo)
-            {
-                CommandTimer--;
-                dontChangeAttackTarget = true;
-                if (CommandTimer < 0 ||  attackTarget == null)
-                {
-                    state = Unit_State.AIDecide;
-                    dontChangeAttackTarget = false;
-                }
-            }
-
-            if (state == Unit_State.AIDecide ||state == Unit_State.CommandAttackTo)
-            {
-                if (data.unitType == UnitData.UnitType.infantry)
-                {
-                    if (infantry != null) infantry.AI_Warrior_Action(dontChangeAttackTarget);
-                    if (spearman != null) spearman.AI_Warrior_Action(dontChangeAttackTarget);
-                }
-
-                if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery) ranger.AI_RangeUnit_Action(dontChangeAttackTarget);
-                if (data.unitType == UnitData.UnitType.cavalry) cavarly.AI_Cavalry_Action(dontChangeAttackTarget);
-                if (data.unitType == UnitData.UnitType.monster) dragonMonster.AI_Monster_Action(dontChangeAttackTarget);
-            }
+            if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery) ranger.AI_RangeUnit_Action(false);
+            if (data.unitType == UnitData.UnitType.cavalry) cavarly.AI_Cavalry_Action(false);
+            if (data.unitType == UnitData.UnitType.monster) dragonMonster.AI_Monster_Action(false);
         }
     }
-
-   
 
     public void AddDamage(int dam)
     {
@@ -205,10 +136,6 @@ public class Unit : MonoBehaviour
         yield return new WaitForSeconds(0.45f);
         Destroy(this.gameObject);
     }
-    public void SetSpeed(float speed)
-    {
-        agent.speed = speed;
-    }
     public void SetChargeSpeed(float speed)
     {
        chargeSpeed = speed;
@@ -216,10 +143,11 @@ public class Unit : MonoBehaviour
     public void AddChargeSpeed()
     {
         if (chargeSpeed <= data.chargeSpeed_Max)
-            chargeSpeed += Time.deltaTime * data.chargeSpeed_Accererate;
+            chargeSpeed += Time.fixedDeltaTime * data.chargeSpeed_Accererate;
 
         agent.speed = data.moveSpeed + chargeSpeed;
     }
+
     public void AddKnockBack(Transform attacker, float knockBackForce, float waitTime, bool isRange)
     {
         StartCoroutine(_AddKnockBack(attacker.position, knockBackForce, waitTime, isRange));
@@ -228,6 +156,7 @@ public class Unit : MonoBehaviour
     {
         StartCoroutine(_AddKnockBack(attacker, knockBackForce, waitTime, isRange));
     }
+
     private IEnumerator _AddKnockBack(Vector3 attacker, float knockBackForce, float waitTime, bool isRange)
     {
         //Debug.Log(knockBackForce);

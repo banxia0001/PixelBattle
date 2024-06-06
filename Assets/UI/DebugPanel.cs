@@ -13,12 +13,6 @@ public class DebugPanel : MonoBehaviour
     public TMP_Text autoR_T;
     public TMP_Text drag_T;
 
-
-    public void Start()
-    {
-        //switch_AutoRecruit();
-        switch_DragSelect();
-    }
     public void switch_AutoRecruit()
     {
         if (TeamA.isAIControl == true)
@@ -33,21 +27,4 @@ public class DebugPanel : MonoBehaviour
             autoR_T.text = "Off";
         }
     }
-
-    public void switch_DragSelect()
-    {
-        Debug.Log("!");
-        if (uss.isEnable == true)
-        {
-            uss.isEnable = false;
-            drag_T.text = "On";
-        }
-
-        else
-        {
-            uss.isEnable = true;
-            drag_T.text = "Off";
-        }
-    }
-
 }

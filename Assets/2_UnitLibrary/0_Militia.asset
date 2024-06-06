@@ -12,30 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afb10edd3e552e448a34c088b002c8b8, type: 3}
   m_Name: 0_Militia
   m_EditorClassIdentifier: 
+  names:
+  - 
+  - 
+  descriptions:
+  - 
+  - 
+  unitSprites:
+  - {fileID: 21300000, guid: 56cf4a51c66472c43b987a9d814a0bce, type: 3}
+  - {fileID: 21300000, guid: bbd08cf6fbca657499fcc90ab6316c6e, type: 3}
   ID: 0
-  UnitPrefabA: {fileID: 1158323175494779983, guid: 158ee473f40fa4840a3b14691968682b, type: 3}
-  UnitPrefabB: {fileID: 1624878365522644244, guid: ce9856c27943aef4f999afda08e93aa1, type: 3}
-  unitSpriteA: {fileID: 21300000, guid: 56cf4a51c66472c43b987a9d814a0bce, type: 3}
-  unitSpriteB: {fileID: 21300000, guid: bbd08cf6fbca657499fcc90ab6316c6e, type: 3}
+  prefabs:
+  - {fileID: 4598290153729289754, guid: b38b36c9744471142bfa376702127f8d, type: 3}
+  - {fileID: 4598290153729289754, guid: 355f07072297db4448b5c46b8ac4cdff, type: 3}
   Gcost: 45
   Tcost: 3
   Num: 5
   UnitValue: 1
   trait1: {fileID: 11400000, guid: 28d04260caeb6b3489b93748865f06a0, type: 2}
   trait2: {fileID: 11400000, guid: f78dae40049b4fe48911c263aa154ccb, type: 2}
-  description: 
   data:
     unitType: 0
     current_AI_Tactic: 0
     current_AI_Target: 2
     current_AI_Target_Secondly: 1
     health: 15
-    armor: 4
-    damageMin: 2
-    damageMax: 8
+    protection: 0
+    damage: {x: 3, y: 5}
+    attackCD: 10
     knockBackForce: 5
     weaponAOENum: 1
-    attackCD: 10
     moveSpeed: 1.2
     moveStopDis: 0.1
     toughness: 1

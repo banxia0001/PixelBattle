@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
- 
-    public float flySpeed;
+    [Header("Dynamic Stats")] 
     public bool cuaseAOE;
-    public bool isJave;
     public float attackDistance;
+
+    [Header("Static Stats")]
+    private float flySpeed;
+    private bool isJave;
     private Vector3 arrowDropLocation;
     private Vector3 arrowStartLocation;
-    private int damMin;
-    private int damMax;
+    private Vector2Int damage;
     private int knockBackBonus;
     private Unit.UnitTeam targetAttackTeam;
     private bool isDead = false;
@@ -22,20 +23,19 @@ public class Projectile : MonoBehaviour
         
     }
 
-    public void SetUpArror(Vector3 arrowDropLocation,Vector3 arrowStartLocation, int damMin, int damMax, int knockback,float flySpeed, Unit.UnitTeam targetAttackTeam, bool isJave)
+    public void SetUpArror(Vector3 arrowDropLocation,Vector3 arrowStartLocation, Vector2Int damage, int knockback,float flySpeed, Unit.UnitTeam targetAttackTeam, bool isJave)
     {
         this.arrowDropLocation = arrowDropLocation;
         this.arrowStartLocation = arrowStartLocation;
         this.flySpeed = flySpeed;
-        this.damMin = damMin;
-        this.damMax = damMax;
+        this.damage = damage;
+
         this.isJave = isJave;
         transform.LookAt(arrowDropLocation);
         this.targetAttackTeam = targetAttackTeam;
-        isDead = false;
         this.knockBackBonus = knockback;
 
-
+        isDead = false;
     }
 
     // Update is called once per frame
@@ -50,7 +50,7 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, arrowDropLocation,  flySpeed);
+            transform.position = Vector3.MoveTowards(transform.position, arrowDropLocation, flySpeed);
         }
     }
 
@@ -66,14 +66,13 @@ public class Projectile : MonoBehaviour
     {
         isDead = true;
 
-        //[an arrow]
+        //[Arrow]
         if (!cuaseAOE)
         {
             Unit targetUnit = AIFunctions.Find_ClosestUnitInList(Arrow_FindAllUnit_InSphere(),this.transform);
             if (targetUnit != null)
             {
-                int dam = BattleFunction.DamageCalculate(damMin, damMax, targetUnit, false, isJave, false, true);
-                //Debug.Log("!!");
+                int dam = BattleFunction.GetDamage(damage, targetUnit, false, isJave, false, true);
                 BattleFunction.Attack(this.transform, dam, targetUnit);
                 targetUnit.AddKnockBack(arrowStartLocation, knockBackBonus, 0.01f,true);
             }

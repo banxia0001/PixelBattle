@@ -5,30 +5,24 @@ using UnityEngine;
 public class Infantry : UnitAIController
 {
     public bool use3DirVP;
-    public void AI_Warrior_Action(bool dontChangeAttackTarget)
+    public void AI_Warrior_Action(bool remainAttackTarget)
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
 
         //[FindTarget]
-        if(!dontChangeAttackTarget)
+        if(!remainAttackTarget)
         FindAttackTarget();
 
         //[Stay]
         if (unit.attackTarget == null)
         {
-            //AI_GoToConquerLand(-1.1f);
             AI_GoToEnemyBase(unit.unitTeam);
             return;
         }
 
+        //[Distance]
         float dis = Vector3.Distance(unit.transform.position, unit.attackTarget.transform.position);
         bool canAttack = false;
-
-        //if (!VP.CheckHitShpere(3))
-        //{
-        //    AI_GoToConquerLand(-1.1f);
-        //    return;
-        //}
 
         if (unit.attackTarget.data.unitType == UnitData.UnitType.cavalry)
         {
@@ -39,21 +33,20 @@ public class Infantry : UnitAIController
                 return;
             }
         }
-
         if (dis < viewPoint.radius_EyeRough * 4f)
         {
             canAttack = viewPoint.CheckHitShpere(1);
         }
 
+
         //[Set Attack]
         if (unit.attackCD <= 0 && canAttack)
         {
             unit.attackCD = unit.data.attackCD + Random.Range(-1, 1);
-            SetUpAttack(unit.data.damageMin, unit.data.damageMax, unit.data.weaponAOENum, unit.data.isAP);
+            SetUpAttack(unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
             unit.SetChargeSpeed(0);
             AI_Stay(true);
         }
-
 
         //[Find Enemy]
         else
@@ -74,9 +67,9 @@ public class Infantry : UnitAIController
         }
     }
 
-    public override void SetUpAttack(int damMin, int damMax, int weaponAOENum, bool causeAP)
+    public override void SetUpAttack(Vector2Int damage, int weaponAOENum, bool causeAP)
     {
-        attackTrigger.InputData(this, damMin, damMax, weaponAOENum, causeAP);
+        attackTrigger.InputData(this, damage, weaponAOENum, causeAP);
 
         if (use3DirVP)
         {
@@ -103,7 +96,6 @@ public class Infantry : UnitAIController
                 }
 
                 else anim.SetTrigger("attack");
-
             }
         }
 

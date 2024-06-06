@@ -17,12 +17,12 @@ public class Ranger : UnitAIController
         viewPoint = this.transform.parent.GetComponent<ViewPoint>();
     }
 
-    public void AI_RangeUnit_Action(bool dontChangeAttackTarget)
+    public void AI_RangeUnit_Action(bool remainAttackTarget)
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.NoObstacleAvoidance;
 
         //[FindTarget]
-        if(!dontChangeAttackTarget)
+        if(!remainAttackTarget)
         FindAttackTarget();
 
         //[Stay]
@@ -35,23 +35,15 @@ public class Ranger : UnitAIController
         //[Attack]
         float dis = Vector3.Distance(this.transform.position, unit.attackTarget.transform.position);
 
-        //if (dis > unit.data.shootDis)
-        //{
-        //    AI_GoToConquerLand(2);
-        //    return;
-        //}
-
-
         if (dis < unit.data.shootDis && unit.attackCD <= 0)
         {
             if (unit.data.unitType == UnitData.UnitType.archer)
             {
                 unit.attackCD = unit.data.attackCD + Random.Range(-2, 2);
-                SetUpAttack(unit.attackTarget.transform, unit.data.damageMin, unit.data.damageMax, false);
+                SetUpAttack(unit.attackTarget.transform);
                 AI_Stay(false);
             }
         }
-
 
 
         //[Find Enemy]
@@ -91,18 +83,10 @@ public class Ranger : UnitAIController
     }
 
 
-    //public virtual void AI_MoveTowardBaseOnConqueredLand_Archer(Transform trans)
-    //{
-    //    float gotoDir = trans.position.x;
-    //    float maxDir = GameController.conquerManager.ReturnUnitFrontLinePosition(unit, 2f);
-    //    if (gotoDir > maxDir) gotoDir = maxDir;
-
-    //    if (unit.agent.enabled)
-    //        unit.agent.SetDestination(new Vector3(gotoDir, 0, Random.Range(-0.1f, 0.1f)));
-    //}
 
 
-    public void SetUpAttack(Transform target, int damMin, int damMax, bool causeAOE)
+
+    public void SetUpAttack(Transform target)
     {
         AI_LookAt(target);
         anim.SetTrigger("shoot");
@@ -110,10 +94,9 @@ public class Ranger : UnitAIController
         this.target = target;
     }
 
-    public void Update()
+    //[Updates]
+    public void FixedUpdate()
     {
-        //if (unit.attackCD <= unit.data.attackCD * 0.4f) unit.SetSpeed(0.1f);
-        //else unit.SetSpeed(unit.data.moveSpeed);
         restreatTimer -= Time.fixedDeltaTime;
 
         if (canAttack)
@@ -133,10 +116,6 @@ public class Ranger : UnitAIController
         Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
         if (unit.unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
 
-        int damMin = unit.data.damageMin;
-        int damMax = unit.data.damageMax;
-
-       
         GameObject Arrow = Instantiate(unit.data.ProjectilePrefab, this.transform.position, Quaternion.identity);
         Projectile ArrowScript = Arrow.GetComponent<Projectile>();
 
@@ -145,6 +124,6 @@ public class Ranger : UnitAIController
         offset = offset * dis / 15;
 
         Vector3 targetPos = target.transform.position + new Vector3(Random.Range(-offset, offset), 0, Random.Range(-offset, offset));
-        ArrowScript.SetUpArror(targetPos,this.unit.transform.position, damMin, damMax, unit.data.knockBackForce, unit.data.arrowSpeed, targetTeam, unit.data.isJavelin);
+        ArrowScript.SetUpArror(targetPos,this.unit.transform.position, unit.data.damage, unit.data.knockBackForce, unit.data.arrowSpeed, targetTeam, unit.data.isJavelin);
     }
 }
