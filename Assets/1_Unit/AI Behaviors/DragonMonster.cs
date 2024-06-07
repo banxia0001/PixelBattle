@@ -49,9 +49,9 @@ public class DragonMonster : UnitAIController
         if (unit.attackCD <= 0 && canAttack)
         {
             isAttacking = true;
-            attackTrigger.InputData(this, unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
-            attackTrigger_Hand2.InputData(this, unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
-            attackTrigger_Body.InputData(this, unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
+            attackTrigger.InputData(this, unit.data.damage, unit.data.isAP);
+            attackTrigger_Hand2.InputData(this, unit.data.damage, unit.data.isAP);
+            attackTrigger_Body.InputData(this, unit.data.damage,  unit.data.isAP);
             unit.attackCD = unit.data.attackCD + Random.Range(-2, 2);
 
             int ran = Random.Range(0, 3);

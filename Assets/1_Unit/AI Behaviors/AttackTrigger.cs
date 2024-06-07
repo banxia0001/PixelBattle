@@ -8,20 +8,18 @@ public class AttackTrigger : MonoBehaviour
     public int damBonus;
     public float knockbackBonus;
     public int weaponCauseNum;
+    public bool canAttack;
 
     [Header("Static Statis")]
     [HideInInspector] public bool inAttacking;
     [HideInInspector] public bool isCharging;
     private UnitAIController AI;
-    private bool canAttack;
     private Vector2Int damage;
     private bool causeAP;
 
-    public void InputData(UnitAIController AI, Vector2Int damage,  int weaponCauseNum, bool causeAP)
+    public void InputData(UnitAIController AI, Vector2Int damage, bool causeAP)
     {
-        this.canAttack = true;
         this.AI = AI;
-        this.weaponCauseNum = weaponCauseNum;
         this.damage = damage;
         this.causeAP = causeAP;
     }

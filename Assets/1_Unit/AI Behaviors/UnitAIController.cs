@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
 
 public class UnitAIController : MonoBehaviour
 {
+    public bool isSpineSkeleton = false;
+
     public AttackTrigger attackTrigger;
     [HideInInspector] public ViewPoint viewPoint;
     [HideInInspector] public Animator anim;
     [HideInInspector] public Unit unit;
-
 
     public virtual void Start()
     {
@@ -20,20 +22,21 @@ public class UnitAIController : MonoBehaviour
 
     public virtual void LateUpdate()
     {
-        this.transform.parent.GetChild(1).eulerAngles = new Vector3(0, this.transform.parent.eulerAngles.y, 0);
         this.transform.localEulerAngles = new Vector3(90, 0, 90);
-        unit.unitSprite.transform.eulerAngles = new Vector3(0, 0, 0);
+        unit.canvas.transform.eulerAngles = new Vector3(0, 0, 0);
     }
     public virtual void SetUp()
     {
-        this.transform.localPosition = new Vector3(0, 0.1f, -0.278f);
-        this.transform.GetChild(0).localPosition = new Vector3(0, 0, 0);
-        this.transform.localEulerAngles = new Vector3(90, -90, 0);
-        anim = this.GetComponent<Animator>();
         unit = this.transform.parent.GetComponent<Unit>();
+        this.transform.localPosition = new Vector3(0, 0.1f, -0.278f);
+        this.transform.localEulerAngles = new Vector3(90, -90, 0);
+
+        if (isSpineSkeleton) return;
+        this.transform.GetChild(0).localPosition = new Vector3(0, 0, 0);
+        anim = this.GetComponent<Animator>();
     }
 
-    public virtual void SetUpAttack(Vector2Int damage, int weaponCauseNum, bool causeAP)
+    public virtual void SetUpAttack(Vector2Int damage, bool causeAP)
     {
         return;
     }

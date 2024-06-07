@@ -43,7 +43,7 @@ public class Infantry : UnitAIController
         if (unit.attackCD <= 0 && canAttack)
         {
             unit.attackCD = unit.data.attackCD + Random.Range(-1, 1);
-            SetUpAttack(unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
+            SetUpAttack(unit.data.damage, unit.data.isAP);
             unit.SetChargeSpeed(0);
             AI_Stay(true);
         }
@@ -67,9 +67,9 @@ public class Infantry : UnitAIController
         }
     }
 
-    public override void SetUpAttack(Vector2Int damage, int weaponAOENum, bool causeAP)
+    public override void SetUpAttack(Vector2Int damage,  bool causeAP)
     {
-        attackTrigger.InputData(this, damage, weaponAOENum, causeAP);
+        attackTrigger.InputData(this, damage, causeAP);
 
         if (use3DirVP)
         {
@@ -77,7 +77,6 @@ public class Infantry : UnitAIController
             {
                 if (viewPoint.CheckSphere("Right") != 0)
                 {
-                    Debug.Log("!!R");
                     this.unit.agent.enabled = false;
                     this.unit.transform.eulerAngles += new Vector3(0, -30, 0);
                     this.unit.agent.enabled = true;
@@ -87,7 +86,6 @@ public class Infantry : UnitAIController
 
                 if (viewPoint.CheckSphere("Left") != 0)
                 {
-                    Debug.Log("!!L");
                     this.unit.agent.enabled = false;
                     this.unit.transform.eulerAngles += new Vector3(0, 30, 0);
                     this.unit.agent.enabled = true;

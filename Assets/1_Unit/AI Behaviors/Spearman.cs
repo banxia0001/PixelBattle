@@ -95,7 +95,7 @@ public class Spearman : UnitAIController
     public override void LateUpdate()
     {
         parentTrans.parent.GetChild(1).eulerAngles = new Vector3(0, this.transform.parent.parent.eulerAngles.y, 0);
-        this.unit.unitSprite.transform.eulerAngles = new Vector3(0, 0, 0);
+        this.unit.canvas.transform.eulerAngles = new Vector3(0, 0, 0);
         this.transform.localEulerAngles = new Vector3(90, 0, 90);
 
         ////[Setup Attack]
@@ -110,7 +110,7 @@ public class Spearman : UnitAIController
                 AI_LookAt(unit.attackTarget.transform);
                 angleNow = parentTrans.parent.transform.eulerAngles.y + 5f;
                 unit.attackCD = unit.data.attackCD + Random.Range(-1, 1);
-                SetUpAttack(unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
+                SetUpAttack(unit.data.damage, unit.data.isAP);
             }
         }
 
@@ -141,9 +141,9 @@ public class Spearman : UnitAIController
         else return 0f;
     }
 
-    public override void SetUpAttack(Vector2Int damage, int weaponAOENum, bool causeAP)
+    public override void SetUpAttack(Vector2Int damage, bool causeAP)
     {
-        attackTrigger.InputData(this, damage, weaponAOENum, causeAP);
+        attackTrigger.InputData(this, damage, causeAP);
         anim.SetTrigger("attack");
     }
 }

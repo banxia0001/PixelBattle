@@ -118,11 +118,11 @@ public class Cavarly : UnitAIController
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
         unit.attackCD = unit.data.attackCD + Random.Range(-2, 2);
-        SetUpAttack(unit.data.damage, unit.data.weaponAOENum, unit.data.isAP);
+        SetUpAttack(unit.data.damage, unit.data.isAP);
     }
-    public override void SetUpAttack(Vector2Int damage, int weaponCauseNum, bool causeAP)
+    public override void SetUpAttack(Vector2Int damage, bool causeAP)
     {
-        attackTrigger.InputData(this, damage, weaponCauseNum, causeAP);
+        attackTrigger.InputData(this, damage, causeAP);
     }
     public void TriggerAttack(string myanim)
     {

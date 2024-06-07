@@ -49,7 +49,6 @@ public class UnitData
     public Vector2Int damage;
     [Range(1, 15)] public int attackCD;
     [Range(1, 30)] public int knockBackForce = 1;
-    public int weaponAOENum;
 
     [Header("Movement")]
     [Range(0.5f, 5f)]
@@ -92,7 +91,6 @@ public class UnitData
         this.damage = data.damage;
         this.attackCD = data.attackCD;
         this.knockBackForce = data.knockBackForce;
-        this.weaponAOENum = data.weaponAOENum;
 
 
         this.moveSpeed = data.moveSpeed;

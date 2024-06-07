@@ -243,6 +243,7 @@ public class AIFunctions : MonoBehaviour
 
         foreach (Collider coll in overlappingItems)
         {
+            Debug.Log(coll.gameObject.name);
             Unit unit = coll.gameObject.GetComponent<Unit>();
 
             if (unit.unitTeam == targetTeam)

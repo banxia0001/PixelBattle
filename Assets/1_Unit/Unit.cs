@@ -21,7 +21,6 @@ public class Unit : MonoBehaviour
     private Vector3 movetoTarget_Command;
     private int CommandTimer;
 
-
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent agent;
 
@@ -40,17 +39,17 @@ public class Unit : MonoBehaviour
 
     [Header("UI")]
     public BarController BC;
-    public GameObject unitSprite;
+    public GameObject canvas;
 
     void Start()
     {
         this.gameObject.name = data_local.data.unitType.ToString() +"||"+ unitTeam.ToString();
-
+        
         //[Get All the AI Behavior Scripts]
         ranger = this.transform.GetChild(2).GetComponent<Ranger>();
         cavarly = this.transform.GetChild(2).GetComponent<Cavarly>();
         infantry = this.transform.GetChild(2).GetComponent<Infantry>();
-        spearman = this.transform.GetChild(2).GetChild(0).GetComponent<Spearman>();
+        //spearman = this.transform.GetChild(2).GetChild(0).GetComponent<Spearman>();
         dragonMonster = this.transform.GetChild(2).GetComponent<DragonMonster>();
 
         //[NavMesh]
@@ -60,7 +59,6 @@ public class Unit : MonoBehaviour
         if (data.unitType == UnitData.UnitType.archer) { agent.avoidancePriority = 100; }
         if (data.unitType == UnitData.UnitType.monster) { agent.avoidancePriority = 20; }
         if (data.unitType == UnitData.UnitType.infantry) { agent.avoidancePriority = 300; }
-
 
         attackTarget = null;
         InputData();
