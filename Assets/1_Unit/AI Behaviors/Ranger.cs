@@ -5,13 +5,13 @@ using UnityEngine;
 public class Ranger : UnitAIController
 {
     private float restreatTimer;
-    private bool canAttack;
+    private bool waitForFire;
     private Transform target;
 
     public override void Start()
     {
         unit = this.transform.parent.GetComponent<Unit>();
-        canAttack = false;
+        waitForFire = false;
         anim = this.GetComponent<Animator>();
         unit = this.transform.parent.GetComponent<Unit>();
         viewPoint = this.transform.parent.GetComponent<ViewPoint>();
@@ -90,7 +90,7 @@ public class Ranger : UnitAIController
     {
         AI_LookAt(target);
         anim.SetTrigger("shoot");
-        canAttack = true;
+        waitForFire = true;
         this.target = target;
     }
 
@@ -99,13 +99,12 @@ public class Ranger : UnitAIController
     {
         restreatTimer -= Time.fixedDeltaTime;
 
-        if (canAttack)
+        if (waitForFire)
         {
             if (target == null) return;
-
-            if (attackTrigger.inAttacking)
+            if (attackTrigger.canAttack)
             {
-                canAttack = false;
+                waitForFire = false;
                 Shoot();
             }
         }

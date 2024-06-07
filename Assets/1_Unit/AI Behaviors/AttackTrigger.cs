@@ -11,7 +11,6 @@ public class AttackTrigger : MonoBehaviour
     public bool canAttack;
 
     [Header("Static Statis")]
-    [HideInInspector] public bool inAttacking;
     [HideInInspector] public bool isCharging;
     private UnitAIController AI;
     private Vector2Int damage;
@@ -26,7 +25,7 @@ public class AttackTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (canAttack == true && inAttacking == true)
+        if (canAttack == true)
         {
             if (other.tag == "Unit")
             {

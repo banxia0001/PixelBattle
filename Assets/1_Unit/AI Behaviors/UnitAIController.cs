@@ -44,6 +44,7 @@ public class UnitAIController : MonoBehaviour
     public virtual void AI_DecideAttackTarget(Unit.UnitTeam targetTeam, bool targetFrontline)
     {
         int choice = Random.Range(0, 20);
+
         if (choice < 12) unit.attackTarget = AI_FindClosestTargetInList(unit.data.current_AI_Target, targetFrontline);
         else unit.attackTarget = AI_FindClosestTargetInList(unit.data.current_AI_Target_Secondly, targetFrontline);
 
@@ -187,12 +188,10 @@ public class UnitAIController : MonoBehaviour
         {
             unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         }
-
         else
         {
             unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
         }
-
         unit.agent.SetDestination(trans.position + new Vector3(Random.Range(-0.1f, 0.1f), 0, Random.Range(-0.1f, 0.1f)));
     }
     public virtual void AI_LookAt(Transform pos)

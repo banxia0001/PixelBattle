@@ -80,7 +80,6 @@ public class ViewPoint : MonoBehaviour
         TransformData.eyeRough = this.eyeRough.localPosition;
         TransformData.radius = this.radius;
         TransformData.radius_Rough = this.radius_EyeRough;
-
     }
     public void PasteEyesVectors()
     {

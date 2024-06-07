@@ -70,27 +70,51 @@ public class GameController : MonoBehaviour
         if (state == GameState.gameActive)
         {
             timer -= Time.fixedDeltaTime;
-            if (timer < 0) StartCoroutine(NewTurn());
+            if (timer < 0)
+            {
+                turn++;
+                timer = 1f;
+                StartCoroutine(NewTurn());
+            } 
         }
     }
 
     public IEnumerator NewTurn()
     {
-        TeamCheck();
-        turn++; timer = 0.33f;
+        //[Update AI]
+        if (turn % 2 == 0)
+        {
+            teams[0].UpdateAction();
+            yield return new WaitForSeconds(.3f);
+            teams[1].UpdateAction();
 
-        yield return new WaitForSeconds(.05f);
+            if (teams[0].isAIControl) teams[0].AI.Action();
+            if (teams[1].isAIControl) teams[1].AI.Action();
+        }
+        else
+        {
+          teams[1].UpdateAction();
+            yield return new WaitForSeconds(.3f);
+          teams[0].UpdateAction();
+
+            if (teams[1].isAIControl) teams[1].AI.Action();
+            if (teams[0].isAIControl) teams[0].AI.Action();
+        }
+
+
+        //[Land]
+        yield return new WaitForSeconds(.2f);
         land.UpdateLand();
-
-        yield return new WaitForSeconds(.05f);
         land.UpdateScore();
-        land.AutoOccup();
 
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.2f);
+        land.AutoOccup();
         land.SetUpFrontLine();
         float newFrontLine = land.GetLandConquerRatio();
         teamScoreRate = newFrontLine;
 
+        //[Score]
+        yield return new WaitForSeconds(.2f);
         if (land.frontLineMeet)
         {        
             UI.UpdateGBar(teamScoreRate);
@@ -108,6 +132,7 @@ public class GameController : MonoBehaviour
         }
 
         //[Gain Tax Check]
+        yield return new WaitForSeconds(.2f);
         turn_GainTax++;
         bool canGainG = false;
         if (turn_GainTax >= 3) { canGainG = true; turn_GainTax = 0; }
@@ -136,25 +161,5 @@ public class GameController : MonoBehaviour
     {
         UI.Update_Population(teams[0].P, 0);
         UI.Update_Population(teams[1].P, 1);
-    }
-    private void TeamCheck()
-    {
-        teams[0].UpdateUnitList();
-        teams[1].UpdateUnitList();
-
-        if (turn % 2 == 0)
-        {
-            teams[0].UpdateAction();
-            teams[1].UpdateAction();
-            if (teams[0].isAIControl) teams[0].AI.Action();
-            if (teams[1].isAIControl) teams[1].AI.Action();
-        }
-        else
-        {
-            teams[1].UpdateAction();
-            teams[0].UpdateAction();
-            if (teams[1].isAIControl) teams[1].AI.Action();
-            if (teams[0].isAIControl) teams[0].AI.Action();
-        }
     }
 }

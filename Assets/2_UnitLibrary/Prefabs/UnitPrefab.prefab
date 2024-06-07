@@ -166,7 +166,6 @@ MonoBehaviour:
     damage: {x: 0, y: 0}
     attackCD: 10
     knockBackForce: 1
-    weaponAOENum: 0
     moveSpeed: 1
     moveStopDis: 0
     toughness: 0
@@ -189,7 +188,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   knockBackTimer: 0
   currentAgentSpeed: 0
-  BC: {fileID: 9133468955189136455}
+  healthBar: {fileID: 9133468955189136455}
   canvas: {fileID: 437509751992264078}
 --- !u!54 &437509751958929166
 Rigidbody:

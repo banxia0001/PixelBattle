@@ -5,41 +5,11 @@ using UnityEngine.UI;
 
 public class BattleFunction : MonoBehaviour
 {
-    public static List<Unit> Find_TargetUnitGroup(Unit.UnitTeam targetTeam, UnitData.UnitType targetType)
-    {
-        GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
-        List<Unit> unitList = new List<Unit>();
-
-        if (allUnits != null)
-            foreach (GameObject unitOb in allUnits)
-            {
-                Unit unit = unitOb.GetComponent<Unit>();
-                if (unit.unitTeam == targetTeam && unit.data.unitType == targetType)
-                {
-                    unitList.Add(unit);
-                }
-            }
-        return unitList;
-    }
     public static List<Unit> Find_TargetUnitGroup(Unit.UnitTeam targetTeam)
     {
-        GameObject[] allUnits = GameObject.FindGameObjectsWithTag("Unit");
-        List<Unit> unitList = new List<Unit>();
-
-        if (allUnits != null)
-            foreach (GameObject unitOb in allUnits)
-            {
-                Unit unit = unitOb.GetComponent<Unit>();
-                if (unit.unitTeam == targetTeam)
-                {
-                    unitList.Add(unit);
-                }
-            }
-        return unitList;
+        GameController GC = FindObjectOfType<GameController>();
+        return GC.teams[(int)targetTeam].unitList;
     }
-
-
-
     public static List<Unit> FindEnemyUnit_InSphere(Vector3 postion, float range, Unit unit)
     {
         Collider[] overlappingItems;
@@ -47,7 +17,6 @@ public class BattleFunction : MonoBehaviour
         if (overlappingItems == null) return null;
         else return AIFunctions.AI_FindEnemyInList(unit, overlappingItems);
     }
-
     public static List<Unit> FindFriendlyUnit_InSphere(Vector3 postion, float range, Unit unit)
     {
         Collider[] overlappingItems;
@@ -55,8 +24,6 @@ public class BattleFunction : MonoBehaviour
         if (overlappingItems == null) return null;
         else return AIFunctions.AI_FindFriendlInList(unit, overlappingItems);
     }
-
-
     public static List<Unit> FindAllUnit_InSphere(Vector3 postion, float range, Unit.UnitTeam unitTeamFrom)
     {
         Unit.UnitTeam targetTeam = Unit.UnitTeam.teamA;
@@ -67,8 +34,6 @@ public class BattleFunction : MonoBehaviour
         if (overlappingItems == null) return null;
         else return AIFunctions.AI_FindEnemyInList(targetTeam, overlappingItems);
     }
-
-
     public static int GetDamage(Vector2Int damage, Unit defender, bool isCharge, bool isJave, bool isAP, bool isRange)
     {
         int dam = Random.Range(damage.x, damage.y);

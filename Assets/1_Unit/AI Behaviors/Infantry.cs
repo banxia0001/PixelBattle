@@ -38,7 +38,6 @@ public class Infantry : UnitAIController
             canAttack = viewPoint.CheckHitShpere(1);
         }
 
-
         //[Set Attack]
         if (unit.attackCD <= 0 && canAttack)
         {
@@ -62,7 +61,6 @@ public class Infantry : UnitAIController
                 }
 
                 else AI_MoveToward(unit.attackTarget.gameObject.transform);
-
             }
         }
     }

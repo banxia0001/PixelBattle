@@ -21,7 +21,9 @@ public class TeamController : MonoBehaviour
     [Header("TeamButton")]
     public List<RecruitButton> buttons;
 
-
+    [HideInInspector]
+    public List<Unit> unitList;
+    [HideInInspector]
     public List<Unit> warriorList;
     [HideInInspector]
     public List<Unit> archerList;
@@ -35,13 +37,11 @@ public class TeamController : MonoBehaviour
     public AIPlayer AI;
 
 
-
     public void Awake()
     {
         GC = FindObjectOfType<GameController>();
         AI = gameObject.GetComponent<AIPlayer>();
         UploadDataToButtons();
-        UpdateUnitList();
     }
     private void Start()
     {
@@ -58,6 +58,34 @@ public class TeamController : MonoBehaviour
         }
     }
 
+
+    public void InsertUnit(Unit unit)
+    {
+        unitList.Add(unit);
+        if(unit.data.unitType == UnitData.UnitType.infantry) warriorList.Add(unit);
+        if(unit.data.unitType == UnitData.UnitType.archer) archerList.Add(unit);
+        if(unit.data.unitType == UnitData.UnitType.cavalry) cavalryList.Add(unit);
+        if(unit.data.unitType == UnitData.UnitType.artillery) artilleryList.Add(unit);
+        if(unit.data.unitType == UnitData.UnitType.monster) monsterList.Add(unit);
+    }
+
+    public void RemoveUnit(Unit unit)
+    {
+        RemoveUnit_2(unitList, unit);
+        if (unit.data.unitType == UnitData.UnitType.archer) RemoveUnit_2(archerList, unit);
+        if (unit.data.unitType == UnitData.UnitType.cavalry) RemoveUnit_2(cavalryList, unit);
+        if (unit.data.unitType == UnitData.UnitType.artillery) RemoveUnit_2(artilleryList, unit);
+        if (unit.data.unitType == UnitData.UnitType.monster) RemoveUnit_2(monsterList, unit);
+    }
+
+    private void RemoveUnit_2(List<Unit> list , Unit unit)
+    {
+        if (list.Contains(unit))
+        {
+            list.Remove(unit);
+        }
+        else Debug.LogWarning("Missing From List.");
+    }
     public bool RecruitUnit(int G)
     {
         if (G > this.G) return false;
@@ -95,15 +123,6 @@ public class TeamController : MonoBehaviour
         }
     }
 
-    public void UpdateUnitList()
-    {
-        warriorList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.infantry);
-        archerList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.archer);
-        cavalryList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.cavalry);
-        monsterList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.monster);
-        artilleryList = BattleFunction.Find_TargetUnitGroup(unitTeam, UnitData.UnitType.artillery);
-    }
-
     public void UpdateAction()
     {
         this.P = 0;
@@ -117,9 +136,9 @@ public class TeamController : MonoBehaviour
     private void UpdateAction_2(List<Unit> units)
     {
         if (units != null && units.Count != 0)
-            foreach (Unit unit in units)
+            for(int i = 0; i < units.Count; i++)
             {
-                unit.AI_DecideAction();
+                units[i].AI_DecideAction();
                 P++;
             }
     }

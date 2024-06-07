@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LandManager : MonoBehaviour
@@ -73,16 +74,26 @@ public class LandManager : MonoBehaviour
     {
         units_A = new int[lands.Length];
         units_B = new int[lands.Length];
-        GameObject[] units = GameObject.FindGameObjectsWithTag("Unit");
 
         //[Add Unit to the Land List]
-        foreach (GameObject ob in units)
+        foreach (Unit unit in GC.teams[0].unitList)
         {
             for (int i = 1; i < lands.Length + 1; i++)
             {
-                if (ob.transform.position.x < i * landLength/ landNum)
+                if (unit.transform.position.x < i * landLength/ landNum)
                 {
-                    AddUnitToLand(ob, i - 1);
+                    AddUnitToLand(unit, i - 1);
+                    break;
+                }
+            }
+        }
+        foreach (Unit unit in GC.teams[1].unitList)
+        {
+            for (int i = 1; i < lands.Length + 1; i++)
+            {
+                if (unit.transform.position.x < i * landLength / landNum)
+                {
+                    AddUnitToLand(unit, i - 1);
                     break;
                 }
             }
@@ -150,9 +161,8 @@ public class LandManager : MonoBehaviour
             }      
         }
     }
-    private void AddUnitToLand(GameObject unitOb, int i)
+    private void AddUnitToLand(Unit unit, int i)
     {
-        Unit unit = unitOb.GetComponent<Unit>();
         if (unit.unitTeam == Unit.UnitTeam.teamA) units_A[i] += unit.data_local.UnitValue;
         else units_B[i] += unit.data_local.UnitValue;
     }
