@@ -32,17 +32,16 @@ MonoBehaviour:
     current_AI_Tactic: 0
     current_AI_Target: 2
     current_AI_Target_Secondly: 4
-    health: 20
+    health: 50
     protection: 30
-    damage: {x: 3, y: 5}
+    damage: 10
     attackCD: 10
     knockBackForce: 5
-    weaponAOENum: 1
     moveSpeed: 0.8
-    moveStopDis: 0.2
+    moveStopDis: 0.5
     toughness: 1
     mass: 3.8
-    knockBackBonus: 0.68
+    knockBackDecrease: 1
     ProjectilePrefab: {fileID: 0}
     isJavelin: 0
     shootDis: 5

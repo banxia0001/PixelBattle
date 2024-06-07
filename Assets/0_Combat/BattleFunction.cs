@@ -34,9 +34,9 @@ public class BattleFunction : MonoBehaviour
         if (overlappingItems == null) return null;
         else return AIFunctions.AI_FindEnemyInList(targetTeam, overlappingItems);
     }
-    public static int GetDamage(Vector2Int damage, Unit defender, bool isCharge, bool isJave, bool isAP, bool isRange)
+    public static int GetDamage(int damage, Unit defender, bool isCharge, bool isJave, bool isAP, bool isRange)
     {
-        int dam = Random.Range(damage.x, damage.y);
+        int dam = damage + Random.Range(-damage/3, damage/3);
         int prot = defender.data.protection;
 
         if (isJave || isAP) prot = prot / 2;

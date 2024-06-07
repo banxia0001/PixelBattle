@@ -120,7 +120,7 @@ public class Cavarly : UnitAIController
         unit.attackCD = unit.data.attackCD + Random.Range(-2, 2);
         SetUpAttack(unit.data.damage, unit.data.isAP);
     }
-    public override void SetUpAttack(Vector2Int damage, bool causeAP)
+    public override void SetUpAttack(int damage, bool causeAP)
     {
         attackTrigger.InputData(this, damage, causeAP);
     }

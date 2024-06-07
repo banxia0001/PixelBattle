@@ -65,7 +65,7 @@ public class Infantry : UnitAIController
         }
     }
 
-    public override void SetUpAttack(Vector2Int damage,  bool causeAP)
+    public override void SetUpAttack(int damage,  bool causeAP)
     {
         attackTrigger.InputData(this, damage, causeAP);
 

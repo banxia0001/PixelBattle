@@ -21,7 +21,6 @@ public class RecruitButton : MonoBehaviour
 
     public enum ButtonState { WaitingForRecruit, TrainingUnit, UnitReady }
     public ButtonState buttonState;
-    private int RNum = -1;
 
     public void FixedUpdate()
     {

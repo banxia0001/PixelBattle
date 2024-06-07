@@ -470,12 +470,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+      propertyPath: unitTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 437509751958929161, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: data_local
       value: 
       objectReference: {fileID: 11400000, guid: 56295ded75efebd4fa60992716a64d21, type: 2}
     - target: {fileID: 437509751958929164, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_Name
-      value: UnitPrefab Variant
+      value: UnitPrefab Variant B
       objectReference: {fileID: 0}
     - target: {fileID: 437509751958929164, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
       propertyPath: m_IsActive

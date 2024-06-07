@@ -61,6 +61,12 @@ public class GameController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha3)) teams[0].buttons[2].InputFromButton();
             if (Input.GetKeyDown(KeyCode.Alpha4)) teams[0].buttons[3].InputFromButton();
             if (Input.GetKeyDown(KeyCode.Alpha5)) teams[0].buttons[4].InputFromButton();
+
+            if (Input.GetKeyDown(KeyCode.Alpha6)) teams[1].buttons[0].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha7)) teams[1].buttons[1].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha8)) teams[1].buttons[2].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha9)) teams[1].buttons[3].InputFromButton();
+            if (Input.GetKeyDown(KeyCode.Alpha0)) teams[1].buttons[4].InputFromButton();
         }
     }
     #endregion
@@ -93,9 +99,9 @@ public class GameController : MonoBehaviour
         }
         else
         {
-          teams[1].UpdateAction();
+            teams[1].UpdateAction();
             yield return new WaitForSeconds(.3f);
-          teams[0].UpdateAction();
+            teams[0].UpdateAction();
 
             if (teams[1].isAIControl) teams[1].AI.Action();
             if (teams[0].isAIControl) teams[0].AI.Action();

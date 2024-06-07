@@ -32,7 +32,6 @@ public class Unit : MonoBehaviour
     private DragonMonster dragonMonster;
 
     [Header("Physics")]
-    private bool inKnockback;
     [HideInInspector] public Rigidbody rb;
     private float chargeSpeed;
     [HideInInspector] public float knockBackTimer;
@@ -64,7 +63,6 @@ public class Unit : MonoBehaviour
 
         //[Set Up]
         attackTarget = null;
-        inKnockback = false;
         InputData();
 
         //[Get Into List]
@@ -177,12 +175,12 @@ public class Unit : MonoBehaviour
 
                 if (isRange)
                 {
-                    rb.AddForce(data.knockBackBonus * newVector * knockBackForce * 5f);
+                    rb.AddForce(data.knockBackDecrease * newVector * knockBackForce, ForceMode.Impulse);
                 }
 
                 else
                 {
-                    rb.AddForce(2f * data.knockBackBonus * newVector * knockBackForce, ForceMode.Impulse);
+                    rb.AddForce(2f * data.knockBackDecrease * newVector * knockBackForce, ForceMode.Impulse);
                 }
 
                 StartCoroutine(RecoverFromKnockback(0.1f + knockBackForce / 15));

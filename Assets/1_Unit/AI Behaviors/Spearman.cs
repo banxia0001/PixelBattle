@@ -141,7 +141,7 @@ public class Spearman : UnitAIController
         else return 0f;
     }
 
-    public override void SetUpAttack(Vector2Int damage, bool causeAP)
+    public override void SetUpAttack(int damage, bool causeAP)
     {
         attackTrigger.InputData(this, damage, causeAP);
         anim.SetTrigger("attack");

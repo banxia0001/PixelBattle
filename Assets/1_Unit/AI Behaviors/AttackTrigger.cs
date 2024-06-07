@@ -7,19 +7,22 @@ public class AttackTrigger : MonoBehaviour
     [Header("Dynamic Stats")]
     public int damBonus;
     public float knockbackBonus;
-    public int weaponCauseNum;
+    public int attackNum;
     public bool canAttack;
+
 
     [Header("Static Statis")]
     [HideInInspector] public bool isCharging;
     private UnitAIController AI;
-    private Vector2Int damage;
+    private int damage;
     private bool causeAP;
 
-    public void InputData(UnitAIController AI, Vector2Int damage, bool causeAP)
+
+    public void InputData(UnitAIController AI, int damage, bool causeAP)
     {
         this.AI = AI;
         this.damage = damage;
+        if (this.attackNum == 0) this.attackNum = 1;
         this.causeAP = causeAP;
     }
 
@@ -32,12 +35,11 @@ public class AttackTrigger : MonoBehaviour
                 Unit unit = other.gameObject.GetComponent<Unit>();
                 if (unit.unitTeam != this.AI.unit.unitTeam)
                 {
-                    weaponCauseNum--;
+                    attackNum--;
 
                     float bonus = damBonus;
-                    if (isCharging) bonus += AI.unit.currentAgentSpeed;
-                    damage.x += (int)bonus;
-                    damage.y += (int)bonus;
+                    if (isCharging) bonus += 2 * AI.unit.currentAgentSpeed;
+                    damage += (int)bonus;
 
                     int dam = BattleFunction.GetDamage(damage, unit, isCharging,false,causeAP, false);
                     BattleFunction.Attack(this.gameObject.transform, dam, unit);
@@ -52,7 +54,7 @@ public class AttackTrigger : MonoBehaviour
                         unit.AddKnockBack(AI.unit.transform, (float)AI.unit.data.knockBackForce + this.knockbackBonus, 0.1f,false);
                     }
 
-                    if (weaponCauseNum <= 0)
+                    if (attackNum <= 0)
                     canAttack = false;
                 }
             }

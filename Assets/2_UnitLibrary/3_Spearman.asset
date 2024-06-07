@@ -22,7 +22,7 @@ MonoBehaviour:
   - {fileID: -1067588588337066499, guid: 16a3a93fb12d97645a179f10660eafc9, type: 3}
   - {fileID: 1829926689433209677, guid: 162f49381e7369f4cba9225f97b0b067, type: 3}
   Gcost: 65
-  Tcost: 12
+  Tcost: 4
   Num: 3
   UnitValue: 1
   trait1: {fileID: 11400000, guid: 41dfcb00599763a48896bf65eaec5318, type: 2}
@@ -32,17 +32,16 @@ MonoBehaviour:
     current_AI_Tactic: 0
     current_AI_Target: 4
     current_AI_Target_Secondly: 1
-    health: 20
+    health: 50
     protection: 0
-    damage: {x: 2, y: 5}
+    damage: 10
     attackCD: 8
     knockBackForce: 3
-    weaponAOENum: 2
     moveSpeed: 1
     moveStopDis: 0.77
     toughness: 0
     mass: 3
-    knockBackBonus: 0.5
+    knockBackDecrease: 1
     ProjectilePrefab: {fileID: 1957203459384285164, guid: 5bffc50d735db6247a90ac9e558a4118, type: 3}
     isJavelin: 0
     shootDis: 19

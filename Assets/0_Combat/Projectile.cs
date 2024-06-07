@@ -13,17 +13,12 @@ public class Projectile : MonoBehaviour
     private bool isJave;
     private Vector3 arrowDropLocation;
     private Vector3 arrowStartLocation;
-    private Vector2Int damage;
-    private int knockBackBonus;
+    private int damage;
+    private float knockBackBonus;
     private Unit.UnitTeam targetAttackTeam;
     private bool isDead = false;
 
-    void Start()
-    {
-        
-    }
-
-    public void SetUpArror(Vector3 arrowDropLocation,Vector3 arrowStartLocation, Vector2Int damage, int knockback,float flySpeed, Unit.UnitTeam targetAttackTeam, bool isJave)
+    public void SetUpArror(Vector3 arrowDropLocation,Vector3 arrowStartLocation, int damage, float knockback,float flySpeed, Unit.UnitTeam targetAttackTeam, bool isJave)
     {
         this.arrowDropLocation = arrowDropLocation;
         this.arrowStartLocation = arrowStartLocation;

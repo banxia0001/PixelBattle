@@ -36,7 +36,7 @@ public class UnitAIController : MonoBehaviour
         anim = this.GetComponent<Animator>();
     }
 
-    public virtual void SetUpAttack(Vector2Int damage, bool causeAP)
+    public virtual void SetUpAttack(int damage, bool causeAP)
     {
         return;
     }

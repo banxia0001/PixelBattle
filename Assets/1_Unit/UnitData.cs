@@ -42,23 +42,22 @@ public class UnitData
     public UnitData.AI_State_FindTarget current_AI_Target_Secondly;
 
     [Header("Stats")]
-    [Range(10, 200)] public int health;
+    [Range(50, 2000)] public int health;
     [Range(0, 99)] public int protection;
 
     [Header("Weapon")]
-    public Vector2Int damage;
+    [Range(10, 100)] public int damage;
     [Range(1, 15)] public int attackCD;
-    [Range(1, 30)] public int knockBackForce = 1;
+    [Range(0, 30)] public float knockBackForce = 1;
 
     [Header("Movement")]
-    [Range(0.5f, 5f)]
-    public float moveSpeed;
-    public float moveStopDis;
+    [Range(0.5f, 5f)] public float moveSpeed;
+    [Range(0.5f, 5f)] public float moveStopDis;
 
     [Header("Mass")]
     [Range(0, 10)] public int toughness;
     [Range(0, 20)] public float mass = 1;
-    [Range(0, 1)] public float knockBackBonus = 1;
+    [Range(0, 1)] public float knockBackDecrease = 1;
 
     [Header("Archer")]
     public GameObject ProjectilePrefab;
@@ -99,7 +98,7 @@ public class UnitData
 
         this.toughness = data.toughness;
         this.mass = data.mass;
-        this.knockBackBonus = data.knockBackBonus;
+        this.knockBackDecrease = data.knockBackDecrease;
 
 
         this.ProjectilePrefab = data.ProjectilePrefab;
