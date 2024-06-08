@@ -5,13 +5,9 @@ using UnityEngine;
 public class Infantry : UnitAIController
 {
     public bool use3DirVP;
-    public void AI_Warrior_Action(bool remainAttackTarget)
+    public void AI_Warrior_Action()
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
-
-        //[FindTarget]
-        if(!remainAttackTarget)
-        FindAttackTarget();
 
         //[Stay]
         if (unit.attackTarget == null)

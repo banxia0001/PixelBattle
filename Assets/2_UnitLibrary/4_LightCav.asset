@@ -21,7 +21,7 @@ MonoBehaviour:
   prefabs:
   - {fileID: 1809564154924346798, guid: 9ea9068927a9a3744a619f33b77dfe83, type: 3}
   - {fileID: 257077623352794149, guid: 3b6a6f5a64eda644cac68d099ca67192, type: 3}
-  Gcost: 30
+  Gcost: 55
   Tcost: 6
   Num: 2
   UnitValue: 3
@@ -35,7 +35,7 @@ MonoBehaviour:
     health: 120
     protection: 20
     damage: 20
-    attackCD: 8
+    attackCD: 10
     knockBackForce: 10
     moveSpeed: 3
     moveStopDis: 0.5

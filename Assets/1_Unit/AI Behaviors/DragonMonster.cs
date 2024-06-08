@@ -17,7 +17,7 @@ public class DragonMonster : UnitAIController
     }
 
 
-    public void AI_Monster_Action(bool dontChangeAttackTarget)
+    public void AI_Monster_Action()
     {
         if (isAttacking)
         {
@@ -29,13 +29,9 @@ public class DragonMonster : UnitAIController
         {
             anim.SetBool("move", true);
         }
-        else anim.SetBool("move", false);
+        else anim.SetBool("move", false);   
 
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
-
-        //[FindTarget]
-        if(!dontChangeAttackTarget)
-        FindAttackTarget();
 
         //[Stay]
         if (unit.attackTarget == null)

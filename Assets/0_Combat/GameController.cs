@@ -27,7 +27,6 @@ public class GameController : MonoBehaviour
     public static LandManager land;
     public GameUI UI;
 
-
     private void Awake()
     {
         Application.targetFrameRate = 60;
@@ -79,19 +78,56 @@ public class GameController : MonoBehaviour
             if (timer < 0)
             {
                 turn++;
-                timer = 1f;
-                StartCoroutine(NewTurn());
+                timer = 0.33f;
+                StartCoroutine(NewTurn_0());
             } 
         }
     }
 
-    public IEnumerator NewTurn()
+    private int checkTarget;
+    public IEnumerator NewTurn_0()
+    {
+        float timer = 0.3f;
+        StartCoroutine(NewTurn_1(timer));
+        yield return new WaitForSeconds(timer);
+
+        timer = 0.05f;
+        StartCoroutine(NewTurn_2(timer));
+        yield return new WaitForSeconds(timer);
+        
+        timer = 0.05f;
+        StartCoroutine(NewTurn_3(timer));
+;
+    }
+    public IEnumerator NewTurn_1(float timer)
+    {
+        checkTarget++;
+        if (checkTarget == 4)
+        {
+            if (turn % 2 == 0)
+            {
+                teams[0].FindTarget();
+                yield return new WaitForSeconds(timer);
+                teams[1].FindTarget();
+            }
+            else
+            {
+                teams[1].FindTarget();
+                yield return new WaitForSeconds(timer);
+                teams[0].FindTarget();
+
+            }
+            checkTarget = 0;
+        }
+    }
+
+    public IEnumerator NewTurn_2(float timer)
     {
         //[Update AI]
         if (turn % 2 == 0)
         {
             teams[0].UpdateAction();
-            yield return new WaitForSeconds(.3f);
+            yield return new WaitForSeconds(timer);
             teams[1].UpdateAction();
 
             if (teams[0].isAIControl) teams[0].AI.Action();
@@ -100,27 +136,26 @@ public class GameController : MonoBehaviour
         else
         {
             teams[1].UpdateAction();
-            yield return new WaitForSeconds(.3f);
+            yield return new WaitForSeconds(timer);
             teams[0].UpdateAction();
 
             if (teams[1].isAIControl) teams[1].AI.Action();
             if (teams[0].isAIControl) teams[0].AI.Action();
         }
 
-
+    }
+    public IEnumerator NewTurn_3(float timer)
+    {
         //[Land]
-        yield return new WaitForSeconds(.2f);
         land.UpdateLand();
         land.UpdateScore();
-
-        yield return new WaitForSeconds(.2f);
         land.AutoOccup();
         land.SetUpFrontLine();
         float newFrontLine = land.GetLandConquerRatio();
         teamScoreRate = newFrontLine;
 
         //[Score]
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(timer);
         if (land.frontLineMeet)
         {        
             UI.UpdateGBar(teamScoreRate);
@@ -138,7 +173,6 @@ public class GameController : MonoBehaviour
         }
 
         //[Gain Tax Check]
-        yield return new WaitForSeconds(.2f);
         turn_GainTax++;
         bool canGainG = false;
         if (turn_GainTax >= 3) { canGainG = true; turn_GainTax = 0; }

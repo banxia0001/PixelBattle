@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
-using UnityEngine.XR;
+using Unity.Mathematics;
 
 public class Unit : MonoBehaviour
 {
@@ -30,6 +29,7 @@ public class Unit : MonoBehaviour
     private Infantry infantry;
     private Spearman spearman;
     private DragonMonster dragonMonster;
+    private bool receivedTarget = false;
 
     [Header("Physics")]
     [HideInInspector] public Rigidbody rb;
@@ -40,6 +40,9 @@ public class Unit : MonoBehaviour
     [Header("UI")]
     public BarController healthBar;
     public GameObject canvas;
+
+    [Header("Reference")]
+    public GameController GC;
 
     void Start()
     {
@@ -56,12 +59,15 @@ public class Unit : MonoBehaviour
         //[NavMesh]
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
+        GC = FindObjectOfType<GameController>();
+
         if (data.unitType == UnitData.UnitType.cavalry) { agent.avoidancePriority = 50; }
         if (data.unitType == UnitData.UnitType.archer) { agent.avoidancePriority = 100; }
         if (data.unitType == UnitData.UnitType.monster) { agent.avoidancePriority = 20; }
         if (data.unitType == UnitData.UnitType.infantry) { agent.avoidancePriority = 300; }
 
         //[Set Up]
+        canvas.gameObject.SetActive(false);
         attackTarget = null;
         InputData();
 
@@ -92,8 +98,7 @@ public class Unit : MonoBehaviour
     }
 
 
-   
-    public void AI_DecideAction()
+    public void DecideAction()
     {
         if (health <= 0) return;
         attackCD--;
@@ -102,19 +107,146 @@ public class Unit : MonoBehaviour
         {
             if (data.unitType == UnitData.UnitType.infantry)
             {
-                if (infantry != null) infantry.AI_Warrior_Action(false);
-                if (spearman != null) spearman.AI_Warrior_Action(false);
+                if (infantry != null) infantry.AI_Warrior_Action();
+                if (spearman != null) spearman.AI_Warrior_Action();
             }
 
-            if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery) ranger.AI_RangeUnit_Action(false);
-            if (data.unitType == UnitData.UnitType.cavalry) cavarly.AI_Cavalry_Action(false);
-            if (data.unitType == UnitData.UnitType.monster) dragonMonster.AI_Monster_Action(false);
+            if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery) ranger.AI_RangeUnit_Action();
+            if (data.unitType == UnitData.UnitType.cavalry) cavarly.AI_Cavalry_Action();
+            if (data.unitType == UnitData.UnitType.monster) dragonMonster.AI_Monster_Action();
         }
     }
+
+
+    public void FindTarget()
+    {
+        if (health <= 0) return;
+        if (receivedTarget)
+        {
+            receivedTarget = false; return;
+        }
+
+        Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
+        if (unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
+        //If no unit in enemy list, return null;
+        if (GC.teams[(int)targetTeam].P <= 0)
+        { 
+            attackTarget = null; return; 
+        }
+
+        //If unit is melee, try find enemy in frontline
+        bool focusFrontline = false;
+        if (data.unitType == UnitData.UnitType.archer ||data.unitType == UnitData.UnitType.artillery ||data.unitType == UnitData.UnitType.cavalry) focusFrontline = false;
+        else focusFrontline = true;
+
+        //[If target empty, Go find new target]
+        if (attackTarget == null)
+        {
+            FindTarget_2(targetTeam, focusFrontline);
+        }
+
+        //[See if unit should find new target]
+        else
+        {
+            float dis = Vector3.Distance(this.transform.position, attackTarget.transform.position);
+            if (data.unitType == UnitData.UnitType.infantry)
+            { if (dis > 2.5f) FindTarget_2(targetTeam, focusFrontline); }
+
+            else if (data.unitType == UnitData.UnitType.archer || data.unitType == UnitData.UnitType.artillery)
+            { if (dis > data.shootDis * 1.2f) FindTarget_2(targetTeam, focusFrontline); }
+
+            else if (data.unitType == UnitData.UnitType.cavalry)
+            { if (dis > 5f) FindTarget_2(targetTeam, focusFrontline); }
+
+            else if (dis > 3f) attackTarget = FindClosestTarget(data.current_AI_Target, false);
+        }
+
+        if (attackTarget != null)
+        {
+            SendAttackTarget(attackTarget);
+        }
+    }
+    public void FindTarget_2(Unit.UnitTeam targetTeam, bool targetFrontline)
+    {
+        int choice = UnityEngine.Random.Range(0, 20);
+
+        if (choice < 12) attackTarget = FindClosestTarget(data.current_AI_Target, targetFrontline);
+        else attackTarget = FindClosestTarget(data.current_AI_Target_Secondly, targetFrontline);
+
+        if (attackTarget == null)
+        {
+            if (choice < 12)attackTarget = FindClosestTarget(data.current_AI_Target_Secondly, targetFrontline);
+            else attackTarget = FindClosestTarget(data.current_AI_Target, targetFrontline);
+        }
+
+        if (attackTarget == null)
+        {
+            attackTarget = AIFunctions.AI_Find_ClosestUnit(targetTeam, this, false, targetFrontline);
+        }
+    }
+
+    public Unit FindClosestTarget(UnitData.AI_State_FindTarget current_AI_Target, bool targrtFrontLine)
+    {
+        Unit.UnitTeam targetTeam = Unit.UnitTeam.teamB;
+        if (unitTeam == Unit.UnitTeam.teamB) targetTeam = Unit.UnitTeam.teamA;
+
+        if (current_AI_Target == UnitData.AI_State_FindTarget.findValueableTarget_InDistance)
+        {
+            return AIFunctions.AI_Find_ValueableUnit(targetTeam, this, false);
+        }
+
+        if (current_AI_Target == UnitData.AI_State_FindTarget.findValueableTarget_InFrontline)
+        {
+            return AIFunctions.AI_Find_ValueableUnit(targetTeam, this, true);
+        }
+
+        if (current_AI_Target == UnitData.AI_State_FindTarget.findClosest)
+        {
+            return AIFunctions.AI_Find_ClosestUnit(targetTeam, this, true, true);
+        }
+
+        if (current_AI_Target == UnitData.AI_State_FindTarget.findClosestWarrior || current_AI_Target == UnitData.AI_State_FindTarget.findClosestTarget_InFrontline)
+        {
+            return AIFunctions.AI_Find_ClosestUnit_2(targetTeam, current_AI_Target, this, true);
+        }
+
+        else
+        {
+            return AIFunctions.AI_Find_ClosestUnit_2(targetTeam, current_AI_Target, this, false);
+        }
+    }
+    public void ReceiveAttackTarget(Unit target)
+    {
+        this.attackTarget = target;
+        receivedTarget = true;
+    }
+    public void SendAttackTarget(Unit attackTarget)
+    {
+        List<Unit> unitGroup = BattleFunction.FindFriendlyUnit_InSphere(this.transform.position, 3f, this);
+        if (unitGroup != null && unitGroup.Count != 0)
+        {
+            foreach (Unit unit in unitGroup)
+            {
+                if (unit.data_local.ID == this.data_local.ID)
+                {
+                    unit.ReceiveAttackTarget(attackTarget);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
 
     public void AddDamage(int dam)
     {
         health -= dam;
+        canvas.gameObject.SetActive(true);
         healthBar.SetValue_Initial(health, data.health);
         if (health <= 0)
         {
@@ -134,6 +266,18 @@ public class Unit : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
+
+
+
+
+
+
+
+
+
+    #region Velocity Functions
+
     public void SetChargeSpeed(float speed)
     {
        chargeSpeed = speed;
@@ -145,7 +289,6 @@ public class Unit : MonoBehaviour
 
         agent.speed = data.moveSpeed + chargeSpeed;
     }
-
     public void AddKnockBack(Transform attacker, float knockBackForce, float waitTime, bool isRange)
     {
         StartCoroutine(_AddKnockBack(attacker.position, knockBackForce, waitTime, isRange));
@@ -196,4 +339,5 @@ public class Unit : MonoBehaviour
         agent.enabled = true;
         GetComponent<CapsuleCollider>().isTrigger = false;
     }
+    #endregion
 }

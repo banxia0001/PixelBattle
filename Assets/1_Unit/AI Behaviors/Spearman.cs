@@ -30,13 +30,9 @@ public class Spearman : UnitAIController
     }
 
 
-    public void AI_Warrior_Action(bool remainAttackTarget)
+    public void AI_Warrior_Action()
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
-
-        //[FindEnemy]
-        if(!remainAttackTarget)
-        FindAttackTarget();
 
         //[Stay]
         if (unit.attackTarget == null)
@@ -45,7 +41,7 @@ public class Spearman : UnitAIController
             return;
         }
 
-        Unit closestCav = AI_FindClosestTargetInList(UnitData.AI_State_FindTarget.findClosestCavalry, false);
+        Unit closestCav = unit.FindClosestTarget(UnitData.AI_State_FindTarget.findClosestCavalry, false);
         if (closestCav != null)
         {
             float dis_CavAlerm = Vector3.Distance(unit.transform.position, closestCav.transform.position);

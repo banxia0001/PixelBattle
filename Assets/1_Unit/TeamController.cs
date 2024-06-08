@@ -21,7 +21,7 @@ public class TeamController : MonoBehaviour
     [Header("TeamButton")]
     public List<RecruitButton> buttons;
 
-    [HideInInspector]
+    //[HideInInspector]
     public List<Unit> unitList;
     [HideInInspector]
     public List<Unit> warriorList;
@@ -125,21 +125,35 @@ public class TeamController : MonoBehaviour
 
     public void UpdateAction()
     {
-        this.P = 0;
+        this.P = unitList.Count;
         UpdateAction_2(warriorList);
         UpdateAction_2(archerList);
         UpdateAction_2(cavalryList);
         UpdateAction_2(monsterList);
         UpdateAction_2(artilleryList);
     }
-
+    public void FindTarget()
+    {
+        FindTarget_2(warriorList);
+        FindTarget_2(archerList);
+        FindTarget_2(cavalryList);
+        FindTarget_2(monsterList);
+        FindTarget_2(artilleryList);
+    }
     private void UpdateAction_2(List<Unit> units)
     {
         if (units != null && units.Count != 0)
             for(int i = 0; i < units.Count; i++)
             {
-                units[i].AI_DecideAction();
-                P++;
+                units[i].DecideAction();
+            }
+    }
+    private void FindTarget_2(List<Unit> units)
+    {
+        if (units != null && units.Count != 0)
+            for (int i = 0; i < units.Count; i++)
+            {
+                units[i].FindTarget();
             }
     }
 

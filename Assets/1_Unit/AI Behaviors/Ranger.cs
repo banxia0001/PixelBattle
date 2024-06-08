@@ -17,13 +17,9 @@ public class Ranger : UnitAIController
         viewPoint = this.transform.parent.GetComponent<ViewPoint>();
     }
 
-    public void AI_RangeUnit_Action(bool remainAttackTarget)
+    public void AI_RangeUnit_Action()
     {
         unit.agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.NoObstacleAvoidance;
-
-        //[FindTarget]
-        if(!remainAttackTarget)
-        FindAttackTarget();
 
         //[Stay]
         if (unit.attackTarget == null)

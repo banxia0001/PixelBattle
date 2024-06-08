@@ -173,13 +173,14 @@ public class AIFunctions : MonoBehaviour
             unitGroup = BattleFunction.FindEnemyUnit_InSphere(pos, 8f, startUnit);
         }
 
+        if (unitGroup == null) return null;
+        if (unitGroup.Count == 0) return null;
+
+
         if (targetType == UnitData.AI_State_FindTarget.findClosestArcher) unitGroup = targetUnitTeam.archerList;
         if (targetType == UnitData.AI_State_FindTarget.findClosestCavalry) unitGroup = targetUnitTeam.cavalryList;
         if (targetType == UnitData.AI_State_FindTarget.findClosestMonster) unitGroup = targetUnitTeam.monsterList;
         if (targetType == UnitData.AI_State_FindTarget.findClosestArtillery) unitGroup = targetUnitTeam.artilleryList;
-
-        if (unitGroup == null) return null;
-        if (unitGroup.Count == 0) return null;
 
         Unit closedUnit = unitGroup[0];
         float closetDis = 9999999;

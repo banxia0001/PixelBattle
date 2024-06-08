@@ -50,19 +50,14 @@ public class Cavarly : UnitAIController
 
 
 
-    public void AI_Cavalry_Action(bool dontChangeAttackTarget)
+    public void AI_Cavalry_Action()
     {
-        //[FindTarget]
-        if(!dontChangeAttackTarget)
-        FindAttackTarget();
-
         //[Stay]
         if (unit.attackTarget == null)
         {
             AI_GoToEnemyBase(unit.unitTeam);
             return;
         }
-
 
         //[Find Enemy]
         if (unit.data.current_AI_Tactic == UnitData.AI_State_Tactic.attack)
