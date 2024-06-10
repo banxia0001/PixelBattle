@@ -24,7 +24,7 @@ MonoBehaviour:
   ID: 0
   prefabs:
   - {fileID: 8135473211782772796, guid: c782eafb1ccf937418e089a7c84af9af, type: 3}
-  - {fileID: 8135473211782772796, guid: d81bd75722ae2264ebc26f975ce1fdd8, type: 3}
+  - {fileID: 2398633815623994059, guid: 37fd21d100bf8034890e5facf6c7f30c, type: 3}
   Gcost: 30
   Tcost: 3
   Num: 6
@@ -37,7 +37,7 @@ MonoBehaviour:
     current_AI_Target: 2
     current_AI_Target_Secondly: 1
     health: 100
-    protection: 10
+    protection: 99
     damage: 10
     attackCD: 8
     knockBackForce: 0.35

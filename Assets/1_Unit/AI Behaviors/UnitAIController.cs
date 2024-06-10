@@ -12,6 +12,20 @@ public class UnitAIController : MonoBehaviour
     [HideInInspector] public Animator anim;
     [HideInInspector] public Unit unit;
 
+    public virtual void OpenAgent()
+    {
+        this.unit.inRootMotion = false;
+    }
+
+    public virtual void CloseAgent()
+    {
+        Debug.Log("!");
+        this.unit.rb.velocity = Vector3.zero;
+        this.unit.rb.freezeRotation = true;
+        this.unit.agent.enabled = false;
+        this.unit.inRootMotion = true;
+    }
+
     public virtual void Start()
     {
         unit = this.transform.parent.GetComponent<Unit>();

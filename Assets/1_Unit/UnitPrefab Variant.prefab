@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 3062370489101607861}
   - component: {fileID: 8330656053893604474}
   - component: {fileID: 4732383077836101917}
+  - component: {fileID: 7139939799446025410}
   m_Layer: 0
   m_Name: Spine Mecanim GameObject (Lizardman_Test_01)
   m_TagString: Untagged
@@ -196,7 +197,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: -0.034721, y: 0.1, z: -0.023959}
-  m_LocalScale: {x: 0.16802448, y: 0.16802448, z: 0.16802448}
+  m_LocalScale: {x: 0.1680245, y: 0.1680245, z: 0.1680245}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8059578617183058330}
@@ -337,6 +338,32 @@ MonoBehaviour:
   anim: {fileID: 0}
   unit: {fileID: 8135473211782772793}
   use3DirVP: 0
+--- !u!114 &7139939799446025410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2415583731658179856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95813afe390494344a6ce2cbc8bfb7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootMotionBoneName: root
+  transformPositionX: 1
+  transformPositionY: 1
+  transformRotation: 1
+  rootMotionScaleX: 1
+  rootMotionScaleY: 1
+  rootMotionScaleRotation: 1
+  rootMotionTranslateXPerY: 0
+  rootMotionTranslateYPerX: 0
+  rigidBody2D: {fileID: 0}
+  applyRigidbody2DGravity: 0
+  rigidBody: {fileID: 8135473211782772798}
+  disableOnOverride: 1
+  mecanimLayerFlags: -1
 --- !u!1 &3301712576919181863
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,3 +540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ae784497d3ee54b9210ea908b59435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &8135473211782772798 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 437509751958929166, guid: 14a4628c74e685e49a318331739a93b1, type: 3}
+  m_PrefabInstance: {fileID: 8571855345713104688}
+  m_PrefabAsset: {fileID: 0}

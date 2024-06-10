@@ -18,6 +18,9 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int attackCD;
 
     [Header("Movement")]
+    public bool inRootMotion;
+    public bool inKnockBack;
+
     [HideInInspector] public Unit attackTarget;
     private Vector3 movetoTarget_Command;
     private int CommandTimer;
@@ -69,6 +72,8 @@ public class Unit : MonoBehaviour
         //[Set Up]
         canvas.gameObject.SetActive(false);
         attackTarget = null;
+        inKnockBack = false;
+        inRootMotion = false;
         InputData();
 
         //[Get Into List]
@@ -95,6 +100,14 @@ public class Unit : MonoBehaviour
     void FixedUpdate()
     {
         currentAgentSpeed = agent.velocity.magnitude;
+        if (!inKnockBack && !inRootMotion)
+        {
+            if (agent.enabled == false)
+            {
+                agent.enabled = true;
+                rb.freezeRotation = false;
+            }
+        }
     }
 
 
@@ -304,7 +317,9 @@ public class Unit : MonoBehaviour
         {
             if (attacker != null && agent != null)
             {
+                inKnockBack = true;
                 agent.enabled = false;
+                rb.freezeRotation = true;
                 yield return new WaitForSeconds(waitTime / 2);
                 rb.velocity = Vector3.zero;
                 yield return new WaitForSeconds(waitTime / 2);
@@ -333,10 +348,10 @@ public class Unit : MonoBehaviour
 
     private IEnumerator RecoverFromKnockback(float timer)
     {
+        inKnockBack = true;
         GetComponent<CapsuleCollider>().isTrigger = true;
         yield return new WaitForSeconds(timer / 3);
-        rb.freezeRotation = false;
-        agent.enabled = true;
+        inKnockBack = false;
         GetComponent<CapsuleCollider>().isTrigger = false;
     }
     #endregion
